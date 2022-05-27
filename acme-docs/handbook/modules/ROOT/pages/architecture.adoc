@@ -1,0 +1,100 @@
+= Architecture
+
+== Overview
+
+The system architecture is inspired by {cosmic-python-href}[Cosmic Python].
+Reading the book will provide the best sense of how this system is designed.
+That said, there are a few differences to make note of.
+
+Key differences:
+
+* Implicit transactions
+
+== C4 Model
+
+The following is an attempt to express the system architecture using the {c4-model-href}[C4 Model].
+
+=== Context Diagram
+
+[plantuml, target=acme-system-context, format=png]
+....
+!include <c4/C4_Container.puml>
+!include <office/Users/user.puml>
+!include <office/Users/mobile_user.puml>
+
+Person(customer, Acme Customer)
+System(acme_system, "Acme System", "Allows customers to use Acme functionality.")
+System_Ext(mail_system, "E-mail System", "Third party email provider.")
+
+Rel(customer, acme_system, "Uses")
+Rel_Back(customer, mail_system, "Sends e-mails to", "SMTP")
+Rel_Neighbor(acme_system, mail_system, "Uses", "SMTP")
+
+....
+
+=== System Container Diagram
+
+[plantuml, target=acme-system-container, format=png]
+....
+!include <c4/C4_Container.puml>
+
+Person(customer, Acme Customer, "Application end-user." )
+
+System_Boundary(c1, "Acme") {
+    Container(web_server, "Web Server", "Nginx", "Delivers Acme SPA content")
+    Container(spa, "Single-Page App", "acme-app-web", "Provides all Acme application functionality")
+    ContainerDb(identity_database, "Identity Database", "PostgreSQL", "Stores Acme\n user identity data")
+    ContainerDb(business_database, "Business Database", "PostgreSQL", "Stores Acme business application data")
+    Container(authn_proxy, "Identity Aware Proxy", "ORY Oathkeeper", "Validates end-user application sessions.")
+    Container(identity_api, "Identity API", "ORY Kratos", "Authenticates and manages user information\nof the system via API")
+    Container(business_api, "Business API", "acme-web-server", "Provides Acme\n functionality via API")
+}
+
+System_Ext(email_system, "E-Mail System", "Third party email provider.")
+
+Rel(customer, web_server, "Uses", "HTTPS")
+Rel(customer, spa, "Uses", "HTTPS")
+
+Rel_Neighbor(web_server, spa, "Delivers")
+Rel(spa, authn_proxy, "Uses", "JSON/HTTPS")
+Rel(authn_proxy, business_api, "Uses", "JSON/HTTPS")
+Rel(authn_proxy, identity_api, "Uses", "JSON/HTTPS")
+Rel(spa, identity_api, "Uses", "JSON/HTTPS")
+Rel(identity_api, spa, "Manages", "Cookies/Session")
+Rel(identity_api, identity_database, "Uses", "TCP")
+Rel(business_api, business_database, "Uses", "TCP")
+
+Rel_Back(customer, email_system, "Sends e-mails to")
+Rel_Back(email_system, identity_api, "Uses", "SMTP")
+....
+
+=== Business API Component Diagram
+
+[plantuml, target=acme-business-api-comonent, format=png]
+....
+!include <c4/C4_Component.puml>
+
+ContainerDb(db, "Database", "PostgreSQL", "Stores domain objects\nand application views")
+
+Container_Boundary(api, "Business API") {
+    Component(ktor, "Web Framework", "Kotlin/Ktor", "Maps HTTP Requests to Commands and Queries.")
+    Component(queries, "Queries", "Kotlin", "Reads materialized views\nfor presentation")
+    Component(message_bus, "Message Bus", "Kotlin", "Manages registry of commands & events to handlers.")
+    Component(uow, "Unit of Work", "Kotlin", "Manages database transaction lifecycle.")
+    Component(command_handlers, "Command Handlers", "Kotlin", "Coordinates business logic.")
+    Component(event_handlers, "Event Handlers", "Kotlin", "Materializes views for end-user application.")
+    Component(repository, "Domain Repository", "Kotlin", "Serializes and deserializes domain objects to/from database.")
+
+    Rel_Neighbor(ktor, uow, "Starts")
+    Rel(ktor, queries, "Calls")
+    Rel(ktor, message_bus, "Dispatches commands to")
+    Rel_D(message_bus, command_handlers, "Calls")
+    Rel(message_bus, event_handlers, "Calls")
+    Rel(command_handlers, message_bus, "Dispatches events to")
+    Rel(command_handlers, repository, "Calls")
+    Rel(event_handlers, db, "Writes")
+    Rel(repository, db, "Reads/Writes")
+    Rel(queries, db, "Reads")
+    Rel(uow, db, "Commits")
+}
+....

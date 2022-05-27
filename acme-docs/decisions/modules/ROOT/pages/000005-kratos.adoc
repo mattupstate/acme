@@ -1,0 +1,25 @@
+= 5. Use ORY Kratos for Identity Management
+
+NOTE: ?
+
+== Context
+
+?
+
+== Decision
+
+?
+
+== Consequences
+
+=== Positive
+
+* ?
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* ?

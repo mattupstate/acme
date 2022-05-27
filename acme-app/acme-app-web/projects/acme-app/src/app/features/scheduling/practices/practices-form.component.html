@@ -1,0 +1,20 @@
+<form [formGroup]="practiceForm" (ngSubmit)="onSubmit(practiceForm.value)" novalidate>
+  <div fxLayout="column">
+    <mat-form-field appearance="outline">
+      <mat-label
+        i18n="Practice form name label@@practiceFormEmailLabel">
+        Name
+      </mat-label>
+      <input matInput formControlName="name">
+      <mat-error
+        i18n="Practice form name required error@@practiceFormNameRequiredError"
+        *ngIf="hasError('name', 'required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+    <button
+      type="submit" color="primary" mat-raised-button
+      i18n="Practice form button label@@practiceFormButtonLabel">Submit
+    </button>
+  </div>
+</form>

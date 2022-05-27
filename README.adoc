@@ -1,0 +1,5 @@
+= Acme
+
+Acme is an experimental project that illustrates usage of software development tools, patterns, workflows, and architectural styles of interest to https://mattupstate.com[Matt Wright].
+
+Learn all the juicy details by visiting the documentation site.

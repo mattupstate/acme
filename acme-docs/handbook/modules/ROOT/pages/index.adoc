@@ -1,0 +1,55 @@
+= Quickstart
+
+TIP: These instructions assume all tools mentioned in the xref:setup.adoc[Setup] section have been installed.
+
+== Kotlin
+
+Run all Kotlin project/module tests by executing the following command from within the root project directory:
+
+[source, shell script]
+----
+$ ./gradlew test
+----
+
+Run one Kotlin project's tests by specifying the module name.
+For example:
+
+[source, shell script]
+----
+$ ./gradlew acme-web:acme-web-server:test
+----
+
+Run a subset of a project's tests by specifying a package or class name.
+For example:
+
+[source, shell script]
+----
+$ ./gradlew acme-web:acme-web-test:test --tests 'com.acme.web.test.*'
+$ ./gradlew acme-web:acme-web-test:test --tests com.acme.web.test.scheduling.api.SchedulingClientCollectionApiSpec
+----
+
+== TypeScript
+
+Activate the required version of `node` by running the following command from the root project directory:
+
+[source, shellscript]
+----
+$ nvm use
+----
+
+From within a TypeScript project directory, such as `acme-app/acme-app-web`, install the project dependencies:
+
+[source, shellscript]
+----
+$ npm install
+----
+
+Run the tests for the current TypeScript project:
+
+[source, shellscript]
+----
+$ npm run test
+----
+
+This will start a long-running process that re-runs tests when code is changed.
+Press `Ctrl+C` to terminate the process.

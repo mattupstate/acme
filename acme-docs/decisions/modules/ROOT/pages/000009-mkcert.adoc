@@ -1,0 +1,25 @@
+= 9. Use mkcert to Manage SSL Certs for Local Development
+
+NOTE: ?
+
+== Context
+
+?
+
+== Decision
+
+?
+
+== Consequences
+
+=== Positive
+
+* ?
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* ?

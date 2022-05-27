@@ -1,0 +1,35 @@
+= 2. Use Kotlin for Domain Modeling and Business Logic
+
+NOTE: Accepted on 2022-01-01
+
+== Context
+
+The desired architectural style described in Cosmic Python can be implemented using a wide variety of languages.
+The main driver behind this decision is to get more familiar with Kotlin and it's features such as https://kotlinlang.org/docs/sealed-classes.html[sealed] and https://kotlinlang.org/docs/inline-classes.html[inline] classes.
+
+== Decision
+
+We will use https://kotlinlang.org/[Kotlin] for all domain modeling and business logic to support the desired architectural style.
+Additionally, we will use the following tools that are common for Kotlin projects:
+
+* https://gradle.org[Gradle] as the build tool.
+* https://junit.org/junit5/docs/current/user-guide/[Junit5] as the test runner.
+* https://kotest.io/[Kotest] as the test framework.
+* https://www.eclemma.org/jacoco/[JaCoCo] for collecting test coverage.
+
+== Consequences
+
+=== Positive
+
+* We are already somewhat familiar with Kotlin which will reduce the learning curve.
+* Kotlin is a mature language with great community and tooling support.
+* The entire Java ecosystem is available to use with Kotlin.
+
+=== Neutral
+
+* Kotlin supports compiling to multiple platforms which may come in handy later
+* Kotlin is the preferred language for Android application development if we choose to build an Android app.
+
+=== Negative
+
+* This is very close to a one-way door decision.

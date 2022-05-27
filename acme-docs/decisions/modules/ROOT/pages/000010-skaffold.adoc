@@ -1,0 +1,25 @@
+= 10. Use Skaffold for Running the System Locally
+
+NOTE: ?
+
+== Context
+
+?
+
+== Decision
+
+?
+
+== Consequences
+
+=== Positive
+
+* ?
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* ?

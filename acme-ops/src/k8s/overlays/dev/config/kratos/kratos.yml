@@ -1,0 +1,89 @@
+version: v0.8.2-alpha.1
+watch-courier: true
+dsn: postgres://kratos:kratos@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+serve:
+  public:
+    base_url: https://kratos-127-0-0-1.nip.io
+    cors:
+      enabled: true
+      debug: true
+      allowed_origins:
+        - https://*.nip.io
+        - http://localhost:4200
+        - http://127.0.0.1:4200
+  admin:
+    base_url: https://kratos-admin-127-0-0-1.nip.io
+cookies:
+  same_site: None
+  domain: nip.io
+session:
+  cookie:
+    domain: nip.io
+    same_site: None
+selfservice:
+  default_browser_return_url: http://127.0.0.1:4200
+  whitelisted_return_urls:
+    - http://127.0.0.1:4200
+    - http://localhost:4200
+    - https://app-127-0-0-1.nip.io
+  methods:
+    password:
+      enabled: true
+    oidc:
+      enabled: true
+      config:
+        providers: []
+  flows:
+    error:
+      ui_url: https://app-127-0-0-1.nip.io/error
+    settings:
+      ui_url: https://app-127-0-0-1.nip.io/settings
+      privileged_session_max_age: 15m
+    recovery:
+      enabled: true
+      ui_url: https://app-127-0-0-1.nip.io/recover
+    verification:
+      enabled: true
+      ui_url: https://app-127-0-0-1.nip.io/sign-in?verified=true
+    logout:
+      after:
+        default_browser_return_url: https://app-127-0-0-1.nip.io/sign-in
+    login:
+      ui_url: https://app-127-0-0-1.nip.io/login
+      lifespan: 10m
+      after:
+        password:
+          hooks:
+            - hook: require_verified_address
+    registration:
+      lifespan: 1h
+      ui_url: https://app-127-0-0-1.nip.io/registration
+      after:
+        oidc:
+          hooks:
+            - hook: session
+#        password:
+#          hooks:
+#            - hook: session
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+secrets:
+  cookie:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+  cipher:
+    - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+ciphers:
+  algorithm: xchacha20-poly1305
+hashers:
+  algorithm: bcrypt
+  bcrypt:
+    cost: 8
+identity:
+  default_schema_url: file:///etc/kratos/common/identity.schema.json
+courier:
+  smtp:
+    connection_uri: smtp://mailhog:1025/?disable_starttls=true
+    from_address: support@app-127-0-0-1.nip.io
+    from_name: Support

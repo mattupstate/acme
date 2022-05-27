@@ -1,0 +1,7 @@
+= Decision Records
+
+Decisions that significantly affect the system shall be documented here.
+Please read the following resources that help explain how to express a decision.
+
+* https://ozimmer.ch/practices/2021/04/23/AnyDecisionRecords.html["ADR = Any Decision Record? Architecture, Design and Beyond", window="_blank"] by Olaf Zimmermann
+* https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions.html[Documenting Architecture Decisions, window="_blank"] by Michael Nygard.

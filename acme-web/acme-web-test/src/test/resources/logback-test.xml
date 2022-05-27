@@ -1,0 +1,14 @@
+<configuration>
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="Console"/>
+  </root>
+
+  <logger name="com.acme" level="DEBUG"/>
+  <logger name="org.jooq.tools.LoggerListener" level="DEBUG" />
+</configuration>

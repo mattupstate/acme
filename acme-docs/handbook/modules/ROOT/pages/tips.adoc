@@ -1,0 +1,23 @@
+= Tips & Tricks
+
+== IntelliJ
+
+With the {kotest-intellij-href}[Kotest IntelliJ plugin] installed, individual test classes or functions can be run.
+This is afforded via the green arrow in the left gutter of a test file:
+
+image::testing-intellij.png[]
+
+== Visual Studio Code
+
+Access the run configurations from the `Run and Debug` menu:
+
+image::vscode-launch.png[]
+
+In this example a developer can choose to run all tests or just the current file.
+Select the desired configuration and click the green arrow button to run.
+
+Optionally, attach the debugger once the test(s) are running by selecting the `Attach to debugger` configuration.
+Click the green arrow button to attach.
+Visual Studio Code should then display breakpoints like so:
+
+image::vscode-debug.png[]

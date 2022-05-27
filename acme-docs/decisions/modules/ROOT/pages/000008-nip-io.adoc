@@ -1,0 +1,25 @@
+= 8. Use nip.io for Local Domain Names
+
+NOTE: ?
+
+== Context
+
+?
+
+== Decision
+
+?
+
+== Consequences
+
+=== Positive
+
+* ?
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* ?

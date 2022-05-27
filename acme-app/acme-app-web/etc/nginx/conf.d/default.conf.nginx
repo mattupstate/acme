@@ -1,0 +1,19 @@
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+
+  server_name
+    "~^(?<application>[\w\d-]+)\.acme\.mattupstate\.com"
+    "~^(?<application>[\w\d]+)\-127-0-0-1\.nip\.io"
+    "~^(?<application>[\w\d]+)\.acme\.localhost"
+  ;
+
+  access_log /dev/stdout;
+  error_log /dev/stderr;
+
+  location / {
+    root /usr/share/acme/acme-$application;
+    index index.html;
+    try_files $uri $uri/ /index.html =404;
+  }
+}

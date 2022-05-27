@@ -1,0 +1,25 @@
+= 6. Use ORY Keto for Authorization
+
+NOTE: ?
+
+== Context
+
+?
+
+== Decision
+
+?
+
+== Consequences
+
+=== Positive
+
+* ?
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* ?

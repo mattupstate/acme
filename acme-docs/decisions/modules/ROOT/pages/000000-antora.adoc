@@ -1,0 +1,28 @@
+= 1. Documentation using Antora
+
+NOTE: Accepted on 2022-01-01
+
+== Context
+
+A documentation tool with a familiar, lightweight markup language will make writing documentation a joy.
+Ideally all documentation can be put under one site that affords a reasonable experience navigating across all the content.
+
+== Decision
+
+We will use https://antora.org/[Antora] to be able to aggregate all project documentation into one logical site and afford us to customize the UI.
+
+== Consequences
+
+=== Positive
+
+* Antora is built on Asciidoc, which we have experience with.
+* Antora supports a multitude of diagram types, including C4 models, via https://github.com/Mogztter/asciidoctor-kroki[asciidoctor-kroki]
+
+=== Neutral
+
+* Antora does not build navigation automatically from source files.
+* Customizing the UI requires some special knowledge, however publicly available themes should suffice
+
+=== Negative
+
+* Changing this decision after a lot of documentation has been written would be hard to reverse.

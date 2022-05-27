@@ -1,0 +1,31 @@
+= 4. Use Angular for Web Applications
+
+NOTE: Accepted on 2022-01-01
+
+== Context
+
+Using a framework will aid in the development of a web application.
+Ideally, the framework is something we are familiar with already to reduce the severity of the learning curve.
+
+== Decision
+
+We will use https://angular.io/[Angular] for all web application development.
+Additionally, we will use https://github.com/nvm-sh/nvm[nvm] for managing the desired version of NodeJS.
+
+== Consequences
+
+=== Positive
+
+* Widely supported and heavily invested in by Google.
+* Focused ecosystem.
+* Good documentation.
+
+=== Neutral
+
+* Code will be written in TypeScript.
+* Karma will be used as the test runner.
+* Jest will be the testing framework.
+
+=== Negative
+
+* ?

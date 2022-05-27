@@ -1,0 +1,77 @@
+= Introduction
+//:description: A description of the page stored in an HTML meta tag.
+//:sectanchors:
+//:url-repo: https://github.com/mattupstate/acme
+//:page-tags: name of a tag, name of a tag
+
+Acme is an experimental project that illustrates usage of software development tools, patterns, workflows, and architectural styles of interest to https://mattupstate.com[Matt Wright].
+It originally started as an attempt to port ideas from {cosmic-python-href}[Cosmic Python] to a Kotlin based system.
+As progress was made the project became a all-purpose sandbox to learn.
+The following is a non-exhaustive list of things that are used, or attempted to be used, in this project:
+
+* Runtimes
+** {java-jdk-href}[OpenJDK]
+** {nodejs-href}[Node.js]
+* Languages
+** {kotlin-href}[Kotlin]
+** {typescript-href}[TypeScript]
+* Frameworks
+** {ktor-href}[Ktor]
+** {angular-href}[Angular]
+*** https://material.angular.io/[Angular Material]
+*** https://github.com/angular/flex-layout[Angular Flex Layout]
+* SQL
+** {postgresql-href}[PostgreSQL]
+** {jooq-href}[jOOQ]
+** {liquibase-href}[Liquibase]
+* Architecture & Design
+** Backend
+*** {ddd-href}[DDD], https://martinfowler.com/bliki/CQRS.html[CQRS], https://martinfowler.com/eaaDev/EventSourcing.html[Event Sourcing] inspired by {cosmic-python-href}[Cosmic Python]
+*** Headless authentication using ORY {ory-kratos-href}[Kratos] and {ory-oathkeeper-href}[Oathkeeper]
+*** https://authzed.com/blog/what-is-zanzibar/[Zanzibar] style authorization using ORY {ory-keto-href}[Keto]
+** Frontend
+*** https://blog.angular-university.io/angular-ngrx-store-and-effects-crash-course/[Centralized store] with {ngrx-href}[NgRx]
+*** https://angular.io/guide/lazy-loading-ngmodules[Lazy loaded modules]
+*** Compile-time i18n
+** APIs
+*** {hateos-href}[HATEOAS]
+*** {hal-href}[HAL] (application/hal+json)
+*** {vnd-error-href}[vnd.error] (application/vnd.error+json)
+* Build Tools
+** Monorepo (not Monolith)
+** {gradle-href}[Gradle]
+*** https://docs.gradle.org/current/userguide/kotlin_dsl.html[Kotlin DSL]
+*** https://docs.gradle.org/current/userguide/multi_project_builds.html#multi_project_builds[Multi project layout]
+*** https://docs.gradle.org/current/samples/sample_convention_plugins.html[Shared build conventions]
+** {docker-engine-href}[Docker Engine]
+** {jib-href}[Jib]
+* Development Tools
+** {rancher-desktop-href}[Rancher Desktop]
+** {k3d-href}[k3d]
+** {mkcert-href}[mkcert]
+** {kustomize-href}[Kustomize]
+** {skaffold-href}[Skaffold]
+** http://nip.io/[nip.io]
+* Testing
+** https://junit.org/junit5/docs/current/user-guide/[JUnit5]
+** {kotest-href}[Kotest]
+** {test-containers-href}[Testcontainers]
+** {karma-href}[Karma]
+** {serenity-href}[Serenity BDD] + {screenplay-href}[Screenplay Pattern]
+* Ops
+** {promtail-href}[Promtail]
+** {loki-href}[Loki]
+** {opentracing-href}[OpenTracing]
+** {jaeger-href}[Jaeger]
+** {micrometer-href}[Micrometer]
+** {prometheus-href}[Prometheus]
+** {grafana-href}[Grafana]
+* Kubernetes
+** {helm-href}[Helm]
+** {ingress-nginx-href}[ingress-nginx]
+** {linkerd-href}[Linkerd]
+* Documentation
+** https://docs.asciidoctor.org/[Asciidoctor]
+** https://antora.org/[Antora]
+** https://plantuml.com/[PlantUML]
+** https://c4model.com/[C4 Model Diagrams]

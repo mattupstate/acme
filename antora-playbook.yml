@@ -1,0 +1,18 @@
+site:
+  title: Acme
+  start_page: ROOT::index.adoc
+asciidoc:
+  extensions:
+    - asciidoctor-kroki
+  attributes:
+    page-component-order: '!ROOT, acme-handbook, acme-adr, *'
+#    kroki-fetch-diagram: true
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      start_paths: acme-docs/root, acme-docs/handbook, acme-docs/decisions, acme-web/acme-web-server/docs
+ui:
+  bundle:
+    url: https://gitlab.com/mattupstate/acme-antora-ui/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true

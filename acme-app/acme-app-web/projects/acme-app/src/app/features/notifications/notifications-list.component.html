@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayoutAlign="space-around">
+  <div fxFlex="80%">
+    <mat-card>
+      <mat-selection-list>
+        <mat-list-option *ngFor="let i of notifications; last as isLast">
+          <mat-icon matListIcon>message</mat-icon>
+          <h3 matLine>Somebody [somebody@acme.com]</h3>
+          <p matLine>
+            <span>A message about</span>
+            <span> -- <a href="https://www.google.com">Blah blah blah</a></span>
+          </p>
+          <mat-divider *ngIf="!isLast"></mat-divider>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-card>
+  </div>
+</div>

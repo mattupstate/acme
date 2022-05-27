@@ -1,0 +1,31 @@
+= 2. Use PostgreSQL for Persistence
+
+NOTE: Accepted on 2022-01-01
+
+== Context
+
+The desired architectural style requires a database to persist domain objects and materialized views for presentation purposes.
+Given the design of the domain objects, it is desirable to store them in the database as a document.
+In contrast, it is desirable to store materialized views in a normalized fashion.
+
+== Decision
+
+We will use https://www.postgresql.org/[PostgreSQL] for all persistence needs as it supports both persistence strategies.
+More specifically, we will use https://www.postgresql.org/docs/current/datatype-json.html[JSON types] for domain object persistence.
+Views will use typical relational data structures.
+
+== Consequences
+
+=== Positive
+
+* Widely supported and easy to operate
+* Broad ecosystem of extensions
+
+=== Neutral
+
+* ?
+
+=== Negative
+
+* This is a one-way door decision if we start to lean on PostgreSQL-only features.
+

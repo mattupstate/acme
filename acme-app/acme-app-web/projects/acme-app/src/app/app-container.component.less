@@ -1,0 +1,30 @@
+.sidenav-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sidenav {
+  width: 200px;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+}
+
+.app-content {
+  min-height: calc(100vh - 110px);
+
+  mat-toolbar {
+    span {
+      display: none;
+
+      .active {
+        display: inline;
+      }
+    }
+  }
+}
+
+.header-toolbar {
+  justify-content: space-between;
+}

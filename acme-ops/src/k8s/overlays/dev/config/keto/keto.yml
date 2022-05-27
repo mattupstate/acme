@@ -1,0 +1,18 @@
+version: v0.8.0
+
+log:
+  level: debug
+
+namespaces:
+  - id: 0
+    name: scheduling
+
+dsn: postgres://keto:keto@keto-postgres:5432/keto?sslmode=disable&max_conns=20&max_idle_conns=4
+
+serve:
+  read:
+    host: 0.0.0.0
+    port: 4466
+  write:
+    host: 0.0.0.0
+    port: 4467

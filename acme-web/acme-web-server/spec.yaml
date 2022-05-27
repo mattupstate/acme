@@ -1,0 +1,151 @@
+openapi: 3.0.3
+info:
+  title: Acme API
+  description: Acme API
+  version: 1.0.0
+servers:
+  - url: https://api-127-0-0-1.nip.io
+paths:
+  /practices:
+    summary: Practice collection resource
+    description: >
+      The Practice collection resource affords a client to read a collection of Practice resources
+      or create Practice resources.
+    get:
+      summary: Returns a Practice collection resource
+      tags:
+        - Scheduling
+      responses:
+        '200':
+          description: A Practice collection resource
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PracticeCollectionResource'
+    post:
+      summary: Create Practice resources
+      tags:
+        - Scheduling
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      phoneNumbers:
+                        type: array
+                        items:
+                          type: string
+                      emailAddresses:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '200':
+          description: Practice collection, including links to newly created Practice resources
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PracticeCollectionResource'
+  /practices/{id}:
+    get:
+      summary: Returns a Practice resource with the specified ID
+      tags:
+        - Scheduling
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The Practice resource ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A Practice resource
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/PracticeResource'
+
+components:
+  schemas:
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: string
+        title:
+          type: string
+        hreflang:
+          type: string
+      required:
+        - href
+    ContactPoint:
+      type: object
+      properties:
+        system:
+          enum:
+            - PHONE
+            - EMAIL
+            - WEB
+            - SMS
+        value:
+          type: string
+        verified:
+          type: boolean
+      required:
+        - system
+        - value
+    PracticeResource:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+        id:
+          type: string
+        name:
+          type: string
+        contactPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPoint'
+    PracticeCollectionResource:
+      type: object
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+            next:
+              $ref: '#/components/schemas/Link'
+            prev:
+              $ref: '#/components/schemas/Link'
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Link'
+          required:
+            - self
+        total:
+          type: number
+        _embedded:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/PracticeResource'

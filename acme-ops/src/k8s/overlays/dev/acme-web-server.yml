@@ -1,0 +1,22 @@
+- path: /spec/template/spec/volumes/-
+  op: add
+  value:
+    name: acme-web-server-config
+    configMap:
+      name: acme-web-server-config
+- path: /spec/template/spec/containers/0/volumeMounts/0
+  op: add
+  value:
+    mountPath: /etc/acme/web
+    name: acme-web-server-config
+- path: /spec/template/spec/volumes/-
+  op: add
+  value:
+    name: acme-web-server-oathkeeper-config
+    configMap:
+      name: acme-web-server-oathkeeper-config
+- path: /spec/template/spec/containers/1/volumeMounts/0
+  op: add
+  value:
+    mountPath: /etc/oathkeeper
+    name: acme-web-server-oathkeeper-config

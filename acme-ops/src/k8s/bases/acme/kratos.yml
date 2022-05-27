@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kratos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: acme
+      app.kubernetes.io/component: kratos
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: acme
+        app.kubernetes.io/component: kratos
+    spec:
+      initContainers:
+        - name: kratos-migrate
+          image: oryd/kratos:v0.8.2
+          imagePullPolicy: IfNotPresent
+          args: ["migrate", "sql", "-e", "--yes"]
+          volumeMounts:
+            - name: kratos-common
+              mountPath: /etc/kratos/common
+      containers:
+        - name: kratos
+          image: oryd/kratos:v0.8.2
+          imagePullPolicy: IfNotPresent
+          args: ["serve"]
+          envFrom: []
+          ports:
+            - name: public
+              containerPort: 4433
+            - name: admin
+              containerPort: 4434
+          volumeMounts:
+            - name: kratos-common
+              mountPath: /etc/kratos/common
+      volumes:
+        - name: kratos-common
+          configMap:
+            name: kratos-common
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kratos
+  labels:
+    app.kubernetes.io/name: kratos
+spec:
+  ports:
+    - name: public
+      port: 80
+      targetPort: 4433
+    - name: admin
+      port: 8080
+      targetPort: 4434
+  selector:
+    app.kubernetes.io/name: acme
+    app.kubernetes.io/component: kratos
+

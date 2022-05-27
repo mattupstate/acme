@@ -1,0 +1,105 @@
+= Setup
+
+The development environment is a first-class component of this system.
+From installation and configuration to supporting fast development feedback loops, it should strive to deliver the best developer experience to as many developers as possible.
+This section describes the recommended steps to configure a development environment suitable for working on Acme.
+Please install tools as they are mentioned in the documentation.
+
+NOTE: Decisions made in service of this goal are often loaded with tradeoffs and are documented as a xref:acme-adr::index.adoc[Decision Record].
+
+== CLIs
+
+[cols="1,3"]
+|===
+|Name |Description
+
+|{sdkman-href}[SDKMAN!]
+|Manages the installation and activation of various JVM tools.
+|{nvm-href}[nvm]
+|Manages the installation and activation of the NodeJS runtime.
+|{mkcert-href}[mkcert]
+|Creates and installs locally trusted development SSL certificates.
+|{k3d-href}[k3d]
+|Lightweight local Kubernetes distrubtion used for local development.
+|{skaffold-href}[skaffold]
+|CLI for continuous development for Kubernetes-native applications.
+|===
+
+
+== SDKs
+
+Install the required SDKs by running the following command from within the root project directory:
+
+[source, shell script]
+----
+$ sdk env install && nvm install
+----
+
+== IDEs
+
+=== IntelliJ IDEA
+
+{intellij-href}[IntelliJ IDEA] is used for, but not limited to, Kotlin development and Asciidoc authoring.
+
+==== Plugins
+
+The following plugins are recommended for the best development experience:
+
+* {kotest-intellij-href}[Kotest plugin]
+* {asciidoc-intellij-href}[AsciiDoc plugin]
+
+==== Configuration
+
+Ensure that IntelliJ is aware of the location of the JDK by opening the `File > Project Structure` menu.
+
+image::intellij-jdk.png[]
+
+Additionally, ensure that IntelliJ is configured to build and run tests with Gradle.
+Under the `Preferences` menu, navigate to `Build, Execution, Deployment > Build Tools > Gradle`:
+
+image::intellij-gradle.png[]
+
+=== Visual Studio Code
+
+{vscode-href}[Visual Studio Code] is primarily used for, but not limited to, TypeScript project development.
+
+==== Plugins
+
+The following plugins are recommended for the best development experience:
+
+* {angular-vscode-href}[Angular Language Service plugin]
+* {eslint-vscode-href}[ESLint plugin]
+
+==== Configuration
+
+Visual Studio Code does not require further configuration for this project.
+
+== Docker
+
+WARNING: As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
+There is a simple workaround described in the <<Linux Users>> section.
+
+{rancher-desktop-href}[Rancher Desktop] is recommended for running Docker locally.
+Other tools, such as Docker Desktop, will have to be uninstalled or disabled before using Rancher Desktop.
+Once installed, configure Rancher Desktop with:
+
+[#img-rancher-desktop-sudo]
+.Administrative Access > Allow sudo access
+image::rancher-desktop-sudo.png[]
+
+[#img-rancher-desktop-docker]
+.Container Runtime > dockerd (moby)
+image::rancher-desktop-docker.png[]
+
+=== Linux Users
+
+As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
+The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`:
+
+[source, shellscript]
+----
+sudo sysctl net.ipv4.ip_unprivileged_port_start=80
+----
+
+This configuration makes it possible to access Kubernetes Ingress resources on `localhost` over privileged ports `80` (HTTP) and `443` (HTTPS).
+It also affords the user of friendly local URLs via http://nip.io/.

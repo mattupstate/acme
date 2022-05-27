@@ -1,0 +1,31 @@
+= 3. Use Ktor for HTTP APIs
+
+NOTE: Accepted on 2022-01-01
+
+== Context
+
+The desired architectural style includes HTTP APIs.
+Choosing a web framework will aid their development.
+The framework must support development using Kotlin, which we have experience with already.
+Better yet, the framework would be built with Kotlin and use coroutines.
+
+== Decision
+
+We will use https://ktor.io/[Ktor] for all HTTP APIs.
+
+== Consequences
+
+=== Positive
+
+* First class Kotlin development experience.
+* Built on coroutines.
+* Includes an HTTP client module.
+
+=== Neutral
+
+* Minimal API surface area.
+
+=== Negative
+
+* Still an early-stage product, likely to be a bit buggy.
+* Sparse plugin ecosystem.

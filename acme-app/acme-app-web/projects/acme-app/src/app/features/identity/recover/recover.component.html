@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-title>Forgot your password?</mat-card-title>
+  <mat-card-content *ngIf="!requested">
+    <form [formGroup]="recoverForm" (ngSubmit)="onSubmit(recoverForm.value)" class="recover">
+      <div fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter your email address</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="primary" class="btn-block">Next</button>
+        <a class="remember" mat-button color="accent" [routerLink]="signInLink">Remember your password?</a>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-content *ngIf="requested">
+    <div fxLayout="column" class="requested">
+      <p>Check your email for instructions to reset your password.</p>
+      <p>Didn't receive the email? <a href="" (click)="reset($event)">Try again</a>.
+      <a class="remember" mat-button color="accent" [routerLink]="signInLink">Remember your password?</a>
+    </div>
+  </mat-card-content>
+</mat-card>

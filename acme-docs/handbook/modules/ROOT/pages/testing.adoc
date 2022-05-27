@@ -1,0 +1,37 @@
+= Testing
+
+== Tools
+
+=== Kotest
+
+{kotest-href}[Kotest]
+
+https://mockk.io/[MockK] is the chosen mocking library for Kotlin code.
+
+
+
+
+== Unit Tests
+
+=== Kotlin
+
+
+
+
+
+== Integration Tests
+
+TODO: Describe integration test principles
+
+=== Data/SQL
+
+TODO: Describe testing the integration of Jooq with PostgreSQL
+
+=== Web/HTTP
+
+TODO: Describe testing the integration of the Domain module(s) with Ktor
+
+== End-to-End Tests
+
+TODO: Describe E2E test principles
+TODO: Describe continuous testing

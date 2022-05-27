@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: acme
+      app.kubernetes.io/component: keto
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: acme
+        app.kubernetes.io/component: keto
+    spec:
+      initContainers:
+        - name: keto-migrate
+          image: oryd/keto:v0.8.0
+          imagePullPolicy: IfNotPresent
+          args: ["migrate", "up", "-y"]
+          volumeMounts: []
+      containers:
+        - name: keto
+          image: oryd/keto:v0.8.0
+          imagePullPolicy: IfNotPresent
+          args: ["serve"]
+          ports:
+            - name: public
+              containerPort: 4466
+            - name: admin
+              containerPort: 4467
+          volumeMounts: []
+      volumes: []
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keto
+  labels:
+    app.kubernetes.io/name: keto
+spec:
+  ports:
+    - name: public
+      port: 80
+      targetPort: 4466
+    - name: admin
+      port: 8080
+      targetPort: 4467
+  selector:
+    app.kubernetes.io/name: acme
+    app.kubernetes.io/component: keto
+

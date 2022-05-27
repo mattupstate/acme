@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: migrations/public/changelog.000001.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/scheduling/changelog.000001.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/web-server/changelog.000001.sql
+      relativeToChangelogFile: true

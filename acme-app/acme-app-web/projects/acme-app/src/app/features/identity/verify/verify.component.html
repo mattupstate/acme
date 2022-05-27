@@ -1,0 +1,35 @@
+<mat-card>
+    <mat-card-title>Verify Your Account</mat-card-title>
+    <mat-card-content *ngIf="!requested">
+      <p>
+        Before you can login we need to verify your email address.
+        Check your inbox to see if you received a message from us.
+        If , enter your email address and we'll try resending the instructions.
+      </p>
+      <form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)" class="verify">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter your email address</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <div class="server-errors">
+            <p class="center" i18n="Verify form client error@@verifyFormClientError"
+              *ngIf="errorCode === 1">
+              There seems to be a problem with the email address you provided.<br/>
+              Please ensure the email address is correct and try again.
+            </p>
+            <p class="center" i18n="Verify form unexpected error@@verifyFormUnexpectedError" *ngIf="errorCode === 100">
+              An unexpected problem occurred.<br />Please try again in a few minutes.
+            </p>
+          </div>
+          <button type="submit" mat-raised-button color="primary" class="btn-block">Next</button>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-content *ngIf="requested">
+      <div fxLayout="column" class="requested">
+        <p>Check your email for instructions to verify your account.</p>
+        <p>Didn't receive the email? <a href="" (click)="reset($event)">Try again</a>.
+      </div>
+    </mat-card-content>
+  </mat-card>
