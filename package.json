@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "description": "Acme project documentation",
   "scripts": {
-    "build": "antora --fetch antora-playbook.yml --stacktrace"
+    "build": "antora --fetch antora-playbook.yml",
+    "deploy": "rm -rf build/site && antora --fetch antora-playbook.yml && touch build/site/.nojekyll && gh-pages-clean && gh-pages --dotfiles --dist build/site --no-history"
   },
   "devDependencies": {
     "@antora/cli": "3.0.0",
-    "@antora/site-generator": "3.0.0"
+    "@antora/site-generator": "3.0.0",
+    "asciidoctor-kroki": "^0.15.4",
+    "asciidoctor-plantuml": "^1.5.0",
+    "gh-pages": "^4.0.0"
   },
   "dependencies": {
-    "asciidoctor-kroki": "^0.15.4",
-    "asciidoctor-plantuml": "^1.5.0"
   }
 }
