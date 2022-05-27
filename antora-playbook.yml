@@ -2,6 +2,8 @@ site:
   title: Acme
   url: https://mattupstate.com/acme
   start_page: ROOT::index.adoc
+  keys:
+    google_analytics: UA-552135-7
 asciidoc:
   extensions:
     - asciidoctor-kroki
