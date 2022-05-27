@@ -18,13 +18,13 @@ import { AppComponent } from './app.component';
 import { AppEffects, StartupAffects } from './app.effects';
 import { GlobalErrorsService } from './app.global-errors.service';
 import { selectStartupState } from './app.selectors';
-import { ApplicationState, reducers, StartupState } from './app.state';
+import { reducers, StartupState } from './app.state';
 import { DeviceAwarenessService } from './device-awareness.service';
 import { FeatureModule } from './features';
 import { IdentityModule } from './features/identity/identity.module';
 import { NotificationsAlertModule } from './features/notifications/notifications-alert.module';
 
-export const initializer = (store: Store<ApplicationState>) => () =>
+export const initializer = (store: Store) => () =>
   new Promise<any>((resolve) => {
     store
       .select(selectStartupState)

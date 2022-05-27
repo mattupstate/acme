@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { register, registerViaOpenId } from '../../app.actions';
 import { selectBusy, selectRegistrationError, selectRegistrationRequested } from '../../app.selectors';
-import { ApplicationState } from '../../app.state';
 
 @Component({
   selector: 'app-register-container',
@@ -26,7 +25,7 @@ export class RegisterContainerComponent {
   busy$ = this.store.select(selectBusy);
   requested$ = this.store.select(selectRegistrationRequested);
 
-  constructor(private store: Store<ApplicationState>) { }
+  constructor(private store: Store) { }
 
   onFormSubmit(data: {
     email: string;

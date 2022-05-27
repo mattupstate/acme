@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { verifyAccount } from '../../app.actions';
 import { selectBusy, selectVerifyRequested, selectVerifyError } from '../../app.selectors';
-import { ApplicationState } from '../../app.state';
 import { IdentityServiceVerifyError } from './identity.service';
 
 @Component({
@@ -23,25 +22,13 @@ import { IdentityServiceVerifyError } from './identity.service';
   `,
 })
 export class VerifyContainerComponent {
-  errorCode$ = this.store.select(selectVerifyError).pipe(
-    map((error) => {
-      if (error != null) {
-        switch (error.constructor) {
-          case IdentityServiceVerifyError:
-            return 1;
-          default:
-            return 100;
-        }
-      }
-      return null;
-    })
-  );
+  errorCode$ = this.store.select(selectVerifyError);
 
   busy$ = this.store.select(selectBusy);
 
   requested$ = this.store.select(selectVerifyRequested);
 
-  constructor(private store: Store<ApplicationState>) {}
+  constructor(private store: Store) {}
 
   dispatch(data: { email: string }) {
     this.store.dispatch(verifyAccount(data));

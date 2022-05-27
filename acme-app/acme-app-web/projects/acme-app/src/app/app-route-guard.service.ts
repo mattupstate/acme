@@ -5,11 +5,10 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { invalidAccess, unauthenticatedAccess } from './app.actions';
 import { selectAuthenticated } from './app.selectors';
-import { ApplicationState } from './app.state';
 
 @Injectable()
 export class IsAuthenticated implements CanActivate {
-  constructor(private store: Store<ApplicationState>) {}
+  constructor(private store: Store) {}
 
   canActivate():
     | Observable<boolean | UrlTree>
@@ -31,7 +30,7 @@ export class IsAuthenticated implements CanActivate {
 
 @Injectable()
 export class IsUnauthenticated implements CanActivate {
-  constructor(private store: Store<ApplicationState>) {}
+  constructor(private store: Store) {}
 
   canActivate():
     | Observable<boolean | UrlTree>

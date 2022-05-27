@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { signIn, signInViaOpenId } from '../../app.actions';
 import { selectBusy, selectSignInError } from '../../app.selectors';
-import { ApplicationState, SignInError } from '../../app.state';
+import { SignInError } from '../../app.state';
 
 @Component({
   selector: 'app-sign-in-container',
@@ -24,26 +24,13 @@ import { ApplicationState, SignInError } from '../../app.state';
   `,
 })
 export class SignInContainerComponent {
-  errorCode$ = this.store.select(selectSignInError).pipe(
-    map((error) => {
-      switch(error) {
-        case SignInError.INVALID_CREDENTIALS:
-          return 1;
-        case SignInError.INACTIVE_ACCOUNT:
-          return 2;
-        case SignInError.UNEXPECTED:
-          return 100;
-        default:
-          return null;
-      }
-    })
-  );
+  errorCode$ = this.store.select(selectSignInError);
 
   busy$: Observable<boolean> = this.store.select(selectBusy);
 
   postVerify = false;
 
-  constructor(private store: Store<ApplicationState>, route: ActivatedRoute) {
+  constructor(private store: Store, route: ActivatedRoute) {
     this.postVerify = route.snapshot.queryParamMap.has('flow') && route.snapshot.queryParamMap.has('verified')
   }
 

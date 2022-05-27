@@ -1,46 +1,46 @@
 import { createAction, props } from '@ngrx/store';
 import { SignInError, RegistrationError, Principal } from './app.state';
 
-export const appStartup = createAction('@acme/startup');
+export const appStartup = createAction('[@acme/app] startup');
 
 export const appStartupComplete = createAction(
-  '@acme/startupComplete',
+  '[@acme/app] startupComplete',
   props<{ principal: Principal | null }>()
 );
 
 export const signIn = createAction(
-  '@acme/signIn',
+  '[@acme/app] signIn',
   props<{ email: string; password: string }>()
 );
 
 export const signInViaOpenId = createAction(
-  '@acme/signInViaOpenId',
+  '[@acme/app] signInViaOpenId',
   props<{ provider: string }>()
 )
 
 export const signInComplete = createAction(
-  '@acme/signInComplete',
+  '[@acme/app] signInComplete',
   props<{ principal: Principal }>()
 );
 export const signInFailure = createAction(
-  '@acme/signInFailure',
+  '[@acme/app] signInFailure',
   props<{ error: SignInError }>()
 );
 
 export const registerFailure = createAction(
-  '@acme/registerFailure',
+  '[@acme/app] registerFailure',
   props<{ error: RegistrationError }>()
 );
 
-export const logout = createAction('@acme/logout');
-export const logoutComplete = createAction('@acme/logoutComplete');
+export const logout = createAction('[@acme/app] logout');
+export const logoutComplete = createAction('[@acme/app] logoutComplete');
 export const logoutFailure = createAction(
-  '@acme/logoutFailure',
+  '[@acme/app] logoutFailure',
   props<{ error: any }>()
 );
 
 export const register = createAction(
-  '@acme/register',
+  '[@acme/app] register',
   props<{
     email: string;
     password: string;
@@ -50,42 +50,42 @@ export const register = createAction(
 );
 
 export const registerViaOpenId = createAction(
-  '@acme/registerViaOpenid',
+  '[@acme/app] registerViaOpenid',
   props<{ provider: string }>()
 )
 
 export const registerComplete = createAction(
-  '@acme/registerComplete'
+  '[@acme/app] registerComplete'
 );
 
 export const unauthenticatedAccess = createAction(
-  '@acme/unauthenticatedAccess'
+  '[@acme/app] unauthenticatedAccess'
 );
 
 export const unauthorizedAccess = createAction(
-  '@acme/unauthorizedAccess',
+  '[@acme/app] unauthorizedAccess',
   props<{ error: any }>()
 );
 
-export const invalidAccess = createAction('@acme/invalidAccess');
+export const invalidAccess = createAction('[@acme/app] invalidAccess');
 
 export const verifyAccount = createAction(
-  '@acme/verifyAccount',
+  '[@acme/app] verifyAccount',
   props<{ email: string }>()
 );
 
-export const verifyRequestComplete = createAction('@acme/verifyRequestComplete');
+export const verifyRequestComplete = createAction('[@acme/app] verifyRequestComplete');
 
 export const recoverAccount = createAction(
-  '@acme/recoverAccount',
+  '[@acme/app] recoverAccount',
   props<{ email: string }>()
 );
 
 export const recoverRequestComplete = createAction(
-  '@acme/recoverRequestComplete'
+  '[@acme/app] recoverRequestComplete'
 );
 
 export const externalLink = createAction(
-  '@acme/externalLink',
+  '[@acme/app] externalLink',
   props<{ url: string }>()
 )

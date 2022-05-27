@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { logout } from './app.actions';
-import { ApplicationState } from './app.state';
 import { DeviceAwarenessService } from './device-awareness.service';
 import { NotificationsAlertService } from './features/notifications/notifications-alert.service';
 
@@ -19,7 +18,7 @@ export class AppContainerComponent {
   constructor(
     breakpointService: DeviceAwarenessService,
     notificationsAlertService: NotificationsAlertService,
-    private store: Store<ApplicationState>
+    private store: Store
   ) {
     this.isHandset$ = breakpointService.isHandset$;
     this.hasNotifications$ = notificationsAlertService.hasNotifications$;

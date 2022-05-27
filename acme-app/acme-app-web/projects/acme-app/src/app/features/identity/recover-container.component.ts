@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { recoverAccount } from '../../app.actions';
 import { selectBusy, selectRecoveryRequested, selectRecoverError } from '../../app.selectors';
-import { ApplicationState } from '../../app.state';
 import { IdentityServiceRecoveryError } from './identity.service';
 
 @Component({
@@ -23,25 +22,13 @@ import { IdentityServiceRecoveryError } from './identity.service';
   `,
 })
 export class RecoverContainerComponent {
-  errorCode$ = this.store.select(selectRecoverError).pipe(
-    map((error) => {
-      if (error != null) {
-        switch (error.constructor) {
-          case IdentityServiceRecoveryError:
-            return 1;
-          default:
-            return 100;
-        }
-      }
-      return null;
-    })
-  );
+  errorCode$ = this.store.select(selectRecoverError);
 
   busy$ = this.store.select(selectBusy);
 
   requested$ = this.store.select(selectRecoveryRequested);
 
-  constructor(private store: Store<ApplicationState>) {}
+  constructor(private store: Store) {}
 
   dispatch(data: { email: string }) {
     this.store.dispatch(recoverAccount(data));

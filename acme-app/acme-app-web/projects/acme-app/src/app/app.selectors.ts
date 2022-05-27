@@ -1,14 +1,12 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ApplicationState, SecurityState } from './app.state';
+import { SecurityState, SignInError, StartupState } from './app.state';
+import { IdentityServiceRecoveryError, IdentityServiceVerifyError } from './features/identity/identity.service';
 
-export const selectStartupState = (state: ApplicationState) => state.startup;
+export const selectStartupState = createFeatureSelector<StartupState>('startup');
 
-export const selectBusy = (state: ApplicationState) => state.busy;
+export const selectBusy = createFeatureSelector<boolean>('busy');
 
-export const selectSecurity = createFeatureSelector<
-  ApplicationState,
-  SecurityState
->('security');
+export const selectSecurity = createFeatureSelector<SecurityState>('security');
 
 export const selectPrincipal = createSelector(
   selectSecurity,
@@ -32,12 +30,35 @@ export const selectRegistrationError = createSelector(
 
 export const selectSignInError = createSelector(
   selectSecurity,
-  (state: SecurityState) => state.signInError
+  (state: SecurityState) => {
+    let error = state.signInError;
+    switch(error) {
+      case SignInError.INVALID_CREDENTIALS:
+        return 1;
+      case SignInError.INACTIVE_ACCOUNT:
+        return 2;
+      case SignInError.UNEXPECTED:
+        return 100;
+      default:
+        return null;
+    }
+  }
 );
 
 export const selectRecoverError = createSelector(
   selectSecurity,
-  (state: SecurityState) => state.recoveryError
+  (state: SecurityState) => {
+    let error = state.recoveryError;
+    if (error != null) {
+      switch (error.constructor) {
+        case IdentityServiceRecoveryError:
+          return 1;
+        default:
+          return 100;
+      }
+    }
+    return null;
+  }
 );
 
 export const selectRecoveryRequested = createSelector(
@@ -52,5 +73,16 @@ export const selectVerifyRequested = createSelector(
 
 export const selectVerifyError = createSelector(
   selectSecurity,
-  (state: SecurityState)  => state.verifyError
+  (state: SecurityState) => {
+    let error = state.verifyError
+    if (error != null) {
+      switch (error.constructor) {
+        case IdentityServiceVerifyError:
+          return 1;
+        default:
+          return 100;
+      }
+    }
+    return null;
+  }
 )
