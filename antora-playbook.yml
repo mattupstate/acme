@@ -7,11 +7,12 @@ asciidoc:
     - asciidoctor-kroki
   attributes:
     page-component-order: '!ROOT, acme-handbook, acme-adr, *'
-#    kroki-fetch-diagram: true
+    # kroki-fetch-diagram: true
 content:
+  edit_url: '{web_url}/blob/{refname}/{path}'
   sources:
-    - url: .
-      branches: HEAD
+    - url: https://github.com/mattupstate/acme.git
+      branches: main
       start_paths: acme-docs/root, acme-docs/handbook, acme-docs/decisions, acme-web/acme-web-server/docs
 ui:
   bundle:
