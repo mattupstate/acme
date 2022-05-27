@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-register',
@@ -76,7 +75,7 @@ export class RegisterComponent implements OnInit {
   get givenName() { return this.registerForm.get('givenName')! }
   get familyName() { return this.registerForm.get('familyName')! }
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.reset();
