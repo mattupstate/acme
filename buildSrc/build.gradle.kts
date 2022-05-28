@@ -16,3 +16,11 @@ dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.5.1")
   }
 }
+
+tasks {
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+      jvmTarget = "11"
+    }
+  }
+}
