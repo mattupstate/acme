@@ -1,9 +1,5 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 tasks {
   val devKubernetesClusterName = (project.properties["dev.kubernetes.name"] ?: "acme-dev")
-  // val devNginxConfFile = file((project.properties["dev.nginx.conf"] ?: "/usr/local/etc/nginx/conf.d/acme.conf"))
-  // val ingressNginxUrlFile = buildDir.resolve("ingressnginx.url.txt")
   val sslCertDir = projectDir.resolve("src/k8s/overlays/dev/ssl")
   val sslCertificateFile = sslCertDir.resolve("_wildcard.nip.io.pem")
   val sslCertificateKeyFile = sslCertDir.resolve("_wildcard.nip.io-key.pem")
