@@ -90,26 +90,28 @@ spec:
                 name: acme-web-server
                 port:
                   number: 80
-#---
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: acme-app-web
-#  namespace: default
-#spec:
-#  ingressClassName: nginx
-#  tls:
-#    - hosts:
-#        - app-127-0-0-1.nip.io
-#      secretName: wildcard-nip-io-tls
-#  rules:
-#    - host: app-127-0-0-1.nip.io
-#      http:
-#        paths:
-#          - path: /
-#            pathType: Prefix
-#            backend:
-#              service:
-#                name: acme-app-web
-#                port:
-#                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: acme-app-web-rewrite
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: http://localhost:4200/$1
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: app-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: http-svc
+                port:
+                  number: 80
