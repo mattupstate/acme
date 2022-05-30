@@ -4,6 +4,10 @@ site:
   start_page: ROOT::index.adoc
   keys:
     google_analytics: UA-552135-7
+    github_url: https://github.com/mattupstate/acme
+antora:
+  extensions:
+    - '@antora/lunr-extension'
 asciidoc:
   extensions:
     - asciidoctor-kroki
@@ -19,4 +23,5 @@ content:
 ui:
   bundle:
     url: https://gitlab.com/mattupstate/acme-antora-ui/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+#    url: ~/Workspace/gitlab.com/mattupstate/acme-antora-ui/build/ui-bundle.zip
     snapshot: true
