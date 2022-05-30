@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>7. Use k3d for Local Kubernetes Clusters :: Acme</title>
+    <link rel="canonical" href="https://mattupstate.com/acme/acme-adr/000007-k3d.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-552135-7"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-552135-7')</script>
+    <script>var uiRootPath = '../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://mattupstate.com/acme">Acme</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/mattupstate/acme" data-title="GitHub Repository">
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" style="fill: white">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+            </span>
+          </a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="acme-adr" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Decision Records</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000000-antora.html">1. Documentation using Antora</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000001-kotlin.html">2. Use Kotlin for Domain Modeling and Business Logic</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000002-postgresql.html">2. Use PostgreSQL for Persistence</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000003-ktor.html">3. Use Ktor for HTTP APIs</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000004-angular.html">4. Use Angular for Web Applications</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000005-kratos.html">5. Use ORY Kratos for Identity Management</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000006-keto.html">6. Use ORY Keto for Authorization</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="000007-k3d.html">7. Use k3d for Local Kubernetes Clusters</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000008-nip-io.html">8. Use nip.io for Local Domain Names</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000009-mkcert.html">9. Use mkcert to Manage SSL Certs for Local Development</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="000010-skaffold.html">10. Use Skaffold for Running the System Locally</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Decision Records</span>
+    <span class="version">default</span>
+  </div>
+  <ul class="components">
+    <li class="component">
+      <a class="title" href="../acme-handbook/index.html">Handbook</a>
+    </li>
+    <li class="component is-current">
+      <a class="title" href="index.html">Decision Records</a>
+    </li>
+    <li class="component">
+      <a class="title" href="../acme-web-server/0.1.0/index.html">acme-web-server</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../acme-web-server/0.1.0/index.html">0.1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Decision Records</a></li>
+    <li><a href="000007-k3d.html">7. Use k3d for Local Kubernetes Clusters</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/mattupstate/acme/blob/main/acme-docs/decisions/modules/ROOT/pages/000007-k3d.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">7. Use k3d for Local Kubernetes Clusters</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+?
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_context"><a class="anchor" href="#_context"></a>Context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decision"><a class="anchor" href="#_decision"></a>Decision</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_consequences"><a class="anchor" href="#_consequences"></a>Consequences</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_positive"><a class="anchor" href="#_positive"></a>Positive</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_neutral"><a class="anchor" href="#_neutral"></a>Neutral</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_negative"><a class="anchor" href="#_negative"></a>Negative</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script src="../_/js/vendor/lunr.js"></script>
+<script src="../_/js/search-ui.js" id="search-ui-script" data-site-root-path=".." data-snippet-length="100" data-stylesheet="../_/css/search.css"></script>
+<script async src="../search-index.js"></script>
+  </body>
+</html>
