@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="11">
+      <module name="acme.acme-api.main" target="12" />
+      <module name="acme.acme-api.test" target="12" />
+      <module name="acme.acme-deploy.main" target="14" />
+      <module name="acme.acme-deploy.test" target="14" />
+      <module name="acme.acme-gateway.main" target="11" />
+      <module name="acme.acme-gateway.test" target="11" />
+      <module name="acme.acme-identity.main" target="11" />
+      <module name="acme.acme-identity.test" target="11" />
+      <module name="acme.acme-notifications.main" target="11" />
+      <module name="acme.acme-notifications.test" target="11" />
+      <module name="acme.acme-patients.main" target="11" />
+      <module name="acme.acme-patients.test" target="11" />
+      <module name="acme.acme-web.main" target="11" />
+      <module name="acme.acme-web.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
