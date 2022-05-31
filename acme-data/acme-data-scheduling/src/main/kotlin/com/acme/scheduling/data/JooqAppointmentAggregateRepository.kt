@@ -1,9 +1,9 @@
 package com.acme.scheduling.data
 
 import com.acme.core.AggregateRepository
-import com.acme.sql.scheduling.Tables.APPOINTMENTS
-import com.acme.scheduling.Appointment
 import com.acme.core.HasRevision
+import com.acme.scheduling.Appointment
+import com.acme.sql.scheduling.Tables.APPOINTMENTS
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

@@ -66,7 +66,7 @@ fun Application.installCallLogging() {
 
 private fun ApplicationCall.getPrincipalAsString() = try {
   authenticatedUser().id
-} catch(e: PrincipalNotFoundException) {
+} catch (e: PrincipalNotFoundException) {
   "anonymous"
 }
 

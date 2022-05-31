@@ -15,6 +15,5 @@ class SignInPage : Page {
     get() = ExpectedConditions.visibilityOf(rootWebElement)
 
   fun signIn(user: User) {
-
   }
 }

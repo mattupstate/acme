@@ -13,6 +13,3 @@ interface AcmeWebUserPrincipal {
     val suffix: String
   }
 }
-
-
-

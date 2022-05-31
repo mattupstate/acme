@@ -37,4 +37,3 @@ class ColoredExceptionConverter : ThrowableProxyConverter() {
     )
   }
 }
-

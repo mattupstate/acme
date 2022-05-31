@@ -54,5 +54,4 @@ class HeaderAuthenticationProvider(config: Config) : AuthenticationProvider(conf
       validateFunction = body
     }
   }
-
 }

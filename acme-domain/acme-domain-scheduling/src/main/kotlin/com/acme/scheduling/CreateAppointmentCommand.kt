@@ -13,4 +13,3 @@ data class CreateAppointmentCommand(
 ) : Command {
   override val metadata: MetaData = MetaData()
 }
-

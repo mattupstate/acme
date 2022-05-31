@@ -116,6 +116,7 @@ fun Route.schedulingQueries(views: SchedulingWebViews, accessControl: AccessCont
             href(AppointmentResourceLocation.Unattended(location))
           ),
         )
-      })
+      }
+    )
   }
 }

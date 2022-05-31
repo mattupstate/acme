@@ -1,8 +1,6 @@
 package com.acme.web.test.specs
 
 // import io.mockk.mockk
-import org.junit.jupiter.api.TestTemplate
-import org.openqa.selenium.WebDriver
 
 class PrescribeProductSpec : Spec() {
 
@@ -13,22 +11,22 @@ class PrescribeProductSpec : Spec() {
 
   // @TestTemplate
   // fun `should prescribe product`(driver: WebDriver) {
-    // Given
-    // val api = DefaultAppointmentsAPI(
-    //   AggregatePersistenceModule(
-    //     appointmentRepository,
-    //     patientRepository,
-    //     practiceRepository,
-    //     practitionerRepository
-    //   )
-    // )
-    //
-    // api.exec(CreatePracticeCommand(PractitionerId(),"Acme Doctors")).also { practiceId ->
-    //   api.exec(CreatePractitionerCommand(UserId(), HumanName("Johnson", "Debbie"), Gender.UNKNOWN)).also { practicionerId ->
-    //     api.exec(CreateClientCommand(HumanName("Smith", "Mary"), Gender.UNKNOWN)).also { patientId ->
-    //
-    //     }
-    //   }
-    // }
+  // Given
+  // val api = DefaultAppointmentsAPI(
+  //   AggregatePersistenceModule(
+  //     appointmentRepository,
+  //     patientRepository,
+  //     practiceRepository,
+  //     practitionerRepository
+  //   )
+  // )
+  //
+  // api.exec(CreatePracticeCommand(PractitionerId(),"Acme Doctors")).also { practiceId ->
+  //   api.exec(CreatePractitionerCommand(UserId(), HumanName("Johnson", "Debbie"), Gender.UNKNOWN)).also { practicionerId ->
+  //     api.exec(CreateClientCommand(HumanName("Smith", "Mary"), Gender.UNKNOWN)).also { patientId ->
+  //
+  //     }
+  //   }
+  // }
   // }
 }

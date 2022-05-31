@@ -17,14 +17,17 @@ import io.ktor.server.routing.Route
 import org.jooq.Configuration
 
 fun Route.scheduling(jooqConfig: Configuration, ketoConfig: KetoConfiguration, basePath: String = "") {
-  val accessControl = KtorOryKetoAccessControlService("scheduling", KtorOryKetoClient(
-    HttpClient {
-      defaultOryKetoClientConfiguration(ketoConfig.readBaseUrl)
-    },
-    HttpClient {
-      defaultOryKetoClientConfiguration(ketoConfig.writeBaseUrl)
-    }
-  ))
+  val accessControl = KtorOryKetoAccessControlService(
+    "scheduling",
+    KtorOryKetoClient(
+      HttpClient {
+        defaultOryKetoClientConfiguration(ketoConfig.readBaseUrl)
+      },
+      HttpClient {
+        defaultOryKetoClientConfiguration(ketoConfig.writeBaseUrl)
+      }
+    )
+  )
   scheduling(jooqConfig, accessControl, basePath)
 }
 

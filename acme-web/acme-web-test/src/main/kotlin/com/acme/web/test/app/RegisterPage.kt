@@ -55,7 +55,6 @@ class RegisterPage : Page {
   fun fillAndSubmitRegistrationForm() =
     fillRegistrationForm().also {
       submitRegistrationForm()
-
     }
 
   data class RegistrationValues(

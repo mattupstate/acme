@@ -1,8 +1,8 @@
 package com.acme.web.server.scheduling.json
 
 import com.acme.web.server.json.hal.HalLink
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClientCollectionResource(

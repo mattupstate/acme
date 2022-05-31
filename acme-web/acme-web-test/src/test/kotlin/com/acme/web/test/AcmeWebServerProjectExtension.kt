@@ -80,17 +80,20 @@ class AcmeWebServerProjectExtension(
       )
     )
 
-    server = embeddedServer(io.ktor.server.netty.Netty, environment = applicationEngineEnvironment {
-      module {
-        main(config)
-      }
+    server = embeddedServer(
+      io.ktor.server.netty.Netty,
+      environment = applicationEngineEnvironment {
+        module {
+          main(config)
+        }
 
-      developmentMode = true
-      connector {
-        port = serverPort
-        host = serverHost
+        developmentMode = true
+        connector {
+          port = serverPort
+          host = serverHost
+        }
       }
-    }).also {
+    ).also {
       it.start()
     }
   }

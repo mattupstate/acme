@@ -42,7 +42,7 @@ class RequestBodyValidationExceptionExtensionTest : ShouldSpec({
             )
           )
         )
-      )
+        )
     }
   }
 })

@@ -1,8 +1,6 @@
 package com.acme.ktor.server.logging
 
 import io.ktor.server.application.ApplicationCall
-import io.ktor.server.application.ApplicationCallPipeline
-import io.ktor.server.application.call
 import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.log
 import io.ktor.util.AttributeKey

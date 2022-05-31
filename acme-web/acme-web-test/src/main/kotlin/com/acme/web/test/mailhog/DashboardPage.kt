@@ -12,7 +12,7 @@ class DashboardPage : Page {
   private val rootWebElement: WebElement? = null
 
   override val waitCondition: ExpectedCondition<WebElement>
-      get() = ExpectedConditions.visibilityOf(rootWebElement)
+    get() = ExpectedConditions.visibilityOf(rootWebElement)
 
   fun clickMessageListItemContaining(recipient: String, subject: String) {
     rootWebElement!!.findElement(

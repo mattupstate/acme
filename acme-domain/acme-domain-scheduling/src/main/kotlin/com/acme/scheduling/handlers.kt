@@ -39,7 +39,6 @@ val createPractitioner = { command: CreatePractitionerCommand, uow: SchedulingUn
     .also {
       uow.addEvent(PractitionerCreatedEvent(it))
     }
-
 }
 
 val createAppointment = { command: CreateAppointmentCommand, uow: SchedulingUnitOfWork ->

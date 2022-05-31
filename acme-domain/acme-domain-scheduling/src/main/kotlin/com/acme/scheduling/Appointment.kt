@@ -37,9 +37,7 @@ data class Appointment(
     return id.hashCode()
   }
 
-
   @JvmInline
   @Serializable
   value class Id(val value: String)
-
 }

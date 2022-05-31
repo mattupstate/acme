@@ -19,7 +19,6 @@ data class I18NContext(
   ).also {
     messageBundles[locale] = it
   }
-
 }
 
 val i18PluginKey = AttributeKey<I18NContext>("i18nPluginKey")

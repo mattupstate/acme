@@ -7,7 +7,6 @@ fun randomLowercaseLetters(length: Int): String {
     .joinToString("")
 }
 
-
 fun randomLettersAndNumbers(length: Int): String {
   val chars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
   return (1..length)

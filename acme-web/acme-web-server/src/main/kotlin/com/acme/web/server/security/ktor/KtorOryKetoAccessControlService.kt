@@ -6,8 +6,8 @@ import com.acme.web.server.security.keto.ktor.KtorOryKetoClient
 import com.acme.web.server.security.keto.ktor.defaultOryKetoReadClient
 import com.acme.web.server.security.keto.ktor.defaultOryKetoWriteClient
 
-class KtorOryKetoAccessControlService(namespace: String, client: OryKetoClient)
-  : OryKetoAccessControlService(namespace, client) {
+class KtorOryKetoAccessControlService(namespace: String, client: OryKetoClient) :
+  OryKetoAccessControlService(namespace, client) {
 
   constructor(namespace: String) : this(namespace, DEFAULT_CLIENT)
 

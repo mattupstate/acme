@@ -48,6 +48,6 @@ data class PractitionerResource(
           "verifiedAt": null
         }]
       }
-      """
+    """
   }
 }

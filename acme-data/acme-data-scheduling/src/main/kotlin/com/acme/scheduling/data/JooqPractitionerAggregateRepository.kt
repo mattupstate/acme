@@ -1,9 +1,9 @@
 package com.acme.scheduling.data
 
 import com.acme.core.AggregateRepository
-import com.acme.sql.scheduling.Tables.PRACTITIONERS
-import com.acme.scheduling.Practitioner
 import com.acme.core.HasRevision
+import com.acme.scheduling.Practitioner
+import com.acme.sql.scheduling.Tables.PRACTITIONERS
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

@@ -1,7 +1,6 @@
 package com.acme.scheduling.data
 
 import com.acme.scheduling.Appointment
-import com.acme.scheduling.Appointment.Id
 import com.acme.scheduling.AppointmentState
 import com.acme.scheduling.Client
 import com.acme.scheduling.Period

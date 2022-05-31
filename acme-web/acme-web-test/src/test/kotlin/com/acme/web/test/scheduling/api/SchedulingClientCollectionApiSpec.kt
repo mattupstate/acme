@@ -25,7 +25,8 @@ class SchedulingClientCollectionApiSpec : ApiSpec({
         headers {
           mockUser()
         }
-        setBody("""
+        setBody(
+          """
           {
             "name": {
               "family": "Evans",
@@ -39,7 +40,8 @@ class SchedulingClientCollectionApiSpec : ApiSpec({
               "hello@world.com"
             ]
           }
-        """)
+          """
+        )
       }.also {
         it shouldHaveStatus HttpStatusCode.OK
         it shouldMatchJsonSchema """
@@ -190,14 +192,16 @@ class SchedulingClientCollectionApiSpec : ApiSpec({
         headers {
           mockUser()
         }
-        setBody("""
+        setBody(
+          """
           {
             "name": {},
             "gender": "BOGUS",
             "phoneNumbers": [],
             "emailAddresses": []
           }
-        """)
+          """
+        )
       }.also {
         it shouldHaveStatus HttpStatusCode.BadRequest
         it shouldMatchJsonSchema """

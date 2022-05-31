@@ -1,14 +1,6 @@
 package com.acme.web.server.scheduling
 
 import com.acme.core.CommandValidationException
-import com.acme.scheduling.data.SchedulingJooqUnitOfWork
-import com.acme.web.server.scheduling.data.AppointmentRecord
-import com.acme.web.server.scheduling.data.ClientRecord
-import com.acme.web.server.scheduling.data.ContactPointRecord
-import com.acme.web.server.scheduling.data.HumanNameRecord
-import com.acme.web.server.scheduling.data.JooqSchedulingWebViews
-import com.acme.web.server.scheduling.data.PracticeRecord
-import com.acme.web.server.scheduling.data.PractitionerRecord
 import com.acme.scheduling.Appointment
 import com.acme.scheduling.AppointmentState
 import com.acme.scheduling.CancelAppointmentCommand
@@ -27,7 +19,15 @@ import com.acme.scheduling.Period
 import com.acme.scheduling.Practice
 import com.acme.scheduling.Practitioner
 import com.acme.scheduling.UserId
+import com.acme.scheduling.data.SchedulingJooqUnitOfWork
 import com.acme.test.IntegrationTest
+import com.acme.web.server.scheduling.data.AppointmentRecord
+import com.acme.web.server.scheduling.data.ClientRecord
+import com.acme.web.server.scheduling.data.ContactPointRecord
+import com.acme.web.server.scheduling.data.HumanNameRecord
+import com.acme.web.server.scheduling.data.JooqSchedulingWebViews
+import com.acme.web.server.scheduling.data.PracticeRecord
+import com.acme.web.server.scheduling.data.PractitionerRecord
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
@@ -198,7 +198,8 @@ class MessagesTest : ShouldSpec({
                 )
               )
             }
-          }}
+          }
+        }
       }
     }
   }

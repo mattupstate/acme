@@ -15,10 +15,12 @@ import kotlinx.serialization.json.Json
 
 fun HttpClientConfig<*>.defaultOryKetoClientConfiguration(baseUrl: String) {
   install(ContentNegotiation) {
-    json(Json {
-      prettyPrint = true
-      prettyPrintIndent = "  "
-    })
+    json(
+      Json {
+        prettyPrint = true
+        prettyPrintIndent = "  "
+      }
+    )
   }
   defaultRequest {
     accept(ContentType.Application.Json)

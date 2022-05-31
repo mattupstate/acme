@@ -53,5 +53,4 @@ class JooqAndPostgresListener : TestListener {
   }
 
   class TestTransactionException : DataAccessException("Rollback caused by test transaction")
-
 }

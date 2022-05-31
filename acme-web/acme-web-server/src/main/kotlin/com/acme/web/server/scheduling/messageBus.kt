@@ -7,7 +7,6 @@ import com.acme.scheduling.AppointmentUnattendedEvent
 import com.acme.scheduling.ClientCreatedEvent
 import com.acme.scheduling.PracticeCreatedEvent
 import com.acme.scheduling.PractitionerCreatedEvent
-import com.acme.scheduling.schedulingMessageBus as baseSchedulingMessageBus
 import com.acme.web.server.scheduling.data.onAppointmentAttended
 import com.acme.web.server.scheduling.data.onAppointmentCanceled
 import com.acme.web.server.scheduling.data.onAppointmentCreated
@@ -15,6 +14,7 @@ import com.acme.web.server.scheduling.data.onAppointmentUnattended
 import com.acme.web.server.scheduling.data.onClientCreated
 import com.acme.web.server.scheduling.data.onPracticeCreated
 import com.acme.web.server.scheduling.data.onPractitionerCreated
+import com.acme.scheduling.schedulingMessageBus as baseSchedulingMessageBus
 
 val schedulingMessageBus = baseSchedulingMessageBus.copy().apply {
   addEventHandler(

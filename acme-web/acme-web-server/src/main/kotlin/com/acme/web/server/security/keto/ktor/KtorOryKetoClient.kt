@@ -100,7 +100,7 @@ class KtorOryKetoClient(private val readClient: HttpClient, private val writeCli
       setBody(tuple)
     }.body()
 
-  override suspend fun delete(tuple: RelationTuple): Unit {
+  override suspend fun delete(tuple: RelationTuple) {
     writeClient.delete(TUPLES_COLLECTION_URL) {
       parametersOf(
         "namespace" to listOf(tuple.namespace),

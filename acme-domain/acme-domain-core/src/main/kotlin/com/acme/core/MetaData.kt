@@ -4,7 +4,7 @@ package com.acme.core
 class MetaData {
   private val meta: MutableMap<String, Any> = mutableMapOf()
 
-  fun <T> get(key: String) : T = meta[key] as T
+  fun <T> get(key: String): T = meta[key] as T
 
   fun set(key: String, value: Any) {
     meta[key] = value
