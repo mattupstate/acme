@@ -5,6 +5,14 @@
  * in the user manual at https://docs.gradle.org/6.0.1/userguide/multi_project_builds.html
  */
 
+val isCiServer = System.getenv().containsKey("CI")
+
+buildCache {
+  local {
+    isEnabled = !isCiServer
+  }
+}
+
 rootProject.name = "acme"
 
 pluginManagement {
