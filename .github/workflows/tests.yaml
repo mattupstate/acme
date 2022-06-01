@@ -8,12 +8,10 @@ on:
       - main
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Run tests
+      - uses: actions/checkout@v3
+      - name: Tests
         uses: gradle/gradle-build-action@v2
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
