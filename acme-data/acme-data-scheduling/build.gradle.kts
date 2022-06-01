@@ -10,6 +10,7 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
+  testImplementation("com.zaxxer:HikariCP:5.0.1")
   testImplementation("org.postgresql:postgresql:42.2.18")
   testImplementation("org.testcontainers:postgresql:1.17.1")
 }
