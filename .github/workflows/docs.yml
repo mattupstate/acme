@@ -1,4 +1,4 @@
-name: Antora Build
+name: Documentation
 on:
   push:
     branches:
@@ -8,7 +8,8 @@ on:
       - main
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    name: Build Antora Site
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
