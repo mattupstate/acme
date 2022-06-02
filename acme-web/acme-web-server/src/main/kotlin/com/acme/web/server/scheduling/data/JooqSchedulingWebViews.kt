@@ -1,14 +1,14 @@
 package com.acme.web.server.scheduling.data
 
-import com.acme.sql.web_server.Tables.APPOINTMENTS
-import com.acme.sql.web_server.Tables.CLIENTS
-import com.acme.sql.web_server.Tables.CLIENT_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.CLIENT_NAMES
-import com.acme.sql.web_server.Tables.PRACTICES
-import com.acme.sql.web_server.Tables.PRACTICE_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.PRACTITIONERS
-import com.acme.sql.web_server.Tables.PRACTITIONER_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.PRACTITIONER_NAMES
+import com.acme.sql.web_server.tables.references.APPOINTMENTS
+import com.acme.sql.web_server.tables.references.CLIENTS
+import com.acme.sql.web_server.tables.references.CLIENT_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.CLIENT_NAMES
+import com.acme.sql.web_server.tables.references.PRACTICES
+import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.PRACTITIONERS
+import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
 import org.jooq.Configuration
 import org.jooq.DSLContext
 import java.time.ZoneOffset
@@ -32,8 +32,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           val contactPoints = result.mapNotNull {
             it[PRACTICE_CONTACT_POINTS.SYSTEM]?.run {
               ContactPointRecord(
-                system = it[PRACTICE_CONTACT_POINTS.SYSTEM],
-                value = it[PRACTICE_CONTACT_POINTS.VALUE],
+                system = it[PRACTICE_CONTACT_POINTS.SYSTEM]!!,
+                value = it[PRACTICE_CONTACT_POINTS.VALUE]!!,
                 verifiedAt = it[PRACTICE_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
               )
             }
@@ -41,8 +41,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
 
           result.first().let {
             PracticeRecord(
-              id = it[PRACTICES.ID],
-              name = it[PRACTICES.NAME],
+              id = it[PRACTICES.ID]!!,
+              name = it[PRACTICES.NAME]!!,
               contactPoints = contactPoints
             )
           }
@@ -65,10 +65,10 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           val names = result.mapNotNull {
             it[CLIENT_NAMES.FAMILY]?.run {
               HumanNameRecord(
-                family = it[CLIENT_NAMES.FAMILY],
-                given = it[CLIENT_NAMES.GIVEN],
-                prefix = it[CLIENT_NAMES.PREFIX],
-                suffix = it[CLIENT_NAMES.SUFFIX],
+                family = it[CLIENT_NAMES.FAMILY]!!,
+                given = it[CLIENT_NAMES.GIVEN]!!,
+                prefix = it[CLIENT_NAMES.PREFIX]!!,
+                suffix = it[CLIENT_NAMES.SUFFIX]!!,
                 periodStart = it[CLIENT_NAMES.PERIOD_START]?.toInstant(ZoneOffset.UTC),
                 periodEnd = it[CLIENT_NAMES.PERIOD_END]?.toInstant(ZoneOffset.UTC)
               )
@@ -78,8 +78,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           val contactPoints = result.mapNotNull {
             it[CLIENT_CONTACT_POINTS.SYSTEM]?.run {
               ContactPointRecord(
-                system = it[CLIENT_CONTACT_POINTS.SYSTEM],
-                value = it[CLIENT_CONTACT_POINTS.VALUE],
+                system = it[CLIENT_CONTACT_POINTS.SYSTEM]!!,
+                value = it[CLIENT_CONTACT_POINTS.VALUE]!!,
                 verifiedAt = it[CLIENT_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
               )
             }
@@ -87,8 +87,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
 
           result.first().let {
             ClientRecord(
-              id = it[CLIENTS.ID],
-              gender = it[CLIENTS.GENDER],
+              id = it[CLIENTS.ID]!!,
+              gender = it[CLIENTS.GENDER]!!,
               names = names,
               contactPoints = contactPoints
             )
@@ -112,10 +112,10 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           val names = result.mapNotNull {
             it[PRACTITIONER_NAMES.FAMILY]?.run {
               HumanNameRecord(
-                family = it[PRACTITIONER_NAMES.FAMILY],
-                given = it[PRACTITIONER_NAMES.GIVEN],
-                prefix = it[PRACTITIONER_NAMES.PREFIX],
-                suffix = it[PRACTITIONER_NAMES.SUFFIX],
+                family = it[PRACTITIONER_NAMES.FAMILY]!!,
+                given = it[PRACTITIONER_NAMES.GIVEN]!!,
+                prefix = it[PRACTITIONER_NAMES.PREFIX]!!,
+                suffix = it[PRACTITIONER_NAMES.SUFFIX]!!,
                 periodStart = it[PRACTITIONER_NAMES.PERIOD_START]?.toInstant(ZoneOffset.UTC),
                 periodEnd = it[PRACTITIONER_NAMES.PERIOD_END]?.toInstant(ZoneOffset.UTC)
               )
@@ -125,8 +125,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           val contactPoints = result.mapNotNull {
             it[PRACTITIONER_CONTACT_POINTS.VALUE]?.run {
               ContactPointRecord(
-                system = it[PRACTITIONER_CONTACT_POINTS.SYSTEM],
-                value = it[PRACTITIONER_CONTACT_POINTS.VALUE],
+                system = it[PRACTITIONER_CONTACT_POINTS.SYSTEM]!!,
+                value = it[PRACTITIONER_CONTACT_POINTS.VALUE]!!,
                 verifiedAt = it[PRACTITIONER_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
               )
             }
@@ -134,8 +134,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
 
           result.first().let {
             PractitionerRecord(
-              id = it[PRACTITIONERS.ID],
-              gender = it[PRACTITIONERS.GENDER],
+              id = it[PRACTITIONERS.ID]!!,
+              gender = it[PRACTITIONERS.GENDER]!!,
               names = names,
               contactPoints = contactPoints
             )
@@ -156,11 +156,11 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
       .where(APPOINTMENTS.ID.eq(id))
       .fetchOne()?.let {
         AppointmentRecord(
-          id = it[APPOINTMENTS.ID],
-          practiceId = it[PRACTICES.ID],
-          practitionerId = it[PRACTITIONERS.ID],
-          clientId = it[CLIENTS.ID],
-          state = it[APPOINTMENTS.STATE],
+          id = it[APPOINTMENTS.ID]!!,
+          practiceId = it[PRACTICES.ID]!!,
+          practitionerId = it[PRACTITIONERS.ID]!!,
+          clientId = it[CLIENTS.ID]!!,
+          state = it[APPOINTMENTS.STATE]!!,
           periodStart = it[APPOINTMENTS.PERIOD_START]?.toInstant(ZoneOffset.UTC),
           periodEnd = it[APPOINTMENTS.PERIOD_END]?.toInstant(ZoneOffset.UTC)
         )

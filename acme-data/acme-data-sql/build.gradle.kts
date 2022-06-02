@@ -12,7 +12,7 @@ dependencies {
   jooqGenerator(project(":acme-lib:acme-lib-liquibase"))
   jooqGenerator("org.testcontainers:postgresql:1.17.1")
   jooqGenerator("org.postgresql:postgresql:42.2.18")
-  // jooqGenerator("ch.qos.logback:logback-classic:1.2.3")
+  jooqGenerator("ch.qos.logback:logback-classic:1.2.3")
 
   implementation(project(":acme-domain:acme-domain-core"))
   implementation("com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2")
@@ -47,18 +47,18 @@ jooq {
             "jdbc:tc:postgresql:11.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
         }
         generator.apply {
-          name = "org.jooq.codegen.DefaultGenerator"
+          name = "org.jooq.codegen.KotlinGenerator"
           database.apply {
             name = "org.jooq.meta.postgres.PostgresDatabase"
             includes = ".*"
             excludes = "databasechangelog.*|databasechangeloglock.*|pg_catalog.*|information_schema.*"
           }
-          generate.apply {
-            isDeprecated = false
-            isRecords = true
-            isImmutablePojos = true
-            isFluentSetters = true
-          }
+          // generate.apply {
+          //   isDeprecated = false
+          //   isRecords = true
+          //   isImmutablePojos = true
+          //   isFluentSetters = true
+          // }
           target.apply {
             packageName = "com.acme.sql"
           }

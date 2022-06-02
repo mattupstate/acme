@@ -3,7 +3,7 @@ package com.acme.scheduling.data
 import com.acme.core.AggregateRepository
 import com.acme.core.HasRevision
 import com.acme.scheduling.Appointment
-import com.acme.sql.scheduling.Tables.APPOINTMENTS
+import com.acme.sql.scheduling.tables.references.APPOINTMENTS
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,7 +18,7 @@ class JooqAppointmentAggregateRepository(
     dsl.selectFrom(APPOINTMENTS)
       .where(APPOINTMENTS.ID.eq(id.value))
       .fetchOne {
-        Json.decodeFromString<Appointment>(it.aggregate.data())
+        Json.decodeFromString<Appointment>(it.aggregate!!.data())
       }
 
   override fun get(id: Appointment.Id): Appointment = getOrThrow(id) { NoSuchElementException() }

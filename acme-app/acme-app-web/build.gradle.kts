@@ -17,6 +17,7 @@ tasks {
 
   register<Exec>("test") {
     inputs.dir("projects")
+    outputs.dir("reports")
     commandLine("npm", "run", "test-ci")
     dependsOn("install")
   }

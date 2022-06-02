@@ -12,15 +12,15 @@ import com.acme.scheduling.Period
 import com.acme.scheduling.PracticeCreatedEvent
 import com.acme.scheduling.PractitionerCreatedEvent
 import com.acme.scheduling.data.SchedulingJooqUnitOfWork
-import com.acme.sql.web_server.Tables.APPOINTMENTS
-import com.acme.sql.web_server.Tables.CLIENTS
-import com.acme.sql.web_server.Tables.CLIENT_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.CLIENT_NAMES
-import com.acme.sql.web_server.Tables.PRACTICES
-import com.acme.sql.web_server.Tables.PRACTICE_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.PRACTITIONERS
-import com.acme.sql.web_server.Tables.PRACTITIONER_CONTACT_POINTS
-import com.acme.sql.web_server.Tables.PRACTITIONER_NAMES
+import com.acme.sql.web_server.tables.references.APPOINTMENTS
+import com.acme.sql.web_server.tables.references.CLIENTS
+import com.acme.sql.web_server.tables.references.CLIENT_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.CLIENT_NAMES
+import com.acme.sql.web_server.tables.references.PRACTICES
+import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.PRACTITIONERS
+import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
+import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
 import java.time.LocalDateTime
 
 val onPractitionerCreated: (PractitionerCreatedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->

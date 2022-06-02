@@ -23,7 +23,7 @@ module.exports = function (config) {
       'src/**/*.js': ['coverage']
     },
     coverageReporter: {
-      dir: 'build/reports/coverage',
+      dir: '../../reports/acme-app/coverage',
       reporters: [
         { type: 'html', subdir: 'html' },
         { type: 'lcov', subdir: 'lcov' },
