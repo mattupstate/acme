@@ -50,7 +50,7 @@ class AcmeWebServerProjectExtension(
       connectTimeoutMillis = 10000
       socketTimeoutMillis = 10000
     }
-    
+
     install(Logging) {
       logger = Logger.DEFAULT
       level = LogLevel.ALL
@@ -91,9 +91,29 @@ class AcmeWebServerProjectExtension(
       io.ktor.server.netty.Netty,
       environment = applicationEngineEnvironment {
         module {
-          main(config)
+          main(
+            MainConfiguration(
+              datasource = DataSourceConfiguration(
+                jdbcUrl = "jdbc:tc:postgresql:11.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update",
+                username = "acme",
+                password = "password"
+              ),
+              authentication = AuthenticationConfiguration(
+                headers = HeaderAuthConfiguration(
+                  enabled = true
+                )
+              ),
+              keto = KetoConfiguration(
+                baseUrl = "http://127.0.0.1",
+                readPort = keto.getMappedPort(4466),
+                writePort = keto.getMappedPort(4467),
+              ),
+              openTracing = OpenTracingConfiguration(
+                "acme", emptyList()
+              )
+            )
+          )
         }
-
         developmentMode = true
         connector {
           port = serverPort
