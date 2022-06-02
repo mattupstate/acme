@@ -10,6 +10,7 @@ import com.acme.web.server.security.ktor.HeaderAuthConfiguration
 import com.google.common.truth.Truth
 import io.kotest.core.listeners.ProjectListener
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
@@ -44,6 +45,12 @@ class AcmeWebServerProjectExtension(
   val http = HttpClient {
     expectSuccess = false
 
+    install(HttpTimeout) {
+      requestTimeoutMillis = 10000
+      connectTimeoutMillis = 10000
+      socketTimeoutMillis = 10000
+    }
+    
     install(Logging) {
       logger = Logger.DEFAULT
       level = LogLevel.ALL
