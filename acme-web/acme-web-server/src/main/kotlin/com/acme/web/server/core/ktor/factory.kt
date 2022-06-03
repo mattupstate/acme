@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
 import org.jooq.SQLDialect
 import org.jooq.impl.DataSourceConnectionProvider
 import org.jooq.impl.DefaultConfiguration
-import org.jooq.impl.ThreadLocalTransactionProvider
+import org.jooq.impl.DefaultTransactionProvider
 import javax.sql.DataSource
 
 fun dataSourceFactory(config: DataSourceConfiguration) = HikariDataSource(
@@ -31,7 +31,7 @@ fun dataSourceFactory(config: DataSourceConfiguration) = HikariDataSource(
 
 fun jooqConfigFactory(dataSource: DataSource) = DefaultConfiguration().apply {
   set(dataSource)
-  set(ThreadLocalTransactionProvider(DataSourceConnectionProvider(dataSource), true))
+  set(DefaultTransactionProvider(DataSourceConnectionProvider(dataSource), true))
   set(SQLDialect.POSTGRES)
 }
 
