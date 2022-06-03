@@ -7,15 +7,12 @@ import com.acme.sql.scheduling.tables.references.CLIENTS
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.JSONB
 
 class JooqClientAggregateRepository(
   private val dsl: DSLContext
 ) : AggregateRepository<Client, Client.Id> {
-
-  constructor(configuration: Configuration) : this(configuration.dsl())
 
   override fun find(id: Client.Id): Client? =
     dsl.selectFrom(CLIENTS)

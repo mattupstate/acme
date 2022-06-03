@@ -18,6 +18,7 @@ dependencies {
   implementation("com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
   api("org.jooq:jooq:$jooqVersion")
+  api("org.jooq:jooq-kotlin:$jooqVersion")
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation("org.postgresql:postgresql:42.2.18")
