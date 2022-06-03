@@ -15,8 +15,7 @@ dependencies {
   jooqGenerator("ch.qos.logback:logback-classic:1.2.3")
 
   implementation(project(":acme-domain:acme-domain-core"))
-  implementation("com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0")
   api("org.jooq:jooq:$jooqVersion")
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
@@ -53,12 +52,6 @@ jooq {
             includes = ".*"
             excludes = "databasechangelog.*|databasechangeloglock.*|pg_catalog.*|information_schema.*"
           }
-          // generate.apply {
-          //   isDeprecated = false
-          //   isRecords = true
-          //   isImmutablePojos = true
-          //   isFluentSetters = true
-          // }
           target.apply {
             packageName = "com.acme.sql"
           }
@@ -80,8 +73,4 @@ tasks {
       systemProperty("liquibase.changelogFile", liquibaseChangelogFile)
     }
   }
-
-  // test {
-  //   systemProperty(liquibaseChangelogProperty, liquibaseChangelogFile)
-  // }
 }
