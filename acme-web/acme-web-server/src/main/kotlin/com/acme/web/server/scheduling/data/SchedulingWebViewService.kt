@@ -25,7 +25,7 @@ class InMemorySchedulingWebViewService(
           periodStart = start?.toInstant(ZoneOffset.UTC),
           periodEnd = end?.toInstant(ZoneOffset.UTC)
         )
-      }.toSet(),
+      },
       gender = event.practitioner.gender.name,
       contactPoints = event.practitioner.contactPoints.map {
         ContactPointRecord(
@@ -33,7 +33,7 @@ class InMemorySchedulingWebViewService(
           system = it.toSystemString(),
           verifiedAt = it.getVerifiedAtValue()?.toInstant(ZoneOffset.UTC)
         )
-      }.toSet()
+      }
     )
   }
 }

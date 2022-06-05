@@ -11,6 +11,9 @@ import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
 import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
 import org.jooq.Configuration
 import org.jooq.DSLContext
+import org.jooq.Records.mapping
+import org.jooq.impl.DSL.multiset
+import org.jooq.impl.DSL.select
 import java.time.ZoneOffset
 
 class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
@@ -18,128 +21,132 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
   constructor(configuration: Configuration) : this(configuration.dsl())
 
   override fun findPractice(id: String): PracticeRecord? =
-    dsl.selectFrom(
-      PRACTICES.leftJoin(PRACTICE_CONTACT_POINTS)
-        .on(PRACTICE_CONTACT_POINTS.PRACTICE_ID.eq(PRACTICES.ID))
+    dsl.select(
+      PRACTICES.ID, PRACTICES.NAME,
+      multiset(
+        select(
+          PRACTICE_CONTACT_POINTS.SYSTEM,
+          PRACTICE_CONTACT_POINTS.VALUE,
+          PRACTICE_CONTACT_POINTS.VERIFIED_AT
+        )
+          .from(PRACTICE_CONTACT_POINTS)
+          .where(PRACTICE_CONTACT_POINTS.PRACTICE_ID.eq(PRACTICES.ID))
+      )
+        .`as`("contactPoints")
+        .convertFrom { result ->
+          result.map(mapping(::ContactPointRecord))
+        }
     )
+      .from(PRACTICES)
       .where(PRACTICES.ID.eq(id))
       .fetch()
       .let { result ->
         if (result.isEmpty()) {
           null
         } else {
-          // TODO: Convert to use new Jooq multiset feature
-          val contactPoints = result.mapNotNull {
-            it[PRACTICE_CONTACT_POINTS.SYSTEM]?.run {
-              ContactPointRecord(
-                system = it[PRACTICE_CONTACT_POINTS.SYSTEM]!!,
-                value = it[PRACTICE_CONTACT_POINTS.VALUE]!!,
-                verifiedAt = it[PRACTICE_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
-              )
-            }
-          }.toSet()
-
           result.first().let {
             PracticeRecord(
               id = it[PRACTICES.ID]!!,
               name = it[PRACTICES.NAME]!!,
-              contactPoints = contactPoints
+              contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
             )
           }
         }
       }
 
   override fun findClient(id: String): ClientRecord? =
-    dsl.selectFrom(
-      CLIENTS
-        .leftJoin(CLIENT_CONTACT_POINTS)
-        .on(CLIENT_CONTACT_POINTS.CLIENT_ID.eq(CLIENTS.ID))
-        .leftJoin(CLIENT_NAMES)
-        .on(CLIENT_NAMES.CLIENT_ID.eq(CLIENTS.ID))
+    dsl.select(
+      CLIENTS.ID, CLIENTS.GENDER,
+      multiset(
+        select(
+          CLIENT_NAMES.GIVEN,
+          CLIENT_NAMES.FAMILY,
+          CLIENT_NAMES.PREFIX,
+          CLIENT_NAMES.SUFFIX,
+          CLIENT_NAMES.PERIOD_START,
+          CLIENT_NAMES.PERIOD_END
+        )
+          .from(CLIENT_NAMES)
+          .where(CLIENT_NAMES.CLIENT_ID.eq(CLIENTS.ID))
+      ).`as`("names")
+        .convertFrom { result ->
+          result.map(mapping(::HumanNameRecord))
+        },
+      multiset(
+        select(
+          CLIENT_CONTACT_POINTS.VALUE,
+          CLIENT_CONTACT_POINTS.SYSTEM,
+          CLIENT_CONTACT_POINTS.VERIFIED_AT
+        )
+          .from(CLIENT_CONTACT_POINTS)
+          .where(CLIENT_CONTACT_POINTS.CLIENT_ID.eq(CLIENTS.ID))
+      )
+        .`as`("contactPoints")
+        .convertFrom { result ->
+          result.map(mapping(::ContactPointRecord))
+        }
     )
+      .from(CLIENTS)
       .where(CLIENTS.ID.eq(id))
       .fetch()
       .let { result ->
-        if (result.isEmpty()) null
-        else {
-          val names = result.mapNotNull {
-            it[CLIENT_NAMES.FAMILY]?.run {
-              HumanNameRecord(
-                family = it[CLIENT_NAMES.FAMILY]!!,
-                given = it[CLIENT_NAMES.GIVEN]!!,
-                prefix = it[CLIENT_NAMES.PREFIX]!!,
-                suffix = it[CLIENT_NAMES.SUFFIX]!!,
-                periodStart = it[CLIENT_NAMES.PERIOD_START]?.toInstant(ZoneOffset.UTC),
-                periodEnd = it[CLIENT_NAMES.PERIOD_END]?.toInstant(ZoneOffset.UTC)
-              )
-            }
-          }.toSet()
-
-          val contactPoints = result.mapNotNull {
-            it[CLIENT_CONTACT_POINTS.SYSTEM]?.run {
-              ContactPointRecord(
-                system = it[CLIENT_CONTACT_POINTS.SYSTEM]!!,
-                value = it[CLIENT_CONTACT_POINTS.VALUE]!!,
-                verifiedAt = it[CLIENT_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
-              )
-            }
-          }.toSet()
-
+        if (result.isEmpty()) {
+          null
+        } else {
           result.first().let {
             ClientRecord(
               id = it[CLIENTS.ID]!!,
               gender = it[CLIENTS.GENDER]!!,
-              names = names,
-              contactPoints = contactPoints
+              names = (it["names"] as List<HumanNameRecord>),
+              contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
             )
           }
         }
       }
 
   override fun findPractitioner(id: String): PractitionerRecord? =
-    dsl.selectFrom(
-      PRACTITIONERS
-        .leftJoin(PRACTITIONER_CONTACT_POINTS)
-        .on(PRACTITIONER_CONTACT_POINTS.PRACTITIONER_ID.eq(PRACTITIONERS.ID))
-        .leftJoin(PRACTITIONER_NAMES)
-        .on(PRACTITIONER_NAMES.PRACTITIONER_ID.eq(PRACTITIONERS.ID))
+    dsl.select(
+      PRACTITIONERS.ID, PRACTITIONERS.GENDER,
+      multiset(
+        select(
+          PRACTITIONER_CONTACT_POINTS.SYSTEM,
+          PRACTITIONER_CONTACT_POINTS.VALUE,
+          PRACTITIONER_CONTACT_POINTS.VERIFIED_AT
+        )
+          .from(PRACTITIONER_CONTACT_POINTS)
+          .where(PRACTITIONER_CONTACT_POINTS.PRACTITIONER_ID.eq(CLIENTS.ID))
+      )
+        .`as`("contactPoints")
+        .convertFrom { result ->
+          result.map(mapping(::ContactPointRecord))
+        },
+      multiset(
+        select(
+          PRACTITIONER_NAMES.GIVEN,
+          PRACTITIONER_NAMES.FAMILY,
+          PRACTITIONER_NAMES.PREFIX,
+          PRACTITIONER_NAMES.SUFFIX,
+          PRACTITIONER_NAMES.PERIOD_START,
+          PRACTITIONER_NAMES.PERIOD_END
+        )
+          .from(PRACTITIONER_NAMES)
+          .where(PRACTITIONER_NAMES.PRACTITIONER_ID.eq(CLIENTS.ID))
+      ).`as`("names")
+        .convertFrom { result ->
+          result.map(mapping(::HumanNameRecord))
+        }
     )
+      .from(PRACTITIONERS)
       .where(PRACTITIONERS.ID.eq(id))
       .fetch()
       .let { result ->
-        if (result.isEmpty()) null
-        else {
-          val names = result.mapNotNull {
-            it[PRACTITIONER_NAMES.FAMILY]?.run {
-              HumanNameRecord(
-                family = it[PRACTITIONER_NAMES.FAMILY]!!,
-                given = it[PRACTITIONER_NAMES.GIVEN]!!,
-                prefix = it[PRACTITIONER_NAMES.PREFIX]!!,
-                suffix = it[PRACTITIONER_NAMES.SUFFIX]!!,
-                periodStart = it[PRACTITIONER_NAMES.PERIOD_START]?.toInstant(ZoneOffset.UTC),
-                periodEnd = it[PRACTITIONER_NAMES.PERIOD_END]?.toInstant(ZoneOffset.UTC)
-              )
-            }
-          }.toSet()
-
-          val contactPoints = result.mapNotNull {
-            it[PRACTITIONER_CONTACT_POINTS.VALUE]?.run {
-              ContactPointRecord(
-                system = it[PRACTITIONER_CONTACT_POINTS.SYSTEM]!!,
-                value = it[PRACTITIONER_CONTACT_POINTS.VALUE]!!,
-                verifiedAt = it[PRACTITIONER_CONTACT_POINTS.VERIFIED_AT]?.toInstant(ZoneOffset.UTC),
-              )
-            }
-          }.toSet()
-
-          result.first().let {
-            PractitionerRecord(
-              id = it[PRACTITIONERS.ID]!!,
-              gender = it[PRACTITIONERS.GENDER]!!,
-              names = names,
-              contactPoints = contactPoints
-            )
-          }
+        result.first().let {
+          PractitionerRecord(
+            id = it[PRACTITIONERS.ID]!!,
+            gender = it[PRACTITIONERS.GENDER]!!,
+            names = it["names"] as List<HumanNameRecord>,
+            contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+          )
         }
       }
 
