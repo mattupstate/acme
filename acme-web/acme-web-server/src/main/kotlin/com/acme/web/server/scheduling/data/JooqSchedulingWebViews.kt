@@ -14,9 +14,30 @@ import org.jooq.DSLContext
 import org.jooq.Records.mapping
 import org.jooq.impl.DSL.multiset
 import org.jooq.impl.DSL.select
+import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
+
+  private val newContactPointRecord = { system: String?, value: String?, verifiedAt: LocalDateTime? ->
+    ContactPointRecord(
+      system = system!!,
+      value = value!!,
+      verifiedAt = verifiedAt?.toInstant(ZoneOffset.UTC)
+    )
+  }
+
+  private val newHumanNameRecord =
+    { given: String?, family: String?, prefix: String?, suffix: String?, periodStart: LocalDateTime?, periodEnd: LocalDateTime? ->
+      HumanNameRecord(
+        given = given!!,
+        family = family!!,
+        prefix = prefix!!,
+        suffix = suffix!!,
+        periodStart = periodStart?.toInstant(ZoneOffset.UTC),
+        periodEnd = periodEnd?.toInstant(ZoneOffset.UTC)
+      )
+    }
 
   constructor(configuration: Configuration) : this(configuration.dsl())
 
@@ -31,10 +52,15 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
         )
           .from(PRACTICE_CONTACT_POINTS)
           .where(PRACTICE_CONTACT_POINTS.PRACTICE_ID.eq(PRACTICES.ID))
+          .orderBy(
+            PRACTICE_CONTACT_POINTS.SYSTEM,
+            PRACTICE_CONTACT_POINTS.VALUE,
+            PRACTICE_CONTACT_POINTS.VERIFIED_AT
+          )
       )
         .`as`("contactPoints")
         .convertFrom { result ->
-          result.map(mapping(::ContactPointRecord))
+          result.map(mapping(newContactPointRecord))
         }
     )
       .from(PRACTICES)
@@ -68,22 +94,31 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
         )
           .from(CLIENT_NAMES)
           .where(CLIENT_NAMES.CLIENT_ID.eq(CLIENTS.ID))
+          .orderBy(
+            CLIENT_NAMES.FAMILY,
+            CLIENT_NAMES.PERIOD_START
+          )
       ).`as`("names")
         .convertFrom { result ->
-          result.map(mapping(::HumanNameRecord))
+          result.map(mapping(newHumanNameRecord))
         },
       multiset(
         select(
-          CLIENT_CONTACT_POINTS.VALUE,
           CLIENT_CONTACT_POINTS.SYSTEM,
+          CLIENT_CONTACT_POINTS.VALUE,
           CLIENT_CONTACT_POINTS.VERIFIED_AT
         )
           .from(CLIENT_CONTACT_POINTS)
           .where(CLIENT_CONTACT_POINTS.CLIENT_ID.eq(CLIENTS.ID))
+          .orderBy(
+            CLIENT_CONTACT_POINTS.SYSTEM,
+            CLIENT_CONTACT_POINTS.VALUE,
+            CLIENT_CONTACT_POINTS.VERIFIED_AT
+          )
       )
         .`as`("contactPoints")
         .convertFrom { result ->
-          result.map(mapping(::ContactPointRecord))
+          result.map(mapping(newContactPointRecord))
         }
     )
       .from(CLIENTS)
@@ -114,11 +149,16 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           PRACTITIONER_CONTACT_POINTS.VERIFIED_AT
         )
           .from(PRACTITIONER_CONTACT_POINTS)
-          .where(PRACTITIONER_CONTACT_POINTS.PRACTITIONER_ID.eq(CLIENTS.ID))
+          .where(PRACTITIONER_CONTACT_POINTS.PRACTITIONER_ID.eq(PRACTITIONERS.ID))
+          .orderBy(
+            PRACTITIONER_CONTACT_POINTS.SYSTEM,
+            PRACTITIONER_CONTACT_POINTS.VALUE,
+            PRACTITIONER_CONTACT_POINTS.VERIFIED_AT
+          )
       )
         .`as`("contactPoints")
         .convertFrom { result ->
-          result.map(mapping(::ContactPointRecord))
+          result.map(mapping(newContactPointRecord))
         },
       multiset(
         select(
@@ -130,10 +170,14 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
           PRACTITIONER_NAMES.PERIOD_END
         )
           .from(PRACTITIONER_NAMES)
-          .where(PRACTITIONER_NAMES.PRACTITIONER_ID.eq(CLIENTS.ID))
+          .where(PRACTITIONER_NAMES.PRACTITIONER_ID.eq(PRACTITIONERS.ID))
+          .orderBy(
+            PRACTITIONER_NAMES.FAMILY,
+            PRACTITIONER_NAMES.PERIOD_START
+          )
       ).`as`("names")
         .convertFrom { result ->
-          result.map(mapping(::HumanNameRecord))
+          result.map(mapping(newHumanNameRecord))
         }
     )
       .from(PRACTITIONERS)

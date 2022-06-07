@@ -70,7 +70,7 @@ class MessagesTest : ShouldSpec({
                 PracticeRecord(
                   id = "Practice123",
                   name = "Hello & Associates",
-                  contactPoints = setOf(
+                  contactPoints = listOf(
                     ContactPointRecord(
                       system = "Email",
                       value = "hello@associates.com",
@@ -120,7 +120,7 @@ class MessagesTest : ShouldSpec({
               findPractitionerOrThrow("Practitioner123").shouldBe(
                 PractitionerRecord(
                   id = "Practitioner123",
-                  names = setOf(
+                  names = listOf(
                     HumanNameRecord(
                       given = "First",
                       family = "Last",
@@ -131,7 +131,7 @@ class MessagesTest : ShouldSpec({
                     )
                   ),
                   gender = "UNKNOWN",
-                  contactPoints = emptySet()
+                  contactPoints = emptyList()
                 )
               )
             }
@@ -172,7 +172,7 @@ class MessagesTest : ShouldSpec({
               findClientOrThrow("Client123").shouldBe(
                 ClientRecord(
                   id = "Client123",
-                  names = setOf(
+                  names = listOf(
                     HumanNameRecord(
                       family = "Last",
                       given = "First",
@@ -183,7 +183,7 @@ class MessagesTest : ShouldSpec({
                     )
                   ),
                   gender = "UNKNOWN",
-                  contactPoints = setOf(
+                  contactPoints = listOf(
                     ContactPointRecord(
                       system = "Email",
                       value = "hello@world.com",
