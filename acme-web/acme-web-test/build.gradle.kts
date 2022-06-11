@@ -11,6 +11,7 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
   implementation("com.google.truth:truth:1.0.1")
   implementation("com.google.truth.extensions:truth-java8-extension:1.0.1")
+  implementation("info.picocli:picocli:4.6.3")
   implementation("io.cucumber:cucumber-java8:5.7.0")
   implementation("io.cucumber:cucumber-junit-platform-engine:5.7.0")
   implementation("io.cucumber:cucumber-picocontainer:5.7.0")
@@ -20,6 +21,7 @@ dependencies {
   implementation("io.ktor:ktor-client-logging:2.0.0")
   implementation("org.junit.jupiter:junit-jupiter-api")
   implementation("org.junit.jupiter:junit-jupiter-params")
+  implementation("org.junit.platform:junit-platform-console")
   implementation("org.junit.platform:junit-platform-launcher")
   implementation("org.seleniumhq.selenium:selenium-chrome-driver:4.1.2")
   implementation("org.seleniumhq.selenium:selenium-java:4.1.2")
@@ -40,7 +42,7 @@ dependencies {
 }
 
 application {
-  mainClass.set("com.acme.web.test.engine.EngineMain")
+  mainClass.set("com.acme.web.test.console.ConsoleLauncher")
   applicationDefaultJvmArgs = listOf(
     "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
     "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
