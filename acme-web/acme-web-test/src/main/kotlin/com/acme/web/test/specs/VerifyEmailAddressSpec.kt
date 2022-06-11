@@ -3,19 +3,27 @@ package com.acme.web.test.specs
 import com.acme.web.test.app.withAcmeApp
 import com.acme.web.test.core.waitForInvisibilityOf
 import com.acme.web.test.mailhog.withMailhogApp
-import org.junit.jupiter.api.TestTemplate
+import io.github.bonigarcia.seljup.DriverCapabilities
+import io.github.bonigarcia.seljup.SeleniumJupiter
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.remote.DesiredCapabilities
 
-class VerifyEmailAddressSpec : Spec() {
+@ExtendWith(SeleniumJupiter::class)
+class VerifyEmailAddressSpec {
 
-  @TestTemplate
-  fun `should send email with link and return back to application`(driver: WebDriver) {
+  @DriverCapabilities
+  val capabilities = DesiredCapabilities().apply {
+    setAcceptInsecureCerts(true)
+  }
+
+  @Test
+  fun testThing(driver: WebDriver) {
     withAcmeApp(driver) {
       navigateToRegisterPage {
         val user = fillAndSubmitRegistrationForm()
-
         waitForInvisibilityOf(rootWebElement)
-
         withMailhogApp(driver) {
           navigateToDashboard {
             clickMessageListItemContaining(user.email, "Please verify your email address")

@@ -27,7 +27,12 @@ import org.testcontainers.containers.GenericContainer
 import java.io.IOException
 import java.net.ServerSocket
 
-class AcmeWebServerProjectExtension(
+/**
+ * Runs the following services to support testing the acme-web-server module HTTP interface:
+ * - ORY Keto using Docker
+ * - acme-web-server using Ktor's embedded server feature
+ */
+class MinimalAcmeWebServerExtension(
   private val serverHost: String,
   private val serverPort: Int,
 ) : ProjectListener {
