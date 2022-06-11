@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-  implementation("io.kotest:kotest-runner-junit5:5.1.0")
+  implementation("io.kotest:kotest-runner-junit5:5.3.0")
 }
