@@ -12,4 +12,4 @@ resources:
   - kratos.yml
   - keto.yml
   - acme-web-server.yml
-#  - acme-app-web.yml
+  - acme-app-web.yml

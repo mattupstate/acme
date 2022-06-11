@@ -1,7 +1,7 @@
 tasks {
   val devKubernetesClusterName = (project.properties["dev.kubernetes.name"] ?: "acme-dev")
   val ingressNginxVersion = (project.properties["dev.ingress-nginx.version"] ?: "1.2.0")
-  val sslCertDir = projectDir.resolve("src/k8s/overlays/dev/ssl")
+  val sslCertDir = projectDir.resolve("src/k8s/overlays/local/ssl")
   val sslCertificateFile = sslCertDir.resolve("_wildcard.nip.io.pem")
   val sslCertificateKeyFile = sslCertDir.resolve("_wildcard.nip.io-key.pem")
 

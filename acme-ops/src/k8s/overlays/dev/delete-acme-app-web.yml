@@ -1,0 +1,12 @@
+---
+$patch: delete
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme-app-web
+---
+$patch: delete
+apiVersion: v1
+kind: Service
+metadata:
+  name: acme-app-web
