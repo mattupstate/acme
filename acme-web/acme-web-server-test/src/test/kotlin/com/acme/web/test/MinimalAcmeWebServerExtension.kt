@@ -7,8 +7,10 @@ import com.acme.web.server.core.ktor.MainConfiguration
 import com.acme.web.server.core.ktor.OpenTracingConfiguration
 import com.acme.web.server.core.ktor.main
 import com.acme.web.server.security.ktor.HeaderAuthConfiguration
-import com.google.common.truth.Truth
 import io.kotest.core.listeners.ProjectListener
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.throwable.shouldHaveMessage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.defaultRequest
@@ -121,12 +123,12 @@ class MinimalAcmeWebServerExtension(
       for (port in FREE_PORT_RANGE) {
         try {
           ServerSocket(port).use { serverSocket ->
-            Truth.assertThat(serverSocket).isNotNull()
-            Truth.assertThat(serverSocket.localPort).isEqualTo(port)
+            serverSocket shouldNotBe null
+            serverSocket.localPort shouldBe port
             return port
           }
         } catch (e: IOException) {
-          Truth.assertThat(e).hasMessageThat().contains("Address already in use")
+          e shouldHaveMessage "Address already in use"
         }
       }
       error("No free port in the range found")

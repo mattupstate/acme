@@ -1,4 +1,4 @@
-package com.acme.web.test.mailhog
+package com.acme.web.test.email.mailhog
 
 import com.acme.web.test.core.Page
 import org.openqa.selenium.WebElement

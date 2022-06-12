@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 
 private val logger = KotlinLogging.logger {}
 
-class AcmeApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, driver) {
+class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, driver) {
   companion object {
     val URL_MAP = mapOf(
       RootPage::class to "/",
@@ -23,8 +23,8 @@ class AcmeApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, driver
     )
   }
 
-  fun navigateToRegisterPage(block: RegisterPage.() -> Unit) =
-    navigate(RegisterPage::class).apply(block)
+  fun <T> navigateToRegisterPage(block: RegisterPage.() -> T): T =
+    block(navigate(RegisterPage::class))
 }
 
 fun AppObject.signIn(user: User) =
@@ -42,10 +42,9 @@ fun <P : Page> AppObject.navigateAndMaybeSignIn(
     waitForPage(pageType, Duration.ofSeconds(5))
   }
 
-fun withAcmeApp(rootUrl: String, driver: WebDriver, block: AcmeApp.() -> Unit) {
-  AcmeApp(rootUrl, driver).apply(block)
-}
+fun <T> withAcmeWebApp(rootUrl: String, driver: WebDriver, block: AcmeWebApp.() -> T): T =
+  block(AcmeWebApp(rootUrl, driver))
 
-fun withAcmeApp(driver: WebDriver, block: AcmeApp.() -> Unit) {
-  withAcmeApp(System.getProperty("acme.app.web.url"), driver, block)
-}
+fun <T> withAcmeWebApp(driver: WebDriver, block: AcmeWebApp.() -> T): T =
+  withAcmeWebApp(System.getProperty("acme.app.web.url"), driver, block)
+

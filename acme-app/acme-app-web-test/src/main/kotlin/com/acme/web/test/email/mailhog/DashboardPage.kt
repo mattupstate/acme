@@ -1,4 +1,4 @@
-package com.acme.web.test.mailhog
+package com.acme.web.test.email.mailhog
 
 import com.acme.web.test.core.Page
 import org.openqa.selenium.By
@@ -11,12 +11,23 @@ class DashboardPage : Page {
   @FindBy(className = "messages")
   private val rootWebElement: WebElement? = null
 
+  private fun findElementFromRoot(by: By) =
+    rootWebElement!!.findElement(by)
+
   override val waitCondition: ExpectedCondition<WebElement>
     get() = ExpectedConditions.visibilityOf(rootWebElement)
 
-  fun clickMessageListItemContaining(recipient: String, subject: String) {
-    rootWebElement!!.findElement(
+  fun navigateToMessageList() {
+    findElementFromRoot(
+      By.xpath("/html/body/div/div/div[1]/ul/li[2]/a")
+    ).click()
+  }
+
+  fun clickMessageListItemContaining(recipient: String) {
+    findElementFromRoot(
       By.className("msglist-message")
-    ).findElement(By.xpath(".//div[contains(.,\"$recipient\") and contains(.,\"$subject\"]")).click()
+    ).findElement(
+      By.xpath(".//div[contains(.,\"$recipient\")]")
+    ).click()
   }
 }

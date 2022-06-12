@@ -15,6 +15,7 @@ pluginManagement {
 }
 
 include(":acme-app:acme-app-web")
+include(":acme-app:acme-app-web-test")
 include(":acme-data:acme-data-scheduling")
 include(":acme-data:acme-data-sql")
 include(":acme-domain:acme-domain-core")
@@ -30,4 +31,4 @@ include(":acme-lib:acme-lib-test")
 include(":acme-lib:acme-lib-validation")
 include(":acme-ops")
 include(":acme-web:acme-web-server")
-include(":acme-web:acme-web-test")
+include(":acme-web:acme-web-server-test")
