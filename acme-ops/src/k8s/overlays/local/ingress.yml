@@ -2,6 +2,98 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: mailhog
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - mailhog-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: mailhog-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mailhog
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kratos
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - kratos-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: kratos-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kratos
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kratos-admin
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - kratos-admin-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: kratos-admin-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kratos
+                port:
+                  number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: acme-web-server
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: api-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: acme-web-server
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: acme-app-web
   namespace: default
 spec:
