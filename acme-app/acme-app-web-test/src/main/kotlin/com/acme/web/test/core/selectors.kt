@@ -5,5 +5,5 @@ import org.openqa.selenium.By
 fun buttonText(text: String): By? =
   By.xpath(".//button[contains(.,\"$text\")]")
 
-fun formControl(name: String): By? =
+fun formControlByName(name: String): By? =
   By.cssSelector("input[formControlName=$name")

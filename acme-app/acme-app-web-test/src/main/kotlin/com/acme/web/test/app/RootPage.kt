@@ -1,15 +1,9 @@
 package com.acme.web.test.app
 
 import com.acme.web.test.core.Page
-import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.FindBy
-import org.openqa.selenium.support.ui.ExpectedCondition
-import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
 
-class RootPage : Page {
-  @FindBy(tagName = "app-root")
-  var appRoot: WebElement? = null
-
-  override val waitCondition: ExpectedCondition<WebElement>
-    get() = ExpectedConditions.visibilityOf(appRoot)
+class RootPage(driver: WebDriver) : Page(driver) {
+  override val rootLocator: By = By.name("app-root")
 }

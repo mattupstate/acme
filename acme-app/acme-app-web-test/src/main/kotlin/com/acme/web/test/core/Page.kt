@@ -1,8 +1,14 @@
 package com.acme.web.test.core
 
+import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ui.ExpectedCondition
 
-interface Page {
-  val waitCondition: ExpectedCondition<WebElement>
+abstract class Page(protected val driver: WebDriver) {
+
+  val root: WebElement by lazy {
+    driver.findElement(rootLocator)
+  }
+
+  abstract val rootLocator: By
 }

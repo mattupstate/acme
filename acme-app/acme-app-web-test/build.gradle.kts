@@ -31,7 +31,7 @@ dependencies {
 application {
   mainClass.set("com.acme.web.test.console.ConsoleLauncher")
   applicationDefaultJvmArgs = listOf(
-    "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
+    "-Dacme.app.web.url=http://127.0.0.1:4200",
     "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
     "-Dsel.jup.default.browser=chrome",
     "-Dsel.jup.browser.template.json.file=classpath:browsers-dev.json"
