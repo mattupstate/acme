@@ -72,6 +72,9 @@ export const busyReducer = createReducer<boolean>(
   on(actions.signIn, (): boolean => true),
   on(actions.signInComplete, (): boolean => false),
   on(actions.signInFailure, (): boolean => false),
+  on(actions.register, (): boolean => true),
+  on(actions.registerComplete, (): boolean => false),
+  on(actions.registerFailure, (): boolean => false),
   on(actions.logout, (): boolean => true),
   on(actions.logoutComplete, (): boolean => false),
   on(actions.logoutFailure, (): boolean => false)
@@ -117,10 +120,10 @@ export const securityReducer = createReducer<SecurityState>(
     principal: null,
     signInError: props.error,
   })),
-  on(actions.register, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    registrationRequested: true,
-  })),
+  // on(actions.register, (state: SecurityState, props): SecurityState => ({
+  //   ...state,
+  //   registrationRequested: true,
+  // })),
   on(actions.registerComplete, (state: SecurityState, props): SecurityState => ({
     ...state,
     registrationRequested: true,

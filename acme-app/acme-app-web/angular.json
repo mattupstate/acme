@@ -78,8 +78,7 @@
               "browserTarget": "acme-app:build:production"
             },
             "development": {
-              "browserTarget": "acme-app:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "browserTarget": "acme-app:build:development"
             }
           },
           "defaultConfiguration": "development"

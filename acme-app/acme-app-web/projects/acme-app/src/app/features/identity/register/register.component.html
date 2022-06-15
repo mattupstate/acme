@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title i18n="Register form card title@registerFormCardTitle">Register</mat-card-title>
-  <mat-card-content *ngIf="!requested">
+  <mat-card-content *ngIf="!requested" name="form-card-content">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)">
       <div fxLayout="row" fxLayoutAlign="space-between start" class="root-error" *ngIf="root.errors?.async">
         <div>
@@ -58,7 +58,7 @@
       </div>
     </form>
   </mat-card-content>
-  <mat-card-content *ngIf="requested">
+  <mat-card-content *ngIf="requested" name="thankyou-card-content">
     Thank you for creating an account with Acme.
     Before you can login we need to verify your email address.
     Check your inbox for instructions on how to verify your account.
