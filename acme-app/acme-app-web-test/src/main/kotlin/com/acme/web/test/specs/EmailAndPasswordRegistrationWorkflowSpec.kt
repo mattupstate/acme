@@ -18,7 +18,7 @@ class EmailAndPasswordRegistrationWorkflowSpec {
   @Test
   fun happyPath(driver: WebDriver) {
     val fixture = fixture<RegisterPage.RegistrationValues>()
-    val originalWindowHandler = driver.windowHandle
+    val registerWindow = driver.windowHandle
 
     withAcmeWebApp(driver) {
       navigateToRegisterPage {
@@ -35,28 +35,29 @@ class EmailAndPasswordRegistrationWorkflowSpec {
             fixture.emailAddress, KratosVerifyEmailContent.SUBJECT
           )
         )
-
         waitFor(
           openEmail(
             fixture.emailAddress, KratosVerifyEmailContent.SUBJECT
           )
         )
-
         withEmailMessageContent<KratosVerifyEmailContent> {
           clickVerificationLink()
         }
+        waitFor(
+          numberOfWindowsToBe(2)
+        )
       }
-
-      waitFor(numberOfWindowsToBe(2))
     }
 
-    val newWindowHandle = driver.windowHandles.minus(originalWindowHandler).first()
-
-    driver.switchTo().window(newWindowHandle)
+    driver.switchTo().window(
+      driver.windowHandles.minus(registerWindow).first()
+    )
 
     withAcmeWebApp(driver) {
       navigateToSignInPage {
-        signIn(fixture.emailAddress, fixture.password)
+        waitFor(
+          signIn(fixture.emailAddress, fixture.password)
+        )
       }
     }
   }

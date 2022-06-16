@@ -7,8 +7,6 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.WebDriverWait
-import java.time.Duration
 import kotlin.reflect.full.primaryConstructor
 
 class RootPage(driver: WebDriver) : Page(driver) {
@@ -32,21 +30,19 @@ class RootPage(driver: WebDriver) : Page(driver) {
       messageList.messageLocator(recipient, subject)
     )
 
-  fun openEmail(recipient: String, subject: String): ExpectedCondition<WebElement> {
+  fun openEmail(recipient: String, subject: String): ExpectedCondition<Boolean> {
     messageList.clickMessageFor(recipient, subject)
-    return ExpectedConditions.presenceOfElementLocated(EmailPreview.LOCATOR)
+    return ExpectedConditions.and(
+      ExpectedConditions.presenceOfElementLocated(EmailPreview.LOCATOR),
+      ExpectedConditions.presenceOfElementLocated(By.id("preview-html"))
+    )
   }
 
   inline fun <reified T : Any> withEmailMessageContent(block: T.() -> Unit) {
     val emailTypeInfo = typeInfo<T>()
-
-    WebDriverWait(`access$driver`, Duration.ofSeconds(5)).until(
-      ExpectedConditions.frameToBeAvailableAndSwitchToIt("preview-html")
-    )
-
-    (emailTypeInfo.type.primaryConstructor!!.call(`access$driver`.findElement(By.tagName("body"))) as T).apply(block)
-
-    `access$driver`.switchTo().defaultContent()
+    driver.switchTo().frame("preview-html")
+    (emailTypeInfo.type.primaryConstructor!!.call(driver.findElement(By.tagName("body"))) as T).apply(block)
+    driver.switchTo().defaultContent()
   }
 
   class MessageList(private val root: WebElement) {
@@ -84,8 +80,4 @@ class RootPage(driver: WebDriver) : Page(driver) {
       val LOCATOR: By = By.xpath("//div[contains(@class, 'preview')]")
     }
   }
-
-  @PublishedApi
-  internal val `access$driver`: WebDriver
-    get() = driver
 }

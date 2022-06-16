@@ -5,6 +5,9 @@ import com.acme.web.test.core.buttonText
 import com.acme.web.test.core.formControlByName
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.support.ui.ExpectedCondition
+import org.openqa.selenium.support.ui.ExpectedConditions
 
 class SignInPage(driver: WebDriver) : Page(driver) {
   override val rootLocator: By = By.tagName("app-sign-in-container")
@@ -21,9 +24,12 @@ class SignInPage(driver: WebDriver) : Page(driver) {
     root.findElement(buttonText("Sign in"))
   }
 
-  fun signIn(emailAddress: String, password: String) {
+  fun signIn(emailAddress: String, password: String): ExpectedCondition<WebElement> {
     usernameInput.sendKeys(emailAddress)
     passwordInput.sendKeys(password)
     signInButton.click()
+    return ExpectedConditions.presenceOfElementLocated(
+      By.tagName("app-root-container")
+    )
   }
 }
