@@ -2,12 +2,11 @@ package com.acme.web.test
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.extensions.Extension
-import io.kotest.extensions.allure.AllureTestReporter
 
-class AcmeWebTestProjectConfig : AbstractProjectConfig() {
+class AcmeWebServerTestProjectConfig : AbstractProjectConfig() {
 
   override fun extensions(): List<Extension> =
-    listOf(apiServer, AllureTestReporter())
+    listOf(apiServer)
 
   companion object {
     val apiServer = MinimalAcmeWebServerExtension(

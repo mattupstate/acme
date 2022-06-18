@@ -1,6 +1,6 @@
 package com.acme.web.test.scheduling.api
 
-import com.acme.web.test.AcmeWebTestProjectConfig.Companion.apiServer
+import com.acme.web.test.AcmeWebServerTestProjectConfig.Companion.apiServer
 import com.acme.web.test.ApiSpec
 import com.acme.web.test.firstLinkedItemHref
 import com.acme.web.test.mockUser
