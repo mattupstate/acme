@@ -10,7 +10,7 @@ data class CommandLineOptions(
   companion object {
     val DEFAULT = CommandLineOptions(
       packageNames = listOf(
-        "com.acme.web.test.specs"
+        "com.acme.web.test"
       ),
       classNamePatterns = listOf(
         ".*Spec",

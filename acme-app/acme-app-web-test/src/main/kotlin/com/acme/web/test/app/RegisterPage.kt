@@ -15,7 +15,7 @@ class RegisterPage(driver: WebDriver) : Page(driver) {
   private val formContentCard by lazy {
     FormContentCard(root.findElement(FormContentCard.LOCATOR))
   }
-
+  
   fun fillAndSubmitRegistrationForm(values: RegistrationValues): ExpectedCondition<WebElement> {
     with(formContentCard) {
       emailInput.sendKeys(values.emailAddress)

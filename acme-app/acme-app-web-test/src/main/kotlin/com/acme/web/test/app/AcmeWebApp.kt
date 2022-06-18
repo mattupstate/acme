@@ -19,7 +19,7 @@ class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, dri
 
   fun navigateToSignInPage(block: SignInPage.() -> Unit): Unit =
     block(navigate(SignInPage::class))
-  
+
   //
   // fun signIn(user: User) =
   //   waitForPage(SignInPage::class, Duration.ofSeconds(5))

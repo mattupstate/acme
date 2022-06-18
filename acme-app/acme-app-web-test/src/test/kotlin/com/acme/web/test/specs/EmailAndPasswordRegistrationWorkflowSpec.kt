@@ -8,16 +8,13 @@ import com.acme.web.test.data.fixture
 import com.acme.web.test.email.kratos.KratosVerifyEmailContent
 import com.acme.web.test.email.mailhog.withMailhogApp
 import io.kotest.core.spec.style.ShouldSpec
-import io.kotest.core.spec.style.shouldSpec
-import io.kotest.extensions.allure.AllureTestReporter
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 
 class EmailAndPasswordRegistrationWorkflowSpec : ShouldSpec({
 
-  fun happyPath(driver: WebDriver) = shouldSpec {
-    extension(AllureTestReporter())
+  val driver = selenium.drivers.first()
 
+  should("afford a new user to register and login after they verify their email address") {
     val fixture = fixture<RegisterPage.RegistrationValues>()
     val registerWindow = driver.windowHandle
 
@@ -63,7 +60,7 @@ class EmailAndPasswordRegistrationWorkflowSpec : ShouldSpec({
     }
   }
 
-  selenium.drivers.forEach {
-    include(happyPath(it))
-  }
+  // selenium.drivers.forEach {
+  //   include(happyPath(it))
+  // }
 })

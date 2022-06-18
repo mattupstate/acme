@@ -15,18 +15,17 @@ object ConsoleLauncher {
     val options = CommandLineOptions.DEFAULT
 
     val request = LauncherDiscoveryRequestBuilder.request()
-      .selectors(
-        options.packageNames.map(::selectPackage)
-      )
-      .filters(
-        includeClassNamePatterns(*options.classNamePatterns.toTypedArray())
-      )
+      .selectors(options.packageNames.map(::selectPackage))
+      .filters(includeClassNamePatterns(*options.classNamePatterns.toTypedArray()))
+      .configurationParameter("junit.jupiter.extensions.autodetection.enabled", "true")
       .build()
 
-    val launcher = LauncherFactory.create()
     val listener = SummaryGeneratingListener()
 
-    launcher.execute(request, listener)
+    LauncherFactory.openSession().use { session ->
+      val launcher = session.launcher
+      launcher.execute(request, listener)
+    }
 
     val summary = listener.summary
     val write = PrintWriter(System.err)
