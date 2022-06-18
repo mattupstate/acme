@@ -41,6 +41,7 @@
 acme-mpp
 acme-web/acme-web-client
 acme-web/acme-web-json
+allure-results
 build
 bin
 node_modules
@@ -54,4 +55,3 @@ out
 
 .DS_Store
 gradle.properties
-
