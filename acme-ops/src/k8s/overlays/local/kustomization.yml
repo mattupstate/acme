@@ -31,6 +31,7 @@ bases:
 
 components:
   - ../../components/mailhog
+  - ../../components/selenium-grid
 
 resources:
   - ssl

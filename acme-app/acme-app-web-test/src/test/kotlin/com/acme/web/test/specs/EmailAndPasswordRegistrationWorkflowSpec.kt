@@ -1,22 +1,23 @@
 package com.acme.web.test.specs
 
+import com.acme.web.test.AcmeAppWebTestConfig.Companion.selenium
 import com.acme.web.test.app.RegisterPage
 import com.acme.web.test.app.withAcmeWebApp
 import com.acme.web.test.core.waitFor
 import com.acme.web.test.data.fixture
 import com.acme.web.test.email.kratos.KratosVerifyEmailContent
 import com.acme.web.test.email.mailhog.withMailhogApp
-import io.github.bonigarcia.seljup.SeleniumJupiter
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.core.spec.style.shouldSpec
+import io.kotest.extensions.allure.AllureTestReporter
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 
-@ExtendWith(SeleniumJupiter::class)
-class EmailAndPasswordRegistrationWorkflowSpec {
+class EmailAndPasswordRegistrationWorkflowSpec : ShouldSpec({
 
-  @Test
-  fun happyPath(driver: WebDriver) {
+  fun happyPath(driver: WebDriver) = shouldSpec {
+    extension(AllureTestReporter())
+
     val fixture = fixture<RegisterPage.RegistrationValues>()
     val registerWindow = driver.windowHandle
 
@@ -61,4 +62,8 @@ class EmailAndPasswordRegistrationWorkflowSpec {
       }
     }
   }
-}
+
+  selenium.drivers.forEach {
+    include(happyPath(it))
+  }
+})
