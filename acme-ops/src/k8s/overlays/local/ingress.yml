@@ -113,3 +113,72 @@ spec:
                 name: acme-app-web
                 port:
                   number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: selenium-hub
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - selenium-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: selenium-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: selenium-hub
+                port:
+                  number: 4444
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: selenium-chrome
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - chrome-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: chrome-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: selenium-chrome
+                port:
+                  number: 7900
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: selenium-firefox
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - firefox-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: firefox-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: selenium-firefox
+                port:
+                  number: 7900
