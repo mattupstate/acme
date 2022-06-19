@@ -2,11 +2,8 @@
   "browsers": [
     [
       {
-        "type": "chrome",
-        "version": "latest",
-        "arguments": [
-          "--disable-notifications"
-        ]
+        "remoteUrl": "https://selenium-127-0-0-1.nip.io",
+        "type": "firefox"
       }
     ]
   ]

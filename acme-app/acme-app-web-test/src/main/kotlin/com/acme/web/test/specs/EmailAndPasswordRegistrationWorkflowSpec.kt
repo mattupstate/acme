@@ -7,7 +7,7 @@ import com.acme.web.test.data.fixture
 import com.acme.web.test.email.kratos.KratosVerifyEmailContent
 import com.acme.web.test.email.mailhog.withMailhogApp
 import io.github.bonigarcia.seljup.SeleniumJupiter
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
 @ExtendWith(SeleniumJupiter::class)
 class EmailAndPasswordRegistrationWorkflowSpec {
 
-  @Test
+  @TestTemplate
   fun happyPath(driver: WebDriver) {
     val fixture = fixture<RegisterPage.RegistrationValues>()
     val registerWindow = driver.windowHandle
