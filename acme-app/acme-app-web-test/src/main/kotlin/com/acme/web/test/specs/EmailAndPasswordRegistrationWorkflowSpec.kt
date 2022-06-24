@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe
+import kotlin.time.Duration.Companion.seconds
 
 @ExtendWith(SeleniumJupiter::class)
 class EmailAndPasswordRegistrationWorkflowSpec {
@@ -33,7 +34,8 @@ class EmailAndPasswordRegistrationWorkflowSpec {
         waitFor(
           emailDeliveredCondition(
             fixture.emailAddress, KratosVerifyEmailContent.SUBJECT
-          )
+          ),
+          10.seconds
         )
         waitFor(
           openEmail(

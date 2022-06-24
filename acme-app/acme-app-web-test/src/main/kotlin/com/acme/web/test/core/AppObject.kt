@@ -8,9 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.net.MalformedURLException
 import java.net.URL
-import java.time.Duration
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 val logger = KotlinLogging.logger {}
 
@@ -29,12 +31,12 @@ open class AppObject(
 fun <P : Page> AppObject.waitForPage(pageType: KClass<P>, timeout: Duration): P =
   pageType.primaryConstructor!!.call(driver).also {
     logger.debug("waiting for ${it.rootLocator}")
-    WebDriverWait(driver, timeout).until(
+    WebDriverWait(driver, timeout.toJavaDuration()).until(
       ExpectedConditions.presenceOfElementLocated(it.rootLocator)
     )
   }
 
-fun <P : Page> AppObject.navigate(pageType: KClass<P>, timeout: Duration = Duration.ofSeconds(5)): P {
+fun <P : Page> AppObject.navigate(pageType: KClass<P>, timeout: Duration = 5.seconds): P {
   val currentUrl: URL? = try {
     URL(driver.currentUrl)
   } catch (e: MalformedURLException) {
@@ -56,9 +58,9 @@ fun <P : Page> AppObject.navigate(pageType: KClass<P>, timeout: Duration = Durat
 
 fun AppObject.waitFor(
   condition: ExpectedCondition<*>,
-  duration: Duration = Duration.ofSeconds(5)
+  duration: Duration = 5.seconds
 ) {
-  WebDriverWait(driver, duration).until(condition)
+  WebDriverWait(driver, duration.toJavaDuration()).until(condition)
 }
 
 fun URL.isLogicallyDifferent(other: URL) =
