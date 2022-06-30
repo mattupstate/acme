@@ -1,4 +1,4 @@
-package com.acme.web.test.data
+package com.acme.app.web.test.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -87,7 +87,7 @@ class KratosUserFixtureService(host: String, port: Int) : UserFixtureService {
               }
             ]
           }
-          """
+        """
       )
     }
   }

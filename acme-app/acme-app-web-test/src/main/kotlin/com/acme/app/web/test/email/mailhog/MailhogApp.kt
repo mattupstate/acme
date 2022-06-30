@@ -1,7 +1,7 @@
-package com.acme.web.test.email.mailhog
+package com.acme.app.web.test.email.mailhog
 
-import com.acme.web.test.core.AppObject
-import com.acme.web.test.core.navigate
+import com.acme.app.web.test.core.AppObject
+import com.acme.app.web.test.core.navigate
 import org.openqa.selenium.WebDriver
 import kotlin.reflect.KClass
 
@@ -22,4 +22,3 @@ class MailhogApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, dri
 
 fun <T> withMailhogApp(driver: WebDriver, block: MailhogApp.() -> T): T =
   block(MailhogApp(System.getProperty("acme.app.mailhog.url"), driver))
-

@@ -1,6 +1,6 @@
-package com.acme.web.test.app
+package com.acme.app.web.test.app
 
-import com.acme.web.test.core.Page
+import com.acme.app.web.test.core.Page
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 

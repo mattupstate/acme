@@ -2,16 +2,16 @@
 
 package com.acme.web.server.scheduling.ktor
 
-import com.acme.web.server.core.ktor.authenticatedUser
-import com.acme.web.server.json.hal.HalLink
-import com.acme.web.server.scheduling.data.SchedulingWebViews
-import com.acme.web.server.scheduling.json.AppointmentResource
-import com.acme.web.server.scheduling.json.ClientResource
-import com.acme.web.server.scheduling.json.PracticeResource
-import com.acme.web.server.scheduling.json.PractitionerResource
-import com.acme.web.server.scheduling.toResource
-import com.acme.web.server.security.AccessControlService
-import com.acme.web.server.security.UnauthorizedAccessException
+import com.acme.app.web.server.core.ktor.authenticatedUser
+import com.acme.app.web.server.json.hal.HalLink
+import com.acme.app.web.server.scheduling.data.SchedulingWebViews
+import com.acme.app.web.server.scheduling.json.AppointmentResource
+import com.acme.app.web.server.scheduling.json.ClientResource
+import com.acme.app.web.server.scheduling.json.PracticeResource
+import com.acme.app.web.server.scheduling.json.PractitionerResource
+import com.acme.app.web.server.scheduling.toResource
+import com.acme.app.web.server.security.AccessControlService
+import com.acme.app.web.server.security.UnauthorizedAccessException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call

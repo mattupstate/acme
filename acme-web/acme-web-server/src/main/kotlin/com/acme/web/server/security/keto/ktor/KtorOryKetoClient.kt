@@ -1,13 +1,13 @@
 package com.acme.web.server.security.keto.ktor
 
-import com.acme.web.server.security.keto.CheckResponse
-import com.acme.web.server.security.keto.ExpandTree
-import com.acme.web.server.security.keto.OryKetoClient
-import com.acme.web.server.security.keto.OryKetoClient.Companion.CHECK_URL
-import com.acme.web.server.security.keto.OryKetoClient.Companion.EXPAND_URL
-import com.acme.web.server.security.keto.OryKetoClient.Companion.TUPLES_COLLECTION_URL
-import com.acme.web.server.security.keto.RelationTuple
-import com.acme.web.server.security.keto.RelationTuplesCollection
+import com.acme.app.web.server.security.keto.CheckResponse
+import com.acme.app.web.server.security.keto.ExpandTree
+import com.acme.app.web.server.security.keto.OryKetoClient
+import com.acme.app.web.server.security.keto.OryKetoClient.Companion.CHECK_URL
+import com.acme.app.web.server.security.keto.OryKetoClient.Companion.EXPAND_URL
+import com.acme.app.web.server.security.keto.OryKetoClient.Companion.TUPLES_COLLECTION_URL
+import com.acme.app.web.server.security.keto.RelationTuple
+import com.acme.app.web.server.security.keto.RelationTuplesCollection
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete

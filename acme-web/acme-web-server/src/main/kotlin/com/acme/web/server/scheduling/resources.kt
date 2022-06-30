@@ -1,19 +1,19 @@
 package com.acme.web.server.scheduling
 
-import com.acme.web.server.scheduling.data.AppointmentRecord
-import com.acme.web.server.scheduling.data.ClientRecord
-import com.acme.web.server.scheduling.data.PracticeRecord
-import com.acme.web.server.scheduling.data.PractitionerRecord
-import com.acme.web.server.scheduling.json.AppointmentResource
-import com.acme.web.server.scheduling.json.AppointmentState
-import com.acme.web.server.scheduling.json.ClientResource
-import com.acme.web.server.scheduling.json.ContactPoint
-import com.acme.web.server.scheduling.json.ContactPointSystem
-import com.acme.web.server.scheduling.json.Gender
-import com.acme.web.server.scheduling.json.HumanName
-import com.acme.web.server.scheduling.json.Period
-import com.acme.web.server.scheduling.json.PracticeResource
-import com.acme.web.server.scheduling.json.PractitionerResource
+import com.acme.app.web.server.scheduling.data.AppointmentRecord
+import com.acme.app.web.server.scheduling.data.ClientRecord
+import com.acme.app.web.server.scheduling.data.PracticeRecord
+import com.acme.app.web.server.scheduling.data.PractitionerRecord
+import com.acme.app.web.server.scheduling.json.AppointmentResource
+import com.acme.app.web.server.scheduling.json.AppointmentState
+import com.acme.app.web.server.scheduling.json.ClientResource
+import com.acme.app.web.server.scheduling.json.ContactPoint
+import com.acme.app.web.server.scheduling.json.ContactPointSystem
+import com.acme.app.web.server.scheduling.json.Gender
+import com.acme.app.web.server.scheduling.json.HumanName
+import com.acme.app.web.server.scheduling.json.Period
+import com.acme.app.web.server.scheduling.json.PracticeResource
+import com.acme.app.web.server.scheduling.json.PractitionerResource
 
 fun AppointmentRecord.toResource(linkProvider: () -> AppointmentResource.Links) =
   AppointmentResource(

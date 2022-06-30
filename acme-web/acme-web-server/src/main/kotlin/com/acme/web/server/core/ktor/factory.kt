@@ -1,8 +1,8 @@
 package com.acme.web.server.core.ktor
 
+import com.acme.app.web.server.core.defaultJson
+import com.acme.app.web.server.scheduling.ktor.scheduling
 import com.acme.ktor.server.logging.logger
-import com.acme.web.server.core.defaultJson
-import com.acme.web.server.scheduling.ktor.scheduling
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.http.ContentType

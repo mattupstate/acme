@@ -2,6 +2,8 @@
 
 package com.acme.web.server.core.ktor
 
+import com.acme.app.web.server.security.PrincipalNotFoundException
+import com.acme.app.web.server.security.UnauthorizedAccessException
 import com.acme.core.CommandValidationException
 import com.acme.ktor.server.i18n.I18N
 import com.acme.ktor.server.logging.StructuredLogging
@@ -11,8 +13,6 @@ import com.acme.ktor.server.tracing.span
 import com.acme.ktor.server.validation.RequestBodyValidationException
 import com.acme.ktor.server.validation.RequestDecodingException
 import com.acme.ktor.server.validation.RequestValidation
-import com.acme.web.server.security.PrincipalNotFoundException
-import com.acme.web.server.security.UnauthorizedAccessException
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode

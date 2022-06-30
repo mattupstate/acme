@@ -1,12 +1,12 @@
 package com.acme.web.server.core.ktor
 
+import com.acme.app.web.server.json.hal.HalLink
+import com.acme.app.web.server.json.hal.VndError
 import com.acme.core.CommandValidationException
 import com.acme.ktor.server.logging.logger
 import com.acme.ktor.server.validation.RequestBodyValidationException
 import com.acme.ktor.server.validation.RequestDecodingException
 import com.acme.ktor.server.validation.getUnderlyingCause
-import com.acme.web.server.json.hal.HalLink
-import com.acme.web.server.json.hal.VndError
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.uri

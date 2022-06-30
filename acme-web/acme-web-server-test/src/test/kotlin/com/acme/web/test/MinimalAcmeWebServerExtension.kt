@@ -1,12 +1,12 @@
 package com.acme.web.test
 
-import com.acme.web.server.core.ktor.AuthenticationConfiguration
-import com.acme.web.server.core.ktor.DataSourceConfiguration
-import com.acme.web.server.core.ktor.KetoConfiguration
-import com.acme.web.server.core.ktor.MainConfiguration
-import com.acme.web.server.core.ktor.OpenTracingConfiguration
-import com.acme.web.server.core.ktor.main
-import com.acme.web.server.security.ktor.HeaderAuthConfiguration
+import com.acme.app.web.server.core.ktor.AuthenticationConfiguration
+import com.acme.app.web.server.core.ktor.DataSourceConfiguration
+import com.acme.app.web.server.core.ktor.KetoConfiguration
+import com.acme.app.web.server.core.ktor.MainConfiguration
+import com.acme.app.web.server.core.ktor.OpenTracingConfiguration
+import com.acme.app.web.server.core.ktor.main
+import com.acme.app.web.server.security.ktor.HeaderAuthConfiguration
 import io.kotest.core.listeners.ProjectListener
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

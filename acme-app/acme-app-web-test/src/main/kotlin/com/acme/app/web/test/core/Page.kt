@@ -1,4 +1,4 @@
-package com.acme.web.test.core
+package com.acme.app.web.test.core
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver

@@ -1,4 +1,4 @@
-package com.acme.web.test.app
+package com.acme.app.web.test.app
 
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy

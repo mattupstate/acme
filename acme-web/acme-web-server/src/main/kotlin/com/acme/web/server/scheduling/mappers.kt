@@ -1,5 +1,6 @@
 package com.acme.web.server.scheduling
 
+import com.acme.app.web.server.security.AcmeWebUserPrincipal
 import com.acme.scheduling.Appointment
 import com.acme.scheduling.AppointmentState
 import com.acme.scheduling.Client
@@ -13,7 +14,6 @@ import com.acme.scheduling.Name
 import com.acme.scheduling.Practice
 import com.acme.scheduling.Practitioner
 import com.acme.scheduling.UserId
-import com.acme.web.server.security.AcmeWebUserPrincipal
 import java.time.LocalDateTime
 
 fun HumanName.toValueObject() =

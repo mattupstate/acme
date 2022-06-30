@@ -1,6 +1,6 @@
 package com.acme.web.server.scheduling
 
-import com.acme.web.server.core.toJsonPointer
+import com.acme.app.web.server.core.toJsonPointer
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.kotest.core.Tag

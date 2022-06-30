@@ -1,4 +1,4 @@
-package com.acme.web.test.core
+package com.acme.app.web.test.core
 
 import mu.KotlinLogging
 import org.openqa.selenium.WebDriver
@@ -65,4 +65,3 @@ fun AppObject.waitFor(
 
 fun URL.isLogicallyDifferent(other: URL) =
   this.protocol != other.protocol || this.host != other.host || this.path != other.path
-

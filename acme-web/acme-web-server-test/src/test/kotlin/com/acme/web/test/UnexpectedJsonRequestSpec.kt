@@ -1,9 +1,9 @@
 // package com.acme.web.test
 //
-// import com.acme.web.client.ClientSideException
-// import com.acme.web.server.json.hal.HalLink
-// import com.acme.web.json.hal.VndError
-// import com.acme.web.test.AcmeWebTestProjectConfig.Companion.serverListener
+// import com.acme.app.web.client.ClientSideException
+// import com.acme.app.web.server.json.hal.HalLink
+// import com.acme.app.web.json.hal.VndError
+// import com.acme.app.web.test.AcmeWebTestProjectConfig.Companion.serverListener
 // import io.kotest.assertions.throwables.shouldThrow
 // import io.kotest.matchers.shouldBe
 // import io.ktor.client.request.post
