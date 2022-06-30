@@ -14,8 +14,8 @@ dependencies {
   implementation("io.ktor:ktor-client-auth:2.0.0")
   implementation("io.ktor:ktor-client-logging:2.0.0")
   implementation("org.fluentlenium:fluentlenium-kotest:5.0.4")
-  implementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
   implementation("org.junit.platform:junit-platform-launcher:1.8.2")
+  implementation("org.seleniumhq.selenium:selenium-chrome-driver:4.3.0")
 }
 
 application {
@@ -24,8 +24,8 @@ application {
     "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
     "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
     "-Dfluentlenium.webDriver=remote",
-    "-Dfluentlenium.remoteUrl=https://selenium-127-0-0-1.nip.io",
-    "-Dfluentlenium.capabilities={\"browserName\":\"chrome\", \"acceptInsecureCerts\":true}",
+    "-Dfluentlenium.capabilities=chrome-for-kubernetes",
+    "-Dfluentlenium.remoteUrl=https://selenium-127-0-0-1.nip.io"
   )
 }
 
@@ -35,11 +35,14 @@ jib {
   }
 }
 
-tasks {
-  test {
-    jvmArgs = listOf(
-      "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
-      "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
-    )
-  }
-}
+// tasks {
+//   test {
+//     jvmArgs = listOf(
+//       "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
+//       "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
+//       "-Dfluentlenium.webDriver=remote",
+//       "-Dfluentlenium.capabilities=\"chrome-for-kubernetes\"",
+//       "-Dfluentlenium.remoteUrl=https://selenium-127-0-0-1.nip.io"
+//     )
+//   }
+// }

@@ -21,7 +21,7 @@ spec:
             medium: Memory
       containers:
         - name: selenium-node-firefox
-          image: selenium/node-firefox:4.0
+          image: selenium/node-firefox:4.3
           ports:
             - containerPort: 5555
             - containerPort: 5900
@@ -65,7 +65,7 @@ spec:
             medium: Memory
       containers:
         - name: selenium-node-chrome
-          image: selenium/node-chrome:4.0
+          image: selenium/node-chrome:4.3
           ports:
             - containerPort: 5555
             - containerPort: 5900
@@ -105,7 +105,7 @@ spec:
     spec:
       containers:
         - name: selenium-hub
-          image: selenium/hub:4.0
+          image: selenium/hub:4.3
           ports:
             - containerPort: 4444
             - containerPort: 4443
