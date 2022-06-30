@@ -1,7 +1,7 @@
 package com.acme.web.server.security
 
-import com.acme.app.web.server.security.keto.OryKetoClient
-import com.acme.app.web.server.security.keto.RelationTuple
+import com.acme.web.server.security.keto.OryKetoClient
+import com.acme.web.server.security.keto.RelationTuple
 
 open class OryKetoAccessControlService(
   private val namespace: String,

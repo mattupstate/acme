@@ -1,6 +1,6 @@
 package com.acme.web.server.scheduling.json
 
-import com.acme.app.web.server.json.hal.HalLink
+import com.acme.web.server.json.hal.HalLink
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

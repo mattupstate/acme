@@ -1,6 +1,6 @@
 package com.acme.web.server.core.ktor
 
-import com.acme.app.web.server.security.ktor.HeaderAuthConfiguration
+import com.acme.web.server.security.ktor.HeaderAuthConfiguration
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.config.ApplicationConfig
 

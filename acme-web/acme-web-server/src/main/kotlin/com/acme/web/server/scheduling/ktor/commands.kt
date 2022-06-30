@@ -1,17 +1,5 @@
 package com.acme.web.server.scheduling.ktor
 
-import com.acme.app.web.server.core.defaultIdGenerator
-import com.acme.app.web.server.core.ktor.authenticatedUser
-import com.acme.app.web.server.scheduling.CreateAppointmentCommandRequest
-import com.acme.app.web.server.scheduling.CreateClientCommandRequest
-import com.acme.app.web.server.scheduling.CreatePracticeCommandRequest
-import com.acme.app.web.server.scheduling.CreatePractitionerCommandRequest
-import com.acme.app.web.server.scheduling.json.AppointmentCollectionResource
-import com.acme.app.web.server.scheduling.json.ClientCollectionResource
-import com.acme.app.web.server.scheduling.json.PracticeCollectionResource
-import com.acme.app.web.server.scheduling.json.PractitionerCollectionResource
-import com.acme.app.web.server.scheduling.toCommand
-import com.acme.app.web.server.security.AccessControlService
 import com.acme.core.MessageBus
 import com.acme.ktor.server.validation.receiveAndValidate
 import com.acme.scheduling.Appointment
@@ -19,6 +7,18 @@ import com.acme.scheduling.CancelAppointmentCommand
 import com.acme.scheduling.MarkAppointmentAttendedCommand
 import com.acme.scheduling.MarkAppointmentUnattendedCommand
 import com.acme.scheduling.SchedulingUnitOfWork
+import com.acme.web.server.core.defaultIdGenerator
+import com.acme.web.server.core.ktor.authenticatedUser
+import com.acme.web.server.scheduling.CreateAppointmentCommandRequest
+import com.acme.web.server.scheduling.CreateClientCommandRequest
+import com.acme.web.server.scheduling.CreatePracticeCommandRequest
+import com.acme.web.server.scheduling.CreatePractitionerCommandRequest
+import com.acme.web.server.scheduling.json.AppointmentCollectionResource
+import com.acme.web.server.scheduling.json.ClientCollectionResource
+import com.acme.web.server.scheduling.json.PracticeCollectionResource
+import com.acme.web.server.scheduling.json.PractitionerCollectionResource
+import com.acme.web.server.scheduling.toCommand
+import com.acme.web.server.security.AccessControlService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call

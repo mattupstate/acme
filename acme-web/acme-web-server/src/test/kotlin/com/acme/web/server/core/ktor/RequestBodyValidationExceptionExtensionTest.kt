@@ -1,8 +1,8 @@
 package com.acme.web.server.core.ktor
 
-import com.acme.app.web.server.json.hal.VndError
-import com.acme.app.web.server.scheduling.constraintValidator
 import com.acme.ktor.server.validation.RequestBodyValidationException
+import com.acme.web.server.json.hal.VndError
+import com.acme.web.server.scheduling.constraintValidator
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import jakarta.validation.constraints.NotBlank
