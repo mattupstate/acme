@@ -1,4 +1,4 @@
-package com.acme.web.test
+package com.acme.web.server.test
 
 import com.acme.web.server.core.ktor.AuthenticationConfiguration
 import com.acme.web.server.core.ktor.DataSourceConfiguration

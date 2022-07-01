@@ -1,4 +1,4 @@
-package com.acme.web.test
+package com.acme.web.server.test
 
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.SchemaVersion

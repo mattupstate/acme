@@ -1,4 +1,4 @@
-package com.acme.web.test
+package com.acme.web.server.test
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.extensions.Extension

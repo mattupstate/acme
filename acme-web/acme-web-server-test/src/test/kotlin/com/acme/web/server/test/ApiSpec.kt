@@ -1,4 +1,4 @@
-package com.acme.web.test
+package com.acme.web.server.test
 
 import com.acme.test.EndToEndTest
 import io.kotest.core.spec.style.ShouldSpec

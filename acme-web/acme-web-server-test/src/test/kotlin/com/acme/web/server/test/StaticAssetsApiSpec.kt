@@ -1,6 +1,6 @@
-package com.acme.web.test
+package com.acme.web.server.test
 
-import com.acme.web.test.AcmeWebTestProjectConfig.Companion.apiServer
+import com.acme.web.server.test.AcmeWebTestProjectConfig.Companion.apiServer
 import io.kotest.assertions.ktor.client.shouldHaveStatus
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode

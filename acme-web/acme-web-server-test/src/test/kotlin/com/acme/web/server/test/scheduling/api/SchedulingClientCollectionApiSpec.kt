@@ -1,11 +1,11 @@
-package com.acme.web.test.scheduling.api
+package com.acme.web.server.test.scheduling.api
 
-import com.acme.web.test.AcmeWebTestProjectConfig.Companion.apiServer
-import com.acme.web.test.ApiSpec
-import com.acme.web.test.firstLinkedItemHref
-import com.acme.web.test.mockUser
-import com.acme.web.test.shouldEqualJson
-import com.acme.web.test.shouldMatchJsonSchema
+import com.acme.web.server.test.AcmeWebTestProjectConfig.Companion.apiServer
+import com.acme.web.server.test.ApiSpec
+import com.acme.web.server.test.firstLinkedItemHref
+import com.acme.web.server.test.mockUser
+import com.acme.web.server.test.shouldEqualJson
+import com.acme.web.server.test.shouldMatchJsonSchema
 import io.kotest.assertions.ktor.client.shouldHaveStatus
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
