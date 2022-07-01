@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions
 import kotlin.reflect.full.primaryConstructor
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class RootPage(driver: WebDriver) : Page(driver) {
 
@@ -30,9 +32,10 @@ class RootPage(driver: WebDriver) : Page(driver) {
       messageList.messageLocator(recipient, subject)
     )
 
-  fun openEmail(recipient: String, subject: String): ExpectedCondition<Boolean> {
+  fun openEmail(recipient: String, subject: String, waitAtMost: Duration = 10.seconds) {
+    await atMost waitAtMost until emailDeliveredCondition(recipient, subject)
     messageList.clickMessageFor(recipient, subject)
-    return ExpectedConditions.and(
+    await atMost 5.seconds until ExpectedConditions.and(
       ExpectedConditions.presenceOfElementLocated(EmailPreview.LOCATOR),
       ExpectedConditions.presenceOfElementLocated(By.id("preview-html"))
     )

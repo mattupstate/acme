@@ -6,8 +6,9 @@ import com.acme.web.test.core.formControlByName
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class RegisterPage(driver: WebDriver) : Page(driver) {
   override val rootLocator: By = By.tagName("app-register-container")
@@ -16,7 +17,7 @@ class RegisterPage(driver: WebDriver) : Page(driver) {
     FormContentCard(root.findElement(FormContentCard.LOCATOR))
   }
 
-  fun fillAndSubmitRegistrationForm(values: RegistrationValues): ExpectedCondition<WebElement> {
+  fun fillAndSubmitRegistrationForm(values: RegistrationValues, waitAtMost: Duration = 10.seconds) {
     with(formContentCard) {
       emailInput.sendKeys(values.emailAddress)
       passwordInput.sendKeys(values.password)
@@ -28,7 +29,7 @@ class RegisterPage(driver: WebDriver) : Page(driver) {
       registerButton.click()
     }
 
-    return presenceOfElementLocated(
+    await atMost waitAtMost until presenceOfElementLocated(
       ThankYouContentCard.LOCATOR
     )
   }

@@ -2,8 +2,7 @@
   "browsers": [
     [
       {
-        "remoteUrl": "https://selenium-127-0-0-1.nip.io",
-        "type": "firefox"
+        "type": "chrome"
       }
     ]
   ]

@@ -26,6 +26,8 @@ open class AppObject(
     urlMap: Map<KClass<out Any>, String>,
     driver: WebDriver
   ) : this(URL(url), urlMap, driver)
+
+  val await get() = Await(driver)
 }
 
 fun <P : Page> AppObject.waitForPage(pageType: KClass<P>, timeout: Duration): P =
