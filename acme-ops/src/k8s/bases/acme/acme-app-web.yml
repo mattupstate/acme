@@ -15,9 +15,9 @@ spec:
         app.kubernetes.io/name: acme
         app.kubernetes.io/component: acme-app-web
       annotations:
-#        linkerd.io/inject: enabled
-#        prometheus.io/scrape: 'true'
-#        promtail.io/scrape: "true"
+    #        linkerd.io/inject: enabled
+    #        prometheus.io/scrape: 'true'
+    #        promtail.io/scrape: "true"
     spec:
       containers:
         - name: app
@@ -40,4 +40,4 @@ spec:
     app.kubernetes.io/component: acme-app-web
   ports:
     - port: 80
-      protocol: TCP
+      targetPort: 80

@@ -17,18 +17,18 @@ spec:
     spec:
       initContainers:
         - name: kratos-migrate
-          image: oryd/kratos:v0.8.2
+          image: oryd/kratos:v0.10.1
           imagePullPolicy: IfNotPresent
-          args: ["migrate", "sql", "-e", "--yes"]
+          args: [ "migrate", "sql", "-e", "--yes" ]
           volumeMounts:
             - name: kratos-common
               mountPath: /etc/kratos/common
       containers:
         - name: kratos
-          image: oryd/kratos:v0.8.2
+          image: oryd/kratos:v0.10.1
           imagePullPolicy: IfNotPresent
-          args: ["serve"]
-          envFrom: []
+          args: [ "serve" ]
+          envFrom: [ ]
           ports:
             - name: public
               containerPort: 4433

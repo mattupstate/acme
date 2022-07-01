@@ -2,10 +2,7 @@ export const environment = {
   production: false,
   identity: {
     kratosUrl: 'https://kratos-127-0-0-1.nip.io',
-    registrationReturnTo: 'http://127.0.0.1:4200'
-  },
-  scheduling: {
-    apiUrl: 'https://api-127-0-0-1.nip.io/api'
+    afterVerificationReturnTo: 'https://app-127-0-0-1.nip.io/sign-in?verified=true'
   },
 };
 

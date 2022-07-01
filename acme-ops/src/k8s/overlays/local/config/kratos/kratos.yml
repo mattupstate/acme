@@ -1,4 +1,4 @@
-version: v0.8.2-alpha.1
+version: v0.10.1
 watch-courier: true
 dsn: postgres://kratos:kratos@kratos-postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
 serve:
@@ -9,6 +9,7 @@ serve:
       debug: true
       allowed_origins:
         - https://*.nip.io
+        - http://*.default.svc.cluster.local
         - http://localhost:4200
         - http://127.0.0.1:4200
   admin:
@@ -21,8 +22,8 @@ session:
     domain: nip.io
     same_site: None
 selfservice:
-  default_browser_return_url: http://127.0.0.1:4200
-  whitelisted_return_urls:
+  default_browser_return_url: http://app-127-0-0-1.nip.io
+  allowed_return_urls:
     - http://127.0.0.1:4200
     - http://localhost:4200
     - https://app-127-0-0-1.nip.io
@@ -32,7 +33,7 @@ selfservice:
     oidc:
       enabled: true
       config:
-        providers: []
+        providers: [ ]
   flows:
     error:
       ui_url: https://app-127-0-0-1.nip.io/error
@@ -45,11 +46,13 @@ selfservice:
     verification:
       enabled: true
       ui_url: https://app-127-0-0-1.nip.io/sign-in?verified=true
+      after:
+        default_browser_return_url: https://app-127-0-0-1.nip.io/sign-in?verified=true
     logout:
       after:
         default_browser_return_url: https://app-127-0-0-1.nip.io/sign-in
     login:
-      ui_url: https://app-127-0-0-1.nip.io/login
+      ui_url: https://app-127-0-0-1.nip.io/sign-in
       lifespan: 10m
       after:
         password:
@@ -81,7 +84,10 @@ hashers:
   bcrypt:
     cost: 8
 identity:
-  default_schema_url: file:///etc/kratos/common/identity.schema.json
+  default_schema_id: default
+  schemas:
+    - id: default
+      url: file:///etc/kratos/common/identity.schema.json
 courier:
   smtp:
     connection_uri: smtp://mailhog:1025/?disable_starttls=true

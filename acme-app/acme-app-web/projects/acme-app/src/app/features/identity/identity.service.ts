@@ -350,14 +350,13 @@ export class KratosIdentityService implements IdentityService {
     familyName: string
   ): Observable<void> {
     return this.http
-      .get<SelfServiceRegistrationFlow>(`${this.baseUrl}/self-service/registration/browser?return_to=${this.registrationReturnTo}`)
+      .get<SelfServiceRegistrationFlow>(`${this.baseUrl}/self-service/registration/browser?verified=true&after_verification_return_to=${this.registrationReturnTo}`)
       .pipe(
         mergeMap((res) =>
           this.http
             .post<Session>(
               res.ui.action,
               {
-                return_to: this.registrationReturnTo,
                 traits: {
                   email,
                   name: {

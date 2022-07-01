@@ -8,24 +8,34 @@ build:
     - image: acme/acme-web-server
       jib:
         project: "acme-web:acme-web-server"
+    #    - image: acme/acme-app-web
+    #      context: ./acme-app/acme-app-web
+    - image: acme/acme-app-web
+      context: ./acme-app/acme-app-web
+      docker:
+        dockerfile: .Dockerfile
+      sync:
+        manual:
+          - src: 'projects/**/*.*'
+            dest: .
 #  local:
 #    push: false
 
 deploy:
   kustomize:
-    path: acme-ops/src/k8s/overlays/dev
+    path: acme-ops/src/k8s/overlays/local
 
-profiles:
-  - name: local
-    patches:
-      - op: add
-        path: /build/artifacts/-
-        value:
-          image: acme/acme-app-web
-          context: ./acme-app/acme-app-web
-    deploy:
-      kustomize:
-        path: acme-ops/src/k8s/overlays/local
+#profiles:
+#  - name: local
+#    patches:
+#      - op: add
+#        path: /build/artifacts/-
+#        value:
+#          image: acme/acme-app-web
+#          context: ./acme-app/acme-app-web
+#    deploy:
+#      kustomize:
+#        path: acme-ops/src/k8s/overlays/local
 
 #  - name: prod
 #    deploy:

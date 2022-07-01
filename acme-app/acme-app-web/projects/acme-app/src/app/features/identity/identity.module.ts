@@ -55,7 +55,7 @@ export class IdentityModule {
         {
           provide: IdentityService,
           useFactory: (http: HttpClient) => {
-            return new KratosIdentityService(http, baseUrl, environment.identity.registrationReturnTo);
+            return new KratosIdentityService(http, baseUrl, environment.identity.afterVerificationReturnTo);
           },
           deps: [HttpClient],
         },

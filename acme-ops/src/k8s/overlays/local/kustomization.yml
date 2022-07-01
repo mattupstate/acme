@@ -31,7 +31,7 @@ bases:
 
 components:
   - ../../components/mailhog
-  - ../../components/selenium-grid
+#  - ../../components/selenium-grid
 
 resources:
   - ssl
@@ -106,16 +106,131 @@ patches:
       version: v1
       kind: Deployment
       name: kratos
-    path: kratos.yml
+    patch: |-
+      - path: /spec/template/spec/initContainers/0/args/-
+        op: add
+        value: --config
+      - path: /spec/template/spec/initContainers/0/args/-
+        op: add
+        value: /etc/kratos/kratos.yml
+      - path: /spec/template/spec/containers/0/args/-
+        op: add
+        value: --config
+      - path: /spec/template/spec/containers/0/args/-
+        op: add
+        value: /etc/kratos/kratos.yml
+      - path: /spec/template/spec/containers/0/args/-
+        op: add
+        value: --config
+      - path: /spec/template/spec/containers/0/args/-
+        op: add
+        value: /etc/kratos/oidc/oidc.yml
+      - path: /spec/template/spec/containers/0/args/-
+        op: add
+        value: --watch-courier
+      - path: /spec/template/spec/volumes/-
+        op: add
+        value:
+          name: kratos-config
+          configMap:
+            name: kratos-config
+      - path: /spec/template/spec/volumes/-
+        op: add
+        value:
+          name: kratos-oidc-secrets
+          secret:
+            secretName: kratos-oidc-secrets
+      - path: /spec/template/spec/containers/0/volumeMounts/-
+        op: add
+        value:
+          mountPath: /etc/kratos
+          name: kratos-config
+      - path: /spec/template/spec/containers/0/volumeMounts/-
+        op: add
+        value:
+          mountPath: /etc/kratos/oidc
+          name: kratos-oidc-secrets
+      - path: /spec/template/spec/initContainers/0/volumeMounts/-
+        op: add
+        value:
+          mountPath: /etc/kratos
+          name: kratos-config
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: keto
-    path: keto.yml
+    patch: |-
+      - path: /spec/template/spec/initContainers/0/args/0
+        op: add
+        value: --config
+      - path: /spec/template/spec/initContainers/0/args/1
+        op: add
+        value: /etc/keto/keto.yml
+      - path: /spec/template/spec/containers/0/args/0
+        op: add
+        value: --config
+      - path: /spec/template/spec/containers/0/args/1
+        op: add
+        value: /etc/keto/keto.yml
+      - path: /spec/template/spec/volumes/-
+        op: add
+        value:
+          name: keto-config
+          configMap:
+            name: keto-config
+      - path: /spec/template/spec/containers/0/volumeMounts/-
+        op: add
+        value:
+          mountPath: /etc/keto
+          name: keto-config
+      - path: /spec/template/spec/initContainers/0/volumeMounts/-
+        op: add
+        value:
+          mountPath: /etc/keto
+          name: keto-config
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: acme-web-server
-    path: acme-web-server.yml
+    patch: |-
+      - path: /spec/template/spec/volumes/-
+        op: add
+        value:
+          name: acme-web-server-config
+          configMap:
+            name: acme-web-server-config
+      - path: /spec/template/spec/containers/0/volumeMounts/0
+        op: add
+        value:
+          mountPath: /etc/acme/web
+          name: acme-web-server-config
+      - path: /spec/template/spec/volumes/-
+        op: add
+        value:
+          name: acme-web-server-oathkeeper-config
+          configMap:
+            name: acme-web-server-oathkeeper-config
+      - path: /spec/template/spec/containers/1/volumeMounts/0
+        op: add
+        value:
+          mountPath: /etc/oathkeeper
+          name: acme-web-server-oathkeeper-config
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: acme-app-web
+    patch: |-
+      - path: /spec/template/spec/containers/0/ports/0/containerPort
+        op: replace
+        value: 4200
+  - target:
+      version: v1
+      kind: Service
+      name: acme-app-web
+    patch: |-
+      - path: /spec/ports/0/targetPort
+        op: replace
+        value: 4200
