@@ -10,6 +10,7 @@ import { VerifyContainerComponent } from './features/identity/verify-container.c
 export const routes: Routes = [
   {
     path: '',
+    title: $localize`Dashboard | Acme`,
     component: AppContainerComponent,
     canActivate: [IsAuthenticated],
     children: [
@@ -44,21 +45,25 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterContainerComponent,
     canActivate: [IsUnauthenticated],
+    title: $localize`Register | Acme`
   },
   {
     path: 'sign-in',
     component: SignInContainerComponent,
     canActivate: [IsUnauthenticated],
+    title: $localize`Sign In | Acme`
   },
   {
     path: 'recover',
     component: RecoverContainerComponent,
     canActivate: [IsUnauthenticated],
+    title: $localize`Recover Your Account | Acme`
   },
   {
     path: 'verify',
     component: VerifyContainerComponent,
     canActivate: [IsUnauthenticated],
+    title: $localize`Verify Your Email Address | Acme`
   }
 ];
 
