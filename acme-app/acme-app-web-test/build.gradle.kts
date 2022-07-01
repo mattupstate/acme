@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-  mainClass.set("com.acme.web.test.console.ConsoleLauncher")
+  mainClass.set("com.acme.app.web.test.console.ConsoleLauncher")
   applicationDefaultJvmArgs = listOf(
     "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
     "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",

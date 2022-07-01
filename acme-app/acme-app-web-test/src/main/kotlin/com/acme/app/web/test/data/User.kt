@@ -1,4 +1,4 @@
-package com.acme.web.test.data
+package com.acme.app.web.test.data
 
 data class User(
   val id: String,

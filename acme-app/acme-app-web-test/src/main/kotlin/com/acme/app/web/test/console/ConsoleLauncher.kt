@@ -1,4 +1,4 @@
-package com.acme.web.test.console
+package com.acme.app.web.test.console
 
 import org.junit.platform.engine.discovery.ClassNameFilter.includeClassNamePatterns
 import org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage

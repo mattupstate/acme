@@ -1,6 +1,6 @@
-package com.acme.web.test.email.mailhog
+package com.acme.app.web.test.email.mailhog
 
-import com.acme.web.test.core.Page
+import com.acme.app.web.test.core.Page
 import io.ktor.util.reflect.typeInfo
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver

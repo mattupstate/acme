@@ -1,4 +1,4 @@
-package com.acme.web.test.data
+package com.acme.app.web.test.data
 
 import com.appmattus.kotlinfixture.decorator.fake.javafaker.javaFakerStrategy
 import com.appmattus.kotlinfixture.kotlinFixture

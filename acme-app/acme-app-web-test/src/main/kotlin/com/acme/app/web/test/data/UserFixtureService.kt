@@ -1,4 +1,4 @@
-package com.acme.web.test.data
+package com.acme.app.web.test.data
 
 import java.util.UUID
 

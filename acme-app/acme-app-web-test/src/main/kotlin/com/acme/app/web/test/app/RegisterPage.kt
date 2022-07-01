@@ -1,8 +1,8 @@
-package com.acme.web.test.app
+package com.acme.app.web.test.app
 
-import com.acme.web.test.core.Page
-import com.acme.web.test.core.buttonText
-import com.acme.web.test.core.formControlByName
+import com.acme.app.web.test.core.Page
+import com.acme.app.web.test.core.buttonText
+import com.acme.app.web.test.core.formControlByName
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement

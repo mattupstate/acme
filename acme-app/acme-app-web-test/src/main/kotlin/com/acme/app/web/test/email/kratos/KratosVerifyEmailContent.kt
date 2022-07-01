@@ -1,4 +1,4 @@
-package com.acme.web.test.email.kratos
+package com.acme.app.web.test.email.kratos
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
