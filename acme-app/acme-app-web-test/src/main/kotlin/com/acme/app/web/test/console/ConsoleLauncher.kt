@@ -29,7 +29,7 @@ object ConsoleLauncher {
     launcher.execute(request, listener)
 
     val summary = listener.summary
-    val write = PrintWriter(System.err)
+    val write = PrintWriter(System.out)
 
     if (summary.totalFailureCount > 0) {
       summary.printFailuresTo(write)
