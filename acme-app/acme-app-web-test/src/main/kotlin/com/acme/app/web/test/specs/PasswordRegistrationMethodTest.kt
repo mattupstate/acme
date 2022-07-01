@@ -32,7 +32,7 @@ class PasswordRegistrationMethodTest {
         withEmailMessageContent<KratosVerifyEmailContent> {
           clickVerificationLink()
         }
-        
+
         await atMost 10.seconds until numberOfWindowsToBe(2)
       }
     }
@@ -40,10 +40,14 @@ class PasswordRegistrationMethodTest {
     driver.close()
     driver.switchTo().window(driver.windowHandles.first())
 
+    assert(driver.title == "Sign In | Acme")
+
     withAcmeWebApp(driver) {
       navigateToSignInPage {
         signIn(fixture.emailAddress, fixture.password)
       }
+
+      assert(driver.title == "Dashboard | Acme")
     }
   }
 }
