@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -33,7 +33,7 @@ export class SignInComponent {
     provider: string;
   }>();
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   hasError(control: string, validator: string) {
     return this.signInForm.controls[control].hasError(validator);

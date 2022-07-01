@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +10,7 @@ export class RegisterComponent implements OnInit {
   hidePassword = true;
   requested = false;
 
-  registerForm: FormGroup = this.formBuilder.group({
+  registerForm: UntypedFormGroup = this.formBuilder.group({
     root: [],
     email: ['', Validators.required],
     password: ['', Validators.required],
@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
   get givenName() { return this.registerForm.get('givenName')! }
   get familyName() { return this.registerForm.get('familyName')! }
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     this.reset();

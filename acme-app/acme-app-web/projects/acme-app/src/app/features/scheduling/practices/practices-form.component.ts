@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-practices-form',
@@ -15,7 +15,7 @@ export class PracticesFormComponent {
     name: string;
   }>();
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   hasError(control: string, validator: string) {
     return this.practiceForm.controls[control].hasError(validator);
