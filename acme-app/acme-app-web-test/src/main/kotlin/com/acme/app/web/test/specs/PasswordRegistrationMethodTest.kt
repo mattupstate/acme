@@ -18,7 +18,6 @@ class PasswordRegistrationMethodTest {
   @TestTemplate
   fun happyPath(driver: WebDriver) {
     val fixture = fixture<RegisterPage.RegistrationValues>()
-    val registerWindow = driver.windowHandle
 
     withAcmeWebApp(driver) {
       navigateToRegisterPage {
@@ -28,21 +27,18 @@ class PasswordRegistrationMethodTest {
 
     withMailhogApp(driver) {
       navigateToInbox {
-        openEmail(
-          fixture.emailAddress, KratosVerifyEmailContent.SUBJECT
-        )
+        openEmail(fixture.emailAddress, KratosVerifyEmailContent.SUBJECT)
 
         withEmailMessageContent<KratosVerifyEmailContent> {
           clickVerificationLink()
         }
+        
+        await atMost 10.seconds until numberOfWindowsToBe(2)
       }
-
-      await atMost 10.seconds until numberOfWindowsToBe(2)
     }
 
-    driver.switchTo().window(
-      driver.windowHandles.minus(registerWindow).first()
-    )
+    driver.close()
+    driver.switchTo().window(driver.windowHandles.first())
 
     withAcmeWebApp(driver) {
       navigateToSignInPage {
