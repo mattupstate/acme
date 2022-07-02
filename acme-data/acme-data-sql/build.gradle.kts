@@ -54,12 +54,6 @@ jooq {
             includes = ".*"
             excludes = "databasechangelog.*|databasechangeloglock.*|pg_catalog.*|information_schema.*"
           }
-          // generate.apply {
-          //   isDeprecated = false
-          //   isRecords = true
-          //   isImmutablePojos = true
-          //   isFluentSetters = true
-          // }
           target.apply {
             packageName = "com.acme.sql"
           }
@@ -81,8 +75,4 @@ tasks {
       systemProperty("liquibase.changelogFile", liquibaseChangelogFile)
     }
   }
-
-  // test {
-  //   systemProperty(liquibaseChangelogProperty, liquibaseChangelogFile)
-  // }
 }
