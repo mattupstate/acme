@@ -2,8 +2,8 @@ import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
   id("acme.kotlin-application-conventions")
-  id("org.asciidoctor.jvm.convert") version "3.3.2"
   id("org.hidetake.swagger.generator") version "2.18.2"
+  id("com.ryandens.javaagent-jib") version "0.3.2"
   kotlin("plugin.serialization")
 }
 
@@ -11,6 +11,7 @@ val localRuntimeOnly by configurations.creating
 
 dependencies {
   swaggerUI("org.webjars:swagger-ui:3.50.0")
+  javaagent("io.opentelemetry.javaagent:opentelemetry-javaagent:1.15.0")
 
   implementation(project(":acme-data:acme-data-scheduling"))
   implementation(project(":acme-data:acme-data-sql"))
@@ -69,7 +70,6 @@ sourceSets.main {
 
 application {
   mainClass.set("io.ktor.server.netty.EngineMain")
-
 }
 
 jib {
@@ -85,15 +85,7 @@ tasks {
     systemProperty("logback.configurationFile", projectDir.resolve("logback-dev.xml"))
   }
 
-  getByName<AsciidoctorTask>("asciidoctor") {
-    baseDirFollowsSourceDir()
-    attributes = mapOf(
-      "project-version" to project.version
-    )
-  }
-
   getByName("processResources") {
-    dependsOn(asciidoctor)
     dependsOn(generateSwaggerUI)
   }
 }
