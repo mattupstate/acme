@@ -1,7 +1,10 @@
 package com.acme.app.web.test.app
 
 import com.acme.app.web.test.core.AppObject
-import com.acme.app.web.test.core.navigate
+import com.acme.app.web.test.core.expectPage
+import com.acme.app.web.test.core.gotoPage
+import io.kotest.matchers.string.shouldContain
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 
 class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, driver) {
@@ -14,11 +17,24 @@ class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, dri
     )
   }
 
-  fun navigateToRegisterPage(block: RegisterPage.() -> Unit): Unit =
-    block(navigate(RegisterPage::class))
+  fun goToRegisterPage(block: RegisterPage.() -> Unit): Unit =
+    block(gotoPage(RegisterPage::class))
 
-  fun navigateToSignInPage(block: SignInPage.() -> Unit): Unit =
-    block(navigate(SignInPage::class))
+  fun gotoToSignInPage(block: SignInPage.() -> Unit): Unit =
+    block(gotoPage(SignInPage::class))
+
+  fun gotoRootPage(block: RootPage.() -> Unit): Unit =
+    block(gotoPage(RootPage::class))
+
+  fun expectSignInPage(block: SignInPage.() -> Unit): Unit =
+    block(expectPage(SignInPage::class))
+
+  fun expectRootPage(block: RootPage.() -> Unit): Unit =
+    block(expectPage(RootPage::class))
+
+  fun expectSnackBarMessage(message: String) {
+    driver.findElement(By.tagName("snack-bar-container")).text shouldContain message
+  }
 
   //
   // fun signIn(user: User) =

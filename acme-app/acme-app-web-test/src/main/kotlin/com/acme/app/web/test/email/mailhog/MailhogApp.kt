@@ -1,7 +1,7 @@
 package com.acme.app.web.test.email.mailhog
 
 import com.acme.app.web.test.core.AppObject
-import com.acme.app.web.test.core.navigate
+import com.acme.app.web.test.core.gotoPage
 import org.openqa.selenium.WebDriver
 import kotlin.reflect.KClass
 
@@ -13,7 +13,7 @@ class MailhogApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, dri
   }
 
   fun navigateToInbox(block: RootPage.() -> Unit) {
-    with(navigate(RootPage::class)) {
+    with(gotoPage(RootPage::class)) {
       navMenu.inboxButton.click()
       apply(block)
     }

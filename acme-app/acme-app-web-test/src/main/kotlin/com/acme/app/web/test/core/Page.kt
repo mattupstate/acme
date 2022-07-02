@@ -12,8 +12,6 @@ abstract class Page(private val webDriver: WebDriver) {
 
   abstract val rootLocator: By
 
-  val await get() = Await(driver)
-
   @PublishedApi
   internal val driver: WebDriver
     get() = this.webDriver

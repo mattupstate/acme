@@ -8,6 +8,8 @@ dependencies {
   implementation("com.appmattus.fixture:fixture-javafaker:1.2.0")
   implementation("com.appmattus.fixture:fixture:1.2.0")
   implementation("io.github.bonigarcia:selenium-jupiter:4.2.0")
+  implementation("io.kotest:kotest-assertions-core:5.3.2")
+  implementation("io.kotest:kotest-runner-junit5-jvm:5.3.2")
   implementation("io.ktor:ktor-client-apache:2.0.0")
   implementation("io.ktor:ktor-client-auth:2.0.0")
   implementation("io.ktor:ktor-client-logging:2.0.0")
@@ -23,7 +25,9 @@ application {
   applicationDefaultJvmArgs = listOf(
     "-Dacme.app.web.url=https://app-127-0-0-1.nip.io",
     "-Dacme.app.mailhog.url=https://mailhog-127-0-0-1.nip.io",
-    "-Dsel.jup.browser.template.json.file=classpath:browsers-dev.json"
+    "-Djunit.platform.output.capture.stdout=true",
+    "-Djunit.platform.output.capture.stderr=true",
+    "-Dwebdriver.browser=chrome",
   )
 }
 

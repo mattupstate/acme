@@ -10,5 +10,6 @@
     <appender-ref ref="Console"/>
   </root>
 
+  <logger name="com.acme.app.web.test" level="DEBUG"/>
   <logger name="ch.qos.logback" level="WARN"/>
 </configuration>

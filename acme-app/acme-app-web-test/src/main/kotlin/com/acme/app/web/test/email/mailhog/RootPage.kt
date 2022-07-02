@@ -1,6 +1,7 @@
 package com.acme.app.web.test.email.mailhog
 
 import com.acme.app.web.test.core.Page
+import com.acme.app.web.test.core.wait
 import io.ktor.util.reflect.typeInfo
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -8,7 +9,6 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions
 import kotlin.reflect.full.primaryConstructor
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class RootPage(driver: WebDriver) : Page(driver) {
@@ -32,10 +32,10 @@ class RootPage(driver: WebDriver) : Page(driver) {
       messageList.messageLocator(recipient, subject)
     )
 
-  fun openEmail(recipient: String, subject: String, waitAtMost: Duration = 10.seconds) {
-    await atMost waitAtMost until emailDeliveredCondition(recipient, subject)
+  fun openEmail(recipient: String, subject: String) {
+    driver.wait atMost 10.seconds until emailDeliveredCondition(recipient, subject)
     messageList.clickMessageFor(recipient, subject)
-    await atMost 5.seconds until ExpectedConditions.and(
+    driver.wait atMost 2.seconds until ExpectedConditions.and(
       ExpectedConditions.presenceOfElementLocated(EmailPreview.LOCATOR),
       ExpectedConditions.presenceOfElementLocated(By.id("preview-html"))
     )

@@ -19,10 +19,9 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.6.10")
   implementation("org.slf4j:slf4j-api:1.7.31")
   implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
-  implementation(platform("io.kotest:kotest-bom:5.3.0"))
 
   testImplementation(project(":acme-lib:acme-lib-test"))
-  testImplementation("io.kotest:kotest-runner-junit5")
+  testImplementation("io.kotest:kotest-runner-junit5:5.3.2")
 }
 
 group = "com.acme"

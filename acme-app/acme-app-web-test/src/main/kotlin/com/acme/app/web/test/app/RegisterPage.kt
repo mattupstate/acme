@@ -3,6 +3,7 @@ package com.acme.app.web.test.app
 import com.acme.app.web.test.core.Page
 import com.acme.app.web.test.core.buttonText
 import com.acme.app.web.test.core.formControlByName
+import com.acme.app.web.test.core.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -29,7 +30,7 @@ class RegisterPage(driver: WebDriver) : Page(driver) {
       registerButton.click()
     }
 
-    await atMost waitAtMost until presenceOfElementLocated(
+    driver.wait atMost waitAtMost until presenceOfElementLocated(
       ThankYouContentCard.LOCATOR
     )
   }
