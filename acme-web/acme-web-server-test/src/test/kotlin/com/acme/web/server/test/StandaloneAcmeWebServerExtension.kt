@@ -34,7 +34,7 @@ import java.net.ServerSocket
  * - ORY Keto using Docker
  * - acme-web-server using Ktor's embedded server feature
  */
-class MinimalAcmeWebServerExtension(
+class StandaloneAcmeWebServerExtension(
   private val serverHost: String,
   private val serverPort: Int,
 ) : ProjectListener {

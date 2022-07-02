@@ -1,4 +1,4 @@
-package com.acme.app.web.test.core
+package com.acme.selenium
 
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedCondition

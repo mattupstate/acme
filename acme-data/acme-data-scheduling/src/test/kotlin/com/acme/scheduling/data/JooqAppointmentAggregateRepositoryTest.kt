@@ -6,7 +6,6 @@ import com.acme.scheduling.Client
 import com.acme.scheduling.Period
 import com.acme.scheduling.Practice
 import com.acme.scheduling.Practitioner
-import com.acme.test.IntegrationTest
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -14,7 +13,6 @@ import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
 
 class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
-  tags(IntegrationTest)
 
   val jooq = listener(JooqAndPostgresListener())
   val now = LocalDateTime.now()

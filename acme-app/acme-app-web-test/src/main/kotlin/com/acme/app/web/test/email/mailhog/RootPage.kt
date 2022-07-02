@@ -1,7 +1,7 @@
 package com.acme.app.web.test.email.mailhog
 
-import com.acme.app.web.test.core.Page
-import com.acme.app.web.test.core.wait
+import com.acme.selenium.PageObject
+import com.acme.selenium.wait
 import io.ktor.util.reflect.typeInfo
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import kotlin.reflect.full.primaryConstructor
 import kotlin.time.Duration.Companion.seconds
 
-class RootPage(driver: WebDriver) : Page(driver) {
+class RootPage(driver: WebDriver) : PageObject(driver) {
 
   override val rootLocator: By = By.className("messages")
 
@@ -43,9 +43,9 @@ class RootPage(driver: WebDriver) : Page(driver) {
 
   inline fun <reified T : Any> withEmailMessageContent(block: T.() -> Unit) {
     val emailTypeInfo = typeInfo<T>()
-    driver.switchTo().frame("preview-html")
-    (emailTypeInfo.type.primaryConstructor!!.call(driver.findElement(By.tagName("body"))) as T).apply(block)
-    driver.switchTo().defaultContent()
+    webDriver.switchTo().frame("preview-html")
+    (emailTypeInfo.type.primaryConstructor!!.call(webDriver.findElement(By.tagName("body"))) as T).apply(block)
+    webDriver.switchTo().defaultContent()
   }
 
   class MessageList(private val root: WebElement) {
@@ -83,4 +83,8 @@ class RootPage(driver: WebDriver) : Page(driver) {
       val LOCATOR: By = By.xpath("//div[contains(@class, 'preview')]")
     }
   }
+
+  @PublishedApi
+  internal val webDriver: WebDriver
+    get() = driver
 }

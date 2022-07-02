@@ -11,6 +11,7 @@ import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.common.runBlocking
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HeadersBuilder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -52,4 +53,22 @@ infix fun String.shouldMatchJsonSchema(schema: String) {
   if (!report.isSuccess) {
     failure(report.asJson().toPrettyString())
   }
+}
+
+fun HeadersBuilder.mockUser(
+  id: String = "user123",
+  email: String = "user@acme.com",
+  givenName: String = "User",
+  familyName: String = "Name",
+  preferredName: String = "User Name",
+  namePrefix: String = "",
+  nameSuffix: String = "",
+) {
+  append("X-Auth-Id", id)
+  append("X-Auth-Email", email)
+  append("X-Auth-Name-Preferred", preferredName)
+  append("X-Auth-Name-Given", givenName)
+  append("X-Auth-Name-Family", familyName)
+  append("X-Auth-Name-Prefix", namePrefix)
+  append("X-Auth-Name-Suffix", nameSuffix)
 }

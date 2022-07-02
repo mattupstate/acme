@@ -1,4 +1,4 @@
-package com.acme.app.web.test.specs
+package com.acme.app.web.test.kotest
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import io.kotest.core.extensions.MountableExtension
@@ -9,6 +9,10 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
+/**
+ * Loosely inspired by io.kotest.extensions.testcontainers.JdbcTestContainerExtension
+ * SEE: https://github.com/kotest/kotest-extensions-testcontainers/blob/master/src/main/kotlin/io/kotest/extensions/testcontainers/JdbcTestContainerExtension.kt
+ */
 class WebDriverExtension(browser: String) : MountableExtension<Nothing, WebDriver>, TestListener {
 
   constructor() : this(System.getProperty("webdriver.browser"))

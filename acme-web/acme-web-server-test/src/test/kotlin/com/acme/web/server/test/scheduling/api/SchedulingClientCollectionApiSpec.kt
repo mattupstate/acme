@@ -1,12 +1,12 @@
 package com.acme.web.server.test.scheduling.api
 
 import com.acme.web.server.test.AcmeWebTestProjectConfig.Companion.apiServer
-import com.acme.web.server.test.ApiSpec
 import com.acme.web.server.test.firstLinkedItemHref
 import com.acme.web.server.test.mockUser
 import com.acme.web.server.test.shouldEqualJson
 import com.acme.web.server.test.shouldMatchJsonSchema
 import io.kotest.assertions.ktor.client.shouldHaveStatus
+import io.kotest.core.spec.style.ShouldSpec
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
@@ -17,7 +17,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 
-class SchedulingClientCollectionApiSpec : ApiSpec({
+class SchedulingClientCollectionApiSpec : ShouldSpec({
   context("Client resource collection") {
     should("create a new client resource with valid input") {
       apiServer.http.post("/scheduling/clients") {

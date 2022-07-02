@@ -1,9 +1,9 @@
-package com.acme.app.web.test.app
+package com.acme.app.web.test.model
 
-import com.acme.app.web.test.core.Page
-import com.acme.app.web.test.core.buttonText
-import com.acme.app.web.test.core.formControlByName
-import com.acme.app.web.test.core.wait
+import com.acme.selenium.PageObject
+import com.acme.selenium.buttonText
+import com.acme.selenium.formControlByName
+import com.acme.selenium.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocate
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-class RegisterPage(driver: WebDriver) : Page(driver) {
+class RegisterPage(driver: WebDriver) : PageObject(driver) {
   override val rootLocator: By = By.tagName("app-register-container")
 
   private val formContentCard by lazy {

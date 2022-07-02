@@ -1,9 +1,9 @@
-package com.acme.app.web.test.app
+package com.acme.app.web.test.model
 
-import com.acme.app.web.test.core.Page
-import com.acme.app.web.test.core.buttonText
-import com.acme.app.web.test.core.formControlByName
-import com.acme.app.web.test.core.wait
+import com.acme.selenium.PageObject
+import com.acme.selenium.buttonText
+import com.acme.selenium.formControlByName
+import com.acme.selenium.wait
 import io.kotest.matchers.string.shouldContain
 import mu.KotlinLogging
 import org.openqa.selenium.By
@@ -11,11 +11,9 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import kotlin.time.Duration.Companion.seconds
 
-class SignInPage(driver: WebDriver) : Page(driver) {
+class SignInPage(driver: WebDriver) : PageObject(driver) {
 
   private val logger = KotlinLogging.logger {}
-
-  val pageTitle = "Sign In | Acme"
 
   override val rootLocator: By = By.tagName("app-sign-in-container")
 

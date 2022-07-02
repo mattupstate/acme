@@ -1,4 +1,4 @@
-package com.acme.app.web.test.core
+package com.acme.selenium
 
 import io.kotest.matchers.collections.shouldHaveSize
 import org.openqa.selenium.By

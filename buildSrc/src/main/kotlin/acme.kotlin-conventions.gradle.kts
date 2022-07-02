@@ -20,7 +20,6 @@ dependencies {
   implementation("org.slf4j:slf4j-api:1.7.31")
   implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
 
-  testImplementation(project(":acme-lib:acme-lib-test"))
   testImplementation("io.kotest:kotest-runner-junit5:5.3.2")
 }
 

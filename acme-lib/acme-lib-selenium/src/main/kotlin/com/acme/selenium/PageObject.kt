@@ -1,18 +1,14 @@
-package com.acme.app.web.test.core
+package com.acme.selenium
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
-abstract class Page(private val webDriver: WebDriver) {
+abstract class PageObject(protected val driver: WebDriver) {
 
   val root: WebElement by lazy {
     driver.findElement(rootLocator)
   }
 
   abstract val rootLocator: By
-
-  @PublishedApi
-  internal val driver: WebDriver
-    get() = this.webDriver
 }

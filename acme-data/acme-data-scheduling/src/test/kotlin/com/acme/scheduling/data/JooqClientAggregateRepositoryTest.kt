@@ -5,14 +5,13 @@ import com.acme.scheduling.Gender
 import com.acme.scheduling.HumanName
 import com.acme.scheduling.Name
 import com.acme.scheduling.Period
-import com.acme.test.IntegrationTest
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
 class JooqClientAggregateRepositoryTest : ShouldSpec({
-  tags(IntegrationTest)
+  
   val jooq = listener(JooqAndPostgresListener())
 
   val client = Client(

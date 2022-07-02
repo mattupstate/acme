@@ -9,9 +9,9 @@ class AcmeWebTestProjectConfig : AbstractProjectConfig() {
     listOf(apiServer)
 
   companion object {
-    val apiServer = MinimalAcmeWebServerExtension(
+    val apiServer = StandaloneAcmeWebServerExtension(
       serverHost = "127.0.0.1",
-      serverPort = MinimalAcmeWebServerExtension.findOpenPort(),
+      serverPort = StandaloneAcmeWebServerExtension.findOpenPort(),
     )
   }
 }

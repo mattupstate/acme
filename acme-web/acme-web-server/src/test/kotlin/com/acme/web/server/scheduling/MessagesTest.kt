@@ -20,7 +20,6 @@ import com.acme.scheduling.Practice
 import com.acme.scheduling.Practitioner
 import com.acme.scheduling.UserId
 import com.acme.scheduling.data.SchedulingJooqUnitOfWork
-import com.acme.test.IntegrationTest
 import com.acme.web.server.scheduling.data.AppointmentRecord
 import com.acme.web.server.scheduling.data.ClientRecord
 import com.acme.web.server.scheduling.data.ContactPointRecord
@@ -41,7 +40,6 @@ fun Instant.toLocalDateTimeUTC(): LocalDateTime =
   LocalDateTime.ofInstant(this, ZoneOffset.UTC)
 
 class MessagesTest : ShouldSpec({
-  tags(IntegrationTest, SchedulingTest)
 
   context("CreatePracticeCommand") {
     should("result in new PracticeEntity") {

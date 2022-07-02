@@ -3,14 +3,13 @@ package com.acme.scheduling.data
 import com.acme.scheduling.ContactPoint
 import com.acme.scheduling.Practice
 import com.acme.scheduling.Practitioner
-import com.acme.test.IntegrationTest
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
 class JooqPracticeAggregateRepositoryTest : ShouldSpec({
-  tags(IntegrationTest)
+
   val jooq = listener(JooqAndPostgresListener())
 
   val practice = Practice(

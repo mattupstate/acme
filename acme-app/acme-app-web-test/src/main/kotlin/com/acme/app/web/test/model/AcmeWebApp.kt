@@ -1,29 +1,34 @@
-package com.acme.app.web.test.app
+package com.acme.app.web.test.model
 
-import com.acme.app.web.test.core.AppObject
-import com.acme.app.web.test.core.expectPage
-import com.acme.app.web.test.core.gotoPage
+import com.acme.selenium.AppObject
 import io.kotest.matchers.string.shouldContain
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import java.net.URL
+import kotlin.reflect.KClass
 
-class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, driver) {
-  companion object {
-    val URL_MAP = mapOf(
-      RootPage::class to "/",
-      SignInPage::class to "/sign-in",
-      PracticesPage::class to "/practices",
-      RegisterPage::class to "/register",
-    )
+class AcmeWebApp(rootUrl: String, driver: WebDriver) : AppObject(driver) {
+
+  override val rootUrl: URL = URL(rootUrl)
+
+  override val pages: Map<KClass<out Any>, String> = mapOf(
+    RootPage::class to "/",
+    SignInPage::class to "/sign-in",
+    RegisterPage::class to "/register",
+  )
+
+  private val snackBarContainer: WebElement by lazy {
+    driver.findElement(By.tagName("snack-bar-container"))
   }
 
   fun goToRegisterPage(block: RegisterPage.() -> Unit): Unit =
     block(gotoPage(RegisterPage::class))
 
-  fun gotoToSignInPage(block: SignInPage.() -> Unit): Unit =
+  fun goToSignInPage(block: SignInPage.() -> Unit): Unit =
     block(gotoPage(SignInPage::class))
 
-  fun gotoRootPage(block: RootPage.() -> Unit): Unit =
+  fun goToRootPage(block: RootPage.() -> Unit): Unit =
     block(gotoPage(RootPage::class))
 
   fun expectSignInPage(block: SignInPage.() -> Unit): Unit =
@@ -33,12 +38,8 @@ class AcmeWebApp(root: String, driver: WebDriver) : AppObject(root, URL_MAP, dri
     block(expectPage(RootPage::class))
 
   fun expectSnackBarMessage(message: String) {
-    driver.findElement(By.tagName("snack-bar-container")).text shouldContain message
+    snackBarContainer.text shouldContain message
   }
-
-  //
-  // fun signIn(user: User) =
-  //   waitForPage(SignInPage::class, Duration.ofSeconds(5))
 }
 
 fun <T> withAcmeWebApp(rootUrl: String, driver: WebDriver, block: AcmeWebApp.() -> T): T =

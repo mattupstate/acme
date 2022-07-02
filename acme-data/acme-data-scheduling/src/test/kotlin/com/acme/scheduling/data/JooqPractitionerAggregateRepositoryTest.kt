@@ -6,14 +6,12 @@ import com.acme.scheduling.Name
 import com.acme.scheduling.Period
 import com.acme.scheduling.Practitioner
 import com.acme.scheduling.UserId
-import com.acme.test.IntegrationTest
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
 class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
-  tags(IntegrationTest)
 
   val jooq = listener(JooqAndPostgresListener())
 
