@@ -1,5 +1,6 @@
 plugins {
-  id("acme.kotlin-application-conventions")
+  id("acme.kotlin-conventions")
+  application
   kotlin("plugin.serialization")
 }
 
@@ -29,8 +30,8 @@ application {
   )
 }
 
-jib {
-  container {
-    mainClass = application.mainClass.get()
-  }
-}
+// jib {
+//   container {
+//     mainClass = application.mainClass.get()
+//   }
+// }

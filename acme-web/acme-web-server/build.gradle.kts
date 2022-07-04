@@ -1,10 +1,10 @@
-import org.asciidoctor.gradle.jvm.AsciidoctorTask
-
 plugins {
-  id("acme.kotlin-application-conventions")
-  id("org.hidetake.swagger.generator") version "2.18.2"
-  id("com.ryandens.javaagent-jib") version "0.3.2"
+  id("acme.kotlin-conventions")
+  application
   kotlin("plugin.serialization")
+  id("org.hidetake.swagger.generator") version "2.18.2"
+  id("com.google.cloud.tools.jib") version "3.2.1"
+  id("com.ryandens.javaagent-jib") version "0.3.2"
 }
 
 val localRuntimeOnly by configurations.creating
@@ -13,14 +13,13 @@ dependencies {
   swaggerUI("org.webjars:swagger-ui:3.50.0")
   javaagent("io.opentelemetry.javaagent:opentelemetry-javaagent:1.15.0")
 
+  implementation(platform("io.opentelemetry:opentelemetry-bom:1.15.0"))
   implementation(project(":acme-data:acme-data-scheduling"))
   implementation(project(":acme-data:acme-data-sql"))
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(project(":acme-domain:acme-domain-scheduling"))
   implementation(project(":acme-ktor:acme-ktor-i18n"))
   implementation(project(":acme-ktor:acme-ktor-logging"))
-  implementation(project(":acme-ktor:acme-ktor-metrics"))
-  implementation(project(":acme-ktor:acme-ktor-tracing"))
   implementation(project(":acme-ktor:acme-ktor-validation"))
   implementation(project(":acme-lib:acme-lib-serialization"))
   implementation(project(":acme-lib:acme-lib-validation"))
@@ -42,6 +41,8 @@ dependencies {
   implementation("io.ktor:ktor-server-netty:2.0.0")
   implementation("io.ktor:ktor-server-status-pages:2.0.0")
   implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
+  implementation("io.opentelemetry:opentelemetry-api")
+  implementation("io.opentelemetry:opentelemetry-sdk")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
   implementation("org.postgresql:postgresql:42.2.18")
   runtimeOnly("org.glassfish:jakarta.el:4.0.1")
@@ -64,7 +65,6 @@ swaggerSources {
 sourceSets.main {
   resources.srcDirs(
     swaggerSources.getByName("acme").ui.outputDir.parent,
-    tasks.getByName<AsciidoctorTask>("asciidoctor").outputDir.parent
   )
 }
 

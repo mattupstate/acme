@@ -1,5 +1,5 @@
 plugins {
-  id("acme.kotlin-application-conventions")
+  id("acme.kotlin-conventions")
   kotlin("plugin.serialization")
 }
 
