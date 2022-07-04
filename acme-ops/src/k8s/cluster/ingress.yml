@@ -1,0 +1,46 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mailhog
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - mailhog-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: mailhog-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mailhog
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jaeger
+  namespace: default
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - jaeger-127-0-0-1.nip.io
+      secretName: wildcard-nip-io-tls
+  rules:
+    - host: jaeger-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jaeger
+                port:
+                  number: 16686

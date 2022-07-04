@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  labels:
+    app: opentelemetry
+    component: jaeger
+spec:
+  selector:
+    app: opentelemetry
+    component: jaeger
+  ports:
+    - name: sampling
+      port: 5778
+      targetPort: 5778
+    - name: agent
+      port: 6831
+      targetPort: 6831
+      protocol: UDP
+    - name: collector-grpc
+      port: 14250
+      targetPort: 14250
+    - name: frontend
+      port: 16686
+      targetPort: 16686
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+  labels:
+    app: opentelemetry
+    component: jaeger
+spec:
+  selector:
+    matchLabels:
+      app: opentelemetry
+      component: jaeger
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: opentelemetry
+        component: jaeger
+    spec:
+      containers:
+        - image: jaegertracing/all-in-one:1.35
+          name: jaeger
+          ports:
+            - containerPort: 5778
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 14250
+            - containerPort: 16686

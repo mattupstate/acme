@@ -1,3 +1,12 @@
+tracing:
+  provider: jaeger
+  providers:
+    jaeger:
+      sampling:
+        server_url: http://jaeger:5778
+        type: const
+        value: 1
+      local_agent_address: jaeger:6831
 log:
   level: debug
   format: text
@@ -29,7 +38,7 @@ errors:
   fallback:
     - json
   handlers:
-     json:
+    json:
       enabled: true
       config:
         verbose: true

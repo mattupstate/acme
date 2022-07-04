@@ -29,11 +29,7 @@ secretGenerator:
 bases:
   - ../../bases/acme
 
-components:
-  - ../../components/mailhog
-
 resources:
-  - ssl
   - ingress.yml
 
 patches:
@@ -194,6 +190,11 @@ patches:
       kind: Deployment
       name: acme-web-server
     patch: |-
+      - path: /spec/template/spec/containers/0/env/-
+        op: add
+        value:
+          name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://otel-collector.default.svc.cluster.local
       - path: /spec/template/spec/volumes/-
         op: add
         value:

@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ssl
+  - opentelemetry
+  - https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
+  - mailhog.yml
+  - ingress.yml
+
+patches:
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    patch: |-
+      - path: /data
+        op: add
+        value:
+          allow-snippet-annotations: "true"
+          enable-opentracing: "true"
+          opentracing-operation-name: "$request_method $host"
+          opentracing-location-operation-name: "$namespace $service_name"
+          jaeger-collector-host: jaeger.default.svc.cluster.local
+          jaeger-collector-port: "6831"
+          jaeger-service-name: ingress-nginx
+          jaeger-sampler-host: jaeger.default.svc.cluster.local
+          jaeger-sampler-port: "5778"
+          jaeger-sampler-type: const
+          jaeger-sampler-param: "1"

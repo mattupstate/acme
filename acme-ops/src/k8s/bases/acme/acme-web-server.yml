@@ -17,10 +17,10 @@ spec:
         app.kubernetes.io/name: acme
         app.kubernetes.io/component: acme-web-server
       annotations:
-#        linkerd.io/inject: enabled
-#        prometheus.io/scrape: "true"
-#        prometheus.io/port: "8080"
-#        promtail.io/scrape: "true"
+    #        linkerd.io/inject: enabled
+    #        prometheus.io/scrape: "true"
+    #        prometheus.io/port: "8080"
+    #        promtail.io/scrape: "true"
     spec:
       #      initContainers:
       #        - name: liquibase
@@ -41,28 +41,22 @@ spec:
         - name: web-server
           image: acme/acme-web-server
           imagePullPolicy: IfNotPresent
-#          env:
-#            - name: JAEGER_AGENT_HOST
-#              value: localhost
-#            - name: JAEGER_SAMPLER_TYPE
-#              value: "const"
-#            - name: JAEGER_SAMPLER_PARAM
-#              value: "1"
+          env: [ ]
           ports:
             - name: http
               containerPort: 8080
-          volumeMounts: []
+          volumeMounts: [ ]
         - name: oathkeeper
-          image: oryd/oathkeeper:v0.38
+          image: oryd/oathkeeper:v0.39
           imagePullPolicy: IfNotPresent
-          args: ["serve", "proxy", "-c", "/etc/oathkeeper/oathkeeper.yml"]
+          args: [ "serve", "proxy", "-c", "/etc/oathkeeper/oathkeeper.yml" ]
           ports:
             - name: public
               containerPort: 4455
             - name: admin
               containerPort: 4456
-          volumeMounts: []
-      volumes: []
+          volumeMounts: [ ]
+      volumes: [ ]
 
 ---
 apiVersion: v1
