@@ -5,9 +5,6 @@ package com.acme.web.server.core.ktor
 import com.acme.core.CommandValidationException
 import com.acme.ktor.server.i18n.I18N
 import com.acme.ktor.server.logging.StructuredLogging
-import com.acme.ktor.server.metrics.PrometheusMetrics
-import com.acme.ktor.server.tracing.OpenTracing
-import com.acme.ktor.server.tracing.span
 import com.acme.ktor.server.validation.RequestBodyValidationException
 import com.acme.ktor.server.validation.RequestDecodingException
 import com.acme.ktor.server.validation.RequestValidation
@@ -38,13 +35,6 @@ import java.util.UUID
 
 private val appLogger = KotlinLogging.logger {}
 
-fun Application.installOpenTracing(configuration: OpenTracingConfiguration) {
-  install(OpenTracing) {
-    serviceName = configuration.serviceName
-    ignore(configuration.ignorePaths)
-  }
-}
-
 fun Application.installCallLogging() {
   install(CallLogging) {
     logger = appLogger
@@ -54,13 +44,13 @@ fun Application.installCallLogging() {
     mdc("principal") {
       it.getPrincipalAsString()
     }
-    mdc("trace") {
-      try {
-        it.span.context().toTraceId()
-      } catch (e: Exception) {
-        null
-      }
-    }
+    // mdc("trace") {
+    //   try {
+    //     it.span.context().toTraceId()
+    //   } catch (e: Exception) {
+    //     null
+    //   }
+    // }
   }
 }
 
@@ -116,7 +106,6 @@ fun Application.common(configuration: MainConfiguration, json: Json) {
   installCallId()
   install(IgnoreTrailingSlash)
   installStructuredLogging()
-  installOpenTracing(configuration.openTracing)
   installCallLogging()
   installStatusPages(json)
   install(Locations)
@@ -125,5 +114,4 @@ fun Application.common(configuration: MainConfiguration, json: Json) {
   installContentNegotiation(json)
   install(I18N)
   install(RequestValidation)
-  install(PrometheusMetrics)
 }
