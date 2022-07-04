@@ -5,10 +5,11 @@ metadata:
 
 build:
   artifacts:
+    - image: acme/acme-data-sql
+      context: ./acme-data/acme-data-sql
     - image: acme/acme-web-server
       jib:
         project: "acme-web:acme-web-server"
-
     - image: acme/acme-app-web
       context: ./acme-app/acme-app-web
       docker:

@@ -14,10 +14,6 @@ spec:
       labels:
         app.kubernetes.io/name: acme
         app.kubernetes.io/component: acme-app-web
-      annotations:
-    #        linkerd.io/inject: enabled
-    #        prometheus.io/scrape: 'true'
-    #        promtail.io/scrape: "true"
     spec:
       containers:
         - name: app

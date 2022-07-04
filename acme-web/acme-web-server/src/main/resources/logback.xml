@@ -1,7 +1,7 @@
 <configuration>
   <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
     <target>System.err</target>
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
   </appender>
 
   <root level="INFO">
@@ -11,4 +11,5 @@
   <logger name="org.eclipse.jetty" level="INFO"/>
   <logger name="io.netty" level="INFO"/>
   <logger name="com.acme.ktor.server.tracing" level="INFO"/>
+  <logger name="org.jooq.Constants" level="ERROR"/>
 </configuration>

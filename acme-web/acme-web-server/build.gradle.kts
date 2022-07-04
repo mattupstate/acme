@@ -27,7 +27,7 @@ dependencies {
   implementation("ch.qos.logback:logback-classic:1.2.11")
   implementation("com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2")
   implementation("com.zaxxer:HikariCP:5.0.1")
-  implementation("io.ktor:ktor-client-apache:2.0.0")
+  implementation("io.ktor:ktor-client-java:2.0.0")
   implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
   implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
   implementation("io.ktor:ktor-server-auth:2.0.0")

@@ -20,7 +20,7 @@ spec:
               service:
                 name: kratos
                 port:
-                  number: 80
+                  number: 4433
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -43,7 +43,7 @@ spec:
               service:
                 name: kratos
                 port:
-                  number: 8080
+                  number: 4434
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

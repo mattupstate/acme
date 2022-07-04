@@ -1,5 +1,6 @@
 version: v0.10.1
 tracing:
+  service_name: ory-kratos
   provider: jaeger
   providers:
     jaeger:

@@ -193,8 +193,13 @@ patches:
       - path: /spec/template/spec/containers/0/env/-
         op: add
         value:
+          name: OTEL_PROPAGATORS
+          value: jaeger
+      - path: /spec/template/spec/containers/0/env/-
+        op: add
+        value:
           name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://otel-collector.default.svc.cluster.local
+          value: http://otel-collector.default.svc.cluster.local:4317
       - path: /spec/template/spec/volumes/-
         op: add
         value:

@@ -16,32 +16,26 @@ spec:
       labels:
         app.kubernetes.io/name: acme
         app.kubernetes.io/component: acme-web-server
-      annotations:
-    #        linkerd.io/inject: enabled
-    #        prometheus.io/scrape: "true"
-    #        prometheus.io/port: "8080"
-    #        promtail.io/scrape: "true"
     spec:
-      #      initContainers:
-      #        - name: liquibase
-      #          image: acme/acme-data-core
-      #          imagePullPolicy: IfNotPresent
-      #          args:
-      #            - --classpath=/liquibase/changelog
-      #            - --changeLogFile=changelog.yaml
-      #            - --url=jdbc:postgresql://acme-web-server-postgres:5432/acme
-      #            - --username=acme
-      #            - --password=acme
-      #            - --logLevel=debug
-      #            - update
-      #          envFrom:
-      #            - secretRef:
-      #                name: acme-web-server
+      initContainers:
+        - name: liquibase
+          image: acme/acme-data-sql
+          imagePullPolicy: IfNotPresent
+          args:
+            - --classpath=/liquibase/changelog
+            - --changeLogFile=changelog.yaml
+            - --url=jdbc:postgresql://acme-web-server-postgres:5432/acme
+            - --username=acme
+            - --password=acme
+            - --logLevel=debug
+            - update
       containers:
         - name: web-server
           image: acme/acme-web-server
           imagePullPolicy: IfNotPresent
-          env: [ ]
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: com-acme-web-server
           ports:
             - name: http
               containerPort: 8080

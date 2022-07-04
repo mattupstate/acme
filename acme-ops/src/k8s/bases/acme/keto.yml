@@ -17,22 +17,22 @@ spec:
     spec:
       initContainers:
         - name: keto-migrate
-          image: oryd/keto:v0.8.0
+          image: oryd/keto:v0.8.0-alpha.2
           imagePullPolicy: IfNotPresent
-          args: ["migrate", "up", "-y"]
-          volumeMounts: []
+          args: [ "migrate", "up", "-y" ]
+          volumeMounts: [ ]
       containers:
         - name: keto
-          image: oryd/keto:v0.8.0
+          image: oryd/keto:v0.8.0-alpha.2
           imagePullPolicy: IfNotPresent
-          args: ["serve"]
+          args: [ "serve" ]
           ports:
-            - name: public
+            - name: read
               containerPort: 4466
-            - name: admin
+            - name: write
               containerPort: 4467
-          volumeMounts: []
-      volumes: []
+          volumeMounts: [ ]
+      volumes: [ ]
 ---
 apiVersion: v1
 kind: Service
@@ -42,11 +42,11 @@ metadata:
     app.kubernetes.io/name: keto
 spec:
   ports:
-    - name: public
-      port: 80
+    - name: read
+      port: 4466
       targetPort: 4466
-    - name: admin
-      port: 8080
+    - name: write
+      port: 4467
       targetPort: 4467
   selector:
     app.kubernetes.io/name: acme
