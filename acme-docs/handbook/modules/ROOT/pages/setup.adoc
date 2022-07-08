@@ -21,16 +21,17 @@ NOTE: Decisions made in service of this goal are often loaded with tradeoffs and
 |Creates and installs locally trusted development SSL certificates.
 |{k3d-href}[k3d]
 |Lightweight local Kubernetes distrubtion used for local development.
+|{helm-href}[Helm]
+|Manages applications deployed to Kubernetes.
 |{skaffold-href}[skaffold]
 |CLI for continuous development for Kubernetes-native applications.
 |===
-
 
 == SDKs
 
 Install the required SDKs by running the following command from within the root project directory:
 
-[source, shell script]
+[source,shell script]
 ----
 $ sdk env install && nvm install
 ----
@@ -96,7 +97,7 @@ image::rancher-desktop-docker.png[]
 As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
 The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`:
 
-[source, shellscript]
+[source,shellscript]
 ----
 sudo sysctl net.ipv4.ip_unprivileged_port_start=80
 ----
