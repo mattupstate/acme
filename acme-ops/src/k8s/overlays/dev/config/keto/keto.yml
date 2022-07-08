@@ -9,7 +9,7 @@ tracing:
         server_url: http://jaeger:5778
         type: const
         value: 1
-      local_agent_address: jaeger:6831
+      local_agent_address: jaeger-agent:6831
 
 log:
   level: debug
@@ -27,3 +27,6 @@ serve:
   write:
     host: 0.0.0.0
     port: 4467
+  metrics:
+    host: 0.0.0.0
+    port: 4468

@@ -14,7 +14,7 @@ tasks {
     commandLine(
       "bash", "-c", """
         k3d cluster create $devKubernetesClusterName -p "80:80@loadbalancer" -p "443:443@loadbalancer" --k3s-arg "--disable=traefik@server:0"
-        kubectl apply -k src/k8s/cluster
+        kubectl kustomize --enable-helm src/k8s/cluster | kubectl apply -f -
       """.trimIndent()
     )
     dependsOn(makeCerts)

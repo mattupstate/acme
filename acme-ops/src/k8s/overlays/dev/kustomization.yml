@@ -199,7 +199,7 @@ patches:
         op: add
         value:
           name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://otel-collector.default.svc.cluster.local:4317
+          value: http://opentelemetry-collector.default.svc.cluster.local:4317
       - path: /spec/template/spec/volumes/-
         op: add
         value:

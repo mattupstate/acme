@@ -8,7 +8,6 @@ configMapGenerator:
       - config/kratos/oidc.google.jsonnet
 
 resources:
-  - databases.yml
   - kratos.yml
   - keto.yml
   - acme-web-server.yml

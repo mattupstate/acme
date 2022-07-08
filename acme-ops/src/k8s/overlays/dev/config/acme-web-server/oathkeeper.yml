@@ -7,7 +7,7 @@ tracing:
         server_url: http://jaeger:5778
         type: const
         value: 1
-      local_agent_address: jaeger:6831
+      local_agent_address: jaeger-agent:6831
 log:
   level: debug
   format: text
@@ -22,6 +22,8 @@ serve:
       enabled: true
       allowed_origins:
         - "*.nip.io"
+        - "localhost:4200"
+        - "127.0.0.1:4200"
       allowed_methods:
         - POST
         - GET
