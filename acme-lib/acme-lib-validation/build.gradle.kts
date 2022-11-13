@@ -1,9 +1,11 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("com.googlecode.libphonenumber:libphonenumber:8.12.24")
-  api("jakarta.validation:jakarta.validation-api:3.0.0")
-  testRuntimeOnly("org.glassfish:jakarta.el:4.0.1")
+  implementation(libs.libphonenumber)
+  api(libs.jakarta.validation.api)
+  testRuntimeOnly(libs.jakarta.el)
+  testImplementation(Testing.kotest.runner.junit5)
 }

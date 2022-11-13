@@ -1,11 +1,13 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-core:2.0.0")
-  implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+  implementation(Ktor.server.core)
+  implementation(KotlinX.serialization.json)
+  implementation(libs.hibernate.validator)
 
-  testRuntimeOnly("org.glassfish:jakarta.el:4.0.1")
+  testImplementation(Testing.kotest.runner.junit5)
+  testRuntimeOnly(libs.jakarta.el)
 }

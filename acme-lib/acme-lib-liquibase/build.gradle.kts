@@ -1,8 +1,10 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("org.liquibase:liquibase-core:4.11.0")
-  implementation("org.yaml:snakeyaml:1.27")
+  implementation(libs.liquibase.core)
+  implementation(libs.snakeyaml)
+  testImplementation(Testing.kotest.runner.junit5)
 }

@@ -1,8 +1,10 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  `java-library`
+  kotlin("jvm")
   kotlin("plugin.serialization")
 }
 
 dependencies {
-  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+  api(KotlinX.serialization.json)
+  testImplementation(Testing.kotest.runner.junit5)
 }

@@ -1,16 +1,20 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
+  implementation(Kotlin.stdlib.jdk8)
+  implementation(KotlinX.coroutines.core)
+  implementation(libs.kotlin.logging.jvm)
   implementation(project(":acme-data:acme-data-sql"))
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(project(":acme-domain:acme-domain-scheduling"))
   implementation(project(":acme-lib:acme-lib-serialization"))
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
+  testImplementation(Testing.kotest.runner.junit5)
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
-  testImplementation("com.zaxxer:HikariCP:5.0.1")
-  testImplementation("org.postgresql:postgresql:42.2.18")
-  testImplementation("org.testcontainers:postgresql:1.17.1")
+  testImplementation(libs.hikaricp)
+  testImplementation(libs.org.postgresql.postgresql)
+  testImplementation(libs.org.testcontainers.postgresql)
 }

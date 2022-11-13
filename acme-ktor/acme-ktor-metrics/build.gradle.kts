@@ -1,8 +1,10 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-metrics-micrometer:2.0.0")
-  implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
+  implementation(libs.ktor.server.metrics.micrometer)
+  implementation(libs.micrometer.registry.prometheus)
+  testImplementation(Testing.kotest.runner.junit5)
 }

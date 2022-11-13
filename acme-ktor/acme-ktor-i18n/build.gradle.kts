@@ -1,7 +1,9 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-core:2.0.0")
+  implementation(Ktor.server.core)
+  testImplementation(Testing.kotest.runner.junit5)
 }

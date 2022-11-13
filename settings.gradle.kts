@@ -14,6 +14,10 @@ pluginManagement {
   }
 }
 
+plugins {
+  id("de.fayard.refreshVersions") version "0.50.1"
+}
+
 include(":acme-app:acme-app-web")
 include(":acme-app:acme-app-web-test")
 include(":acme-data:acme-data-scheduling")

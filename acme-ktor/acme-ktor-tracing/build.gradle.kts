@@ -1,10 +1,12 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("io.jaegertracing:jaeger-micrometer:1.2.0")
-  implementation("io.jaegertracing:jaeger-thrift:1.2.0")
-  implementation("io.ktor:ktor-server-core:2.0.0")
-  api("io.opentracing:opentracing-api:0.33.0")
+  implementation(libs.jaeger.micrometer)
+  implementation(libs.jaeger.thrift)
+  implementation(Ktor.server.core)
+  api(libs.opentracing.api)
+  testImplementation(Testing.kotest.runner.junit5)
 }

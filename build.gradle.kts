@@ -5,17 +5,19 @@ buildscript {
   configurations.classpath {
     resolutionStrategy {
       // SEE: https://github.com/GoogleContainerTools/jib/issues/3058
-      force("org.apache.httpcomponents:httpcore:4.4.12")
-      force("org.apache.httpcomponents:httpclient:4.5.10")
-      force("com.google.http-client:google-http-client:1.34.0")
-      force("com.google.http-client:google-http-client-apache-v2:1.34.0")
+      force("org.apache.httpcomponents:httpcore:_")
+      force("org.apache.httpcomponents:httpclient:_")
+      force("com.google.http-client:google-http-client:_")
+      force("com.google.http-client:google-http-client-apache-v2:_")
     }
   }
 }
 
-repositories {
-  mavenLocal()
-  mavenCentral()
+allprojects {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
 }
 
 plugins {
@@ -26,7 +28,7 @@ plugins {
 tasks {
   register<Exec>("runDev") {
     commandLine("bash", "-c", "eval $(minikube --profile=acme-dev docker-env); skaffold run --kube-context=acme-dev")
-    dependsOn("acme-ops:deployDev", "acme-app:acme-app-web:build")
+    dependsOn("acme-ops:deployDev:_", "acme-app:acme-app-web:_")
   }
 
   register<JacocoReport>("mergeJacocoReports") {

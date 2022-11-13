@@ -1,8 +1,10 @@
 plugins {
-  id("acme.kotlin-library-conventions")
+  kotlin("jvm")
+  `java-library`
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-core:2.0.0")
-  implementation("net.logstash.logback:logstash-logback-encoder:7.0.1")
+  implementation(Ktor.server.core)
+  implementation(libs.logstash.logback.encoder)
+  testImplementation(Testing.kotest.runner.junit5)
 }

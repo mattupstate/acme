@@ -1,8 +1,8 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
-  id("org.asciidoctor.jvm.convert") version "3.3.2"
-  id("org.ajoberstar.git-publish") version "2.1.3"
+  id("org.asciidoctor.jvm.convert")
+  id("org.ajoberstar.git-publish")
 }
 
 repositories {
