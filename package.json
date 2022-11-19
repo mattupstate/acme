@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Acme project documentation",
   "scripts": {
-    "build": "antora --fetch antora-playbook.yml",
-    "deploy": "rm -rf build/site && antora --fetch antora-playbook.yml && touch build/site/.nojekyll && gh-pages-clean && gh-pages --dotfiles --dist build/site --no-history"
+    "buildDocs": "antora --fetch antora-playbook.yml",
+    "publishDocs": "rm -rf build/site && antora --fetch antora-playbook.yml && touch build/site/.nojekyll && gh-pages-clean && gh-pages --dotfiles --dist build/site --no-history"
   },
   "devDependencies": {
     "@antora/cli": "3.0.0",

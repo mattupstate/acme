@@ -52,4 +52,12 @@ tasks {
       }
     }
   }
+
+  register<Exec>("buildAntoraSite") {
+    commandLine("bash", "-c", "npm install && npm run buildDocs")
+  }
+
+  register<Exec>("publishAntoraSite") {
+    commandLine("npm", "run", "publishDocs")
+  }
 }
