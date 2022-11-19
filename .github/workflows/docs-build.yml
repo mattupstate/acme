@@ -1,8 +1,5 @@
 name: Documentation
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -18,5 +15,5 @@ jobs:
           cache: 'npm'
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: publishAntoraSite
+          arguments: buildAntoraSite
 
