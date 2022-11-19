@@ -7,7 +7,7 @@ plugins {
   alias(libs.plugins.com.ryandens.javaagent.jib)
 }
 
-val localRuntimeOnly by configurations.creating
+val localRuntimeOnly: Configuration by configurations.creating
 
 dependencies {
   swaggerUI(libs.org.webjars.swagger.ui)
