@@ -19,6 +19,7 @@ dependencies {
   api(libs.org.jooq.jooq.kotlin)
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
+  testImplementation(libs.io.kotest.kotest.runner.junit5)
   testImplementation(libs.org.postgresql)
   testImplementation(libs.org.testcontainers.postgresql)
 }

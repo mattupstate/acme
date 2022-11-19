@@ -27,8 +27,9 @@ dependencies {
   implementation(libs.ch.qos.logback.logback.classic)
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
   implementation(libs.com.zaxxer.hikariCP)
-  implementation(libs.io.ktor.ktor.client.java)
+  implementation(libs.io.github.microutils.kotlin.logging.jvm)
   implementation(libs.io.ktor.ktor.client.content.negotiation)
+  implementation(libs.io.ktor.ktor.client.java)
   implementation(libs.io.ktor.ktor.serialization.kotlinx.json)
   implementation(libs.io.ktor.ktor.server.auth)
   implementation(libs.io.ktor.ktor.server.call.id)
@@ -45,10 +46,12 @@ dependencies {
   implementation(libs.io.opentelemetry.opentelemetry.sdk)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
   implementation(libs.org.postgresql)
+  implementation(libs.org.slf4j.slf4j.api)
   runtimeOnly(libs.org.glassfish.jakarta.el)
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation(libs.com.mattbertolini.liquibase.slf4j)
+  testImplementation(libs.io.kotest.kotest.runner.junit5)
   testImplementation(libs.org.testcontainers.postgresql)
 
   localRuntimeOnly(project(":acme-lib:acme-lib-liquibase"))

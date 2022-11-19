@@ -5,19 +5,28 @@ plugins {
 }
 
 dependencies {
+  implementation(kotlin("stdlib"))
+  implementation(kotlin("stdlib-common"))
+  implementation(kotlin("stdlib-jdk8"))
+  implementation(kotlin("reflect"))
+  implementation(kotlin("script-runtime"))
+
   implementation(project(":acme-lib:acme-lib-selenium"))
-  implementation(libs.net.logstash.logback.logstash.logback.encoder)
-  implementation(libs.com.appmattus.fixture.fixture.javafaker)
   implementation(libs.com.appmattus.fixture)
+  implementation(libs.com.appmattus.fixture.fixture.javafaker)
   implementation(libs.io.github.bonigarcia.selenium.jupiter)
+  implementation(libs.io.github.microutils.kotlin.logging.jvm)
   implementation(libs.io.kotest.kotest.runner.junit5.jvm)
   implementation(libs.io.ktor.ktor.client.apache)
   implementation(libs.io.ktor.ktor.client.auth)
   implementation(libs.io.ktor.ktor.client.logging)
+  implementation(libs.net.logstash.logback.logstash.logback.encoder)
   implementation(libs.org.junit.jupiter.junit.jupiter.api)
   implementation(libs.org.junit.platform.junit.platform.launcher)
+  implementation(libs.org.slf4j.slf4j.api)
   runtimeOnly(libs.org.junit.jupiter.junit.jupiter.engine)
   runtimeOnly(libs.org.seleniumhq.selenium.selenium.chrome.driver)
+  testImplementation(libs.io.kotest.kotest.runner.junit5)
 }
 
 application {

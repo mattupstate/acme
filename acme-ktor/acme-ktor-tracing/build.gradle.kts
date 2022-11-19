@@ -7,4 +7,5 @@ dependencies {
   implementation(libs.io.jaegertracing.jaeger.thrift)
   implementation(libs.io.ktor.ktor.server.core)
   api(libs.io.opentracing.opentracing.api)
+  testImplementation(libs.io.kotest.kotest.runner.junit5)
 }
