@@ -37,7 +37,7 @@ tasks {
     }
 
     sourceSets(*javaSourceSets.toTypedArray())
-    executionData.setFrom(fileTree(rootDir).include("**/test.exec"))
+    executionData.setFrom(fileTree(rootDir).include("**/build/jacoco/*.exec"))
     classDirectories.setFrom(files(javaSourceSets.map { it.output }))
     sourceDirectories.setFrom(files(javaSourceSets.map { it.allSource.srcDirs }))
 

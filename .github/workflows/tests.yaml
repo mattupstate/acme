@@ -25,4 +25,9 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: test
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: mergeJacocoReports
       - uses: codecov/codecov-action@v3
+        with:
+          files: ./build/reports/jacoco/xml/coverage.xml
