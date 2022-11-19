@@ -4,6 +4,7 @@ on:
     branches:
       - main
     paths-ignore:
+      - .github/**
       - .idea/**
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
@@ -16,6 +17,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 11
       - uses: gradle/gradle-build-action@v2
-      - run: ./gradlew test
+        with:
+          arguments: test
