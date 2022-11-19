@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+  api(libs.org.jetbrains.kotlinx.kotlinx.serialization.json)
 }

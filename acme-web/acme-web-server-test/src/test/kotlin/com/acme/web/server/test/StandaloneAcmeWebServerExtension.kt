@@ -4,7 +4,6 @@ import com.acme.web.server.core.ktor.AuthenticationConfiguration
 import com.acme.web.server.core.ktor.DataSourceConfiguration
 import com.acme.web.server.core.ktor.KetoConfiguration
 import com.acme.web.server.core.ktor.MainConfiguration
-import com.acme.web.server.core.ktor.OpenTracingConfiguration
 import com.acme.web.server.core.ktor.main
 import com.acme.web.server.security.ktor.HeaderAuthConfiguration
 import io.kotest.core.listeners.ProjectListener
@@ -94,9 +93,6 @@ class StandaloneAcmeWebServerExtension(
                 readPort = keto.getMappedPort(4466),
                 writePort = keto.getMappedPort(4467),
               ),
-              openTracing = OpenTracingConfiguration(
-                "acme", emptyList()
-              )
             )
           )
         }

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-  implementation("com.googlecode.libphonenumber:libphonenumber:8.12.24")
-  api("jakarta.validation:jakarta.validation-api:3.0.0")
-  testRuntimeOnly("org.glassfish:jakarta.el:4.0.1")
+  implementation(libs.com.googlecode.libphonenumber)
+  api(libs.jakarta.validation.jakarta.validation.api)
+  testRuntimeOnly(libs.org.glassfish.jakarta.el)
 }

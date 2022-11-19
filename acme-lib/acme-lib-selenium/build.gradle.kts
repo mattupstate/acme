@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-  api("org.seleniumhq.selenium:selenium-java:4.3.0")
-  api("io.kotest:kotest-assertions-core:5.3.2")
+  api(libs.org.seleniumhq.selenium.selenium.java)
+  api(libs.io.kotest.kotest.assertions.core)
 }

@@ -3,26 +3,24 @@ import nu.studer.gradle.jooq.JooqGenerate
 
 plugins {
   id("acme.kotlin-library-conventions")
-  id("nu.studer.jooq") version "7.1.1"
+  alias(libs.plugins.nu.studer.jooq)
 }
-
-val jooqVersion = "3.16.4"
 
 dependencies {
   jooqGenerator(project(":acme-lib:acme-lib-liquibase"))
-  jooqGenerator("org.testcontainers:postgresql:1.17.1")
-  jooqGenerator("org.postgresql:postgresql:42.2.18")
-  jooqGenerator("ch.qos.logback:logback-classic:1.2.3")
+  jooqGenerator(libs.org.testcontainers.postgresql)
+  jooqGenerator(libs.org.postgresql)
+  jooqGenerator(libs.ch.qos.logback.logback.classic)
 
   implementation(project(":acme-domain:acme-domain-core"))
-  implementation("com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-  api("org.jooq:jooq:$jooqVersion")
-  api("org.jooq:jooq-kotlin:$jooqVersion")
+  implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
+  implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  api(libs.org.jooq)
+  api(libs.org.jooq.jooq.kotlin)
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
-  testImplementation("org.postgresql:postgresql:42.2.18")
-  testImplementation("org.testcontainers:postgresql:1.17.1")
+  testImplementation(libs.org.postgresql)
+  testImplementation(libs.org.testcontainers.postgresql)
 }
 
 java {
@@ -36,7 +34,7 @@ java {
 }
 
 jooq {
-  version.set(jooqVersion)
+  version.set("3.16.4")
   edition.set(JooqEdition.OSS)
   configurations {
     create("main") {

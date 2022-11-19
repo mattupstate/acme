@@ -3,9 +3,8 @@ plugins {
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-core:2.0.0")
-  implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
-
-  testRuntimeOnly("org.glassfish:jakarta.el:4.0.1")
+  implementation(libs.io.ktor.ktor.server.core)
+  implementation(libs.org.hibernate.validator.hibernate.validator)
+  implementation(libs.org.jetbrains.kotlinx.kotlinx.serialization.json)
+  testRuntimeOnly(libs.org.glassfish.jakarta.el)
 }

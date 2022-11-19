@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
   implementation(project(":acme-lib:acme-lib-serialization"))
-  implementation("net.sizovs:pipelinr:0.6")
+  implementation(libs.net.sizovs.pipelinr)
   api(project(":acme-domain:acme-domain-core"))
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
 }
