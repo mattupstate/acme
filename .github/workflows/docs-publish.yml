@@ -1,8 +1,12 @@
-name: Documentation
+name: Publish Antora Site
 on:
   push:
     branches:
       - main
+    paths:
+      - .github/workflows/docs-*
+      - acme-docs/**
+      - acme-web/acme-web-server/docs/**
 jobs:
   build:
     name: Build Antora Site
