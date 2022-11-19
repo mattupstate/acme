@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemap>
+<loc>https://mattupstate.com/acme/sitemap-acme-adr.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://mattupstate.com/acme/sitemap-acme-handbook.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://mattupstate.com/acme/sitemap-acme-web-server.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://mattupstate.com/acme/sitemap-ROOT.xml</loc>
+</sitemap>
+</sitemapindex>

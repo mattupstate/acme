@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/architecture.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/deployment.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/development.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/index.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/setup.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/testing.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+<url>
+<loc>https://mattupstate.com/acme/acme-handbook/tips.html</loc>
+<lastmod>2022-11-19T14:04:27.918Z</lastmod>
+</url>
+</urlset>
