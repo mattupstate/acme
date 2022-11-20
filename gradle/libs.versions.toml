@@ -93,8 +93,8 @@ org-yaml-snakeyaml = "org.yaml:snakeyaml:1.33"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.44.0"
-com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.2.1"
-com-ryandens-javaagent-jib = "com.ryandens.javaagent-jib:0.3.2"
+com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.3.1"
+com-ryandens-javaagent-jib = "com.ryandens.javaagent-jib:0.4.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
 nu-studer-jooq = "nu.studer.jooq:8.0"
-org-hidetake-swagger-generator = "org.hidetake.swagger.generator:2.18.2"
+org-hidetake-swagger-generator = "org.hidetake.swagger.generator:2.19.2"
