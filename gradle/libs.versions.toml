@@ -3,7 +3,7 @@ com-appmattus-fixture = "1.2.0"
 io-jaegertracing = "1.2.0"
 io-kotest = "5.5.4"
 io-ktor = "2.0.0"
-io-opentelemetry = "1.15.0"
+io-opentelemetry = "1.20.1"
 kotlin = "1.6.21"
 org-jooq = "3.17.4"
 org-junit-jupiter = "5.9.1"
@@ -47,7 +47,7 @@ io-ktor-ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics
 io-ktor-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "io-ktor" }
 io-ktor-ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "io-ktor" }
 io-micrometer-micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.10.1"
-io-opentelemetry-javaagent-opentelemetry-javaagent = "io.opentelemetry.javaagent:opentelemetry-javaagent:1.15.0"
+io-opentelemetry-javaagent-opentelemetry-javaagent = "io.opentelemetry.javaagent:opentelemetry-javaagent:1.20.1"
 io-opentelemetry-opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "io-opentelemetry" }
 io-opentelemetry-opentelemetry-bom = { module = "io.opentelemetry:opentelemetry-bom", version.ref = "io-opentelemetry" }
 io-opentelemetry-opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk", version.ref = "io-opentelemetry" }
