@@ -25,6 +25,13 @@ plugins {
   alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
+versionCatalogUpdate {
+  keep {
+    keepUnusedVersions.set(true)
+    keepUnusedLibraries.set(true)
+  }
+}
+
 tasks {
   register<Exec>("runDev") {
     commandLine("bash", "-c", "eval $(minikube --profile=acme-dev docker-env); skaffold run --kube-context=acme-dev")
