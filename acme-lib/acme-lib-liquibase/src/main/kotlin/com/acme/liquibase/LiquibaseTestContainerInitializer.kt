@@ -5,7 +5,7 @@ import liquibase.Liquibase
 import liquibase.database.jvm.JdbcConnection
 import liquibase.resource.ClassLoaderResourceAccessor
 import liquibase.resource.CompositeResourceAccessor
-import liquibase.resource.FileSystemResourceAccessor
+import liquibase.resource.DirectoryResourceAccessor
 import java.io.File
 import java.sql.Connection
 
@@ -14,7 +14,7 @@ fun update(baseDir: String, changelogFile: String, connection: Connection) {
     changelogFile,
     CompositeResourceAccessor(
       ClassLoaderResourceAccessor(),
-      FileSystemResourceAccessor(File(baseDir))
+      DirectoryResourceAccessor(File(baseDir))
     ),
     JdbcConnection(connection)
   ).update(Contexts())

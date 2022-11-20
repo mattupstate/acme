@@ -78,7 +78,7 @@ org-jooq-jooq-kotlin = { module = "org.jooq:jooq-kotlin", version.ref = "org-joo
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.9.1"
-org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.11.0"
+org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.17.2"
 org-postgresql = "org.postgresql:postgresql:42.5.0"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
