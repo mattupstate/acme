@@ -7,7 +7,7 @@ io-opentelemetry = "1.15.0"
 kotlin = "1.6.21"
 org-jooq = "3.17.4"
 org-junit-jupiter = "5.9.1"
-org-seleniumhq-selenium = "4.3.0"
+org-seleniumhq-selenium = "4.6.0"
 
 [libraries]
 am-ik-timeflake-timeflake4j = "am.ik.timeflake:timeflake4j:1.4.0"
@@ -69,8 +69,8 @@ org-jetbrains-kotlin-kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kot
 org-jetbrains-kotlin-kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 org-jetbrains-kotlin-serialization-gradle-plugin = { module = "org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin", version.ref = "kotlin" }
-org-jetbrains-kotlinx-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
-org-jetbrains-kotlinx-kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
+org-jetbrains-kotlinx-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+org-jetbrains-kotlinx-kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 org-jlleitschuh-ktlint-gradle-plugin = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
 org-jooq = { module = "org.jooq:jooq", version.ref = "org-jooq" }
 org-jooq-jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "org-jooq" }
@@ -82,9 +82,9 @@ org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.11.0"
 org-postgresql = "org.postgresql:postgresql:42.5.0"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
-org-slf4j-slf4j-api = "org.slf4j:slf4j-api:1.7.31"
+org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.4"
 org-testcontainers-postgresql = "org.testcontainers:postgresql:1.17.6"
-org-webjars-swagger-ui = "org.webjars:swagger-ui:3.50.0"
+org-webjars-swagger-ui = "org.webjars:swagger-ui:4.15.5"
 org-yaml-snakeyaml = "org.yaml:snakeyaml:1.33"
 
 [plugins]
