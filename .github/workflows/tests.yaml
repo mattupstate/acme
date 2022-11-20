@@ -1,5 +1,13 @@
 name: Tests
 on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .github/**
+      - .idea/**
+      - acme-docs/**
+      - acme-web/acme-web-server/docs/**
   pull_request:
     branches:
       - main
@@ -9,8 +17,8 @@ on:
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
 jobs:
-  test:
-    name: Run All Tests
+  setup:
+    name: Setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,12 +30,24 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: test
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
       - uses: gradle/gradle-build-action@v2
+        name: Collect Jacoco Reports
         with:
           arguments: mergeJacocoReports
       - uses: codecov/codecov-action@v3
+        name: Report to Codecov
         with:
           files: ./build/reports/jacoco/xml/coverage.xml

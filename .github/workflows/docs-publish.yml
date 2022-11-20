@@ -9,16 +9,14 @@ on:
       - acme-web/acme-web-server/docs/**
 jobs:
   build:
-    name: Build Antora Site
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.15.0
-          cache: 'npm'
-      - run: npm install
-      - run: npm run buildAntoraSite
+      - uses: mattupstate/acme/.github/workflows/docs-build.yml@main
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
