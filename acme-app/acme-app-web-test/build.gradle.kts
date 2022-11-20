@@ -5,12 +5,6 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("stdlib"))
-  implementation(kotlin("stdlib-common"))
-  implementation(kotlin("stdlib-jdk8"))
-  implementation(kotlin("reflect"))
-  implementation(kotlin("script-runtime"))
-
   implementation(project(":acme-lib:acme-lib-selenium"))
   implementation(libs.com.appmattus.fixture)
   implementation(libs.com.appmattus.fixture.fixture.javafaker)

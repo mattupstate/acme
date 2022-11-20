@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation(kotlin("reflect"))
   implementation(project(":acme-lib:acme-lib-serialization"))
   implementation(libs.io.github.microutils.kotlin.logging.jvm)
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
