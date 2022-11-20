@@ -1,6 +1,7 @@
 [versions]
 com-appmattus-fixture = "1.2.0"
 io-jaegertracing = "1.2.0"
+io-kotest = "5.5.4"
 io-ktor = "2.0.0"
 io-opentelemetry = "1.15.0"
 kotlin = "1.6.21"
@@ -24,10 +25,10 @@ io-github-microutils-kotlin-logging-jvm = "io.github.microutils:kotlin-logging-j
 io-jaegertracing-jaeger-micrometer = { module = "io.jaegertracing:jaeger-micrometer", version.ref = "io-jaegertracing" }
 io-jaegertracing-jaeger-thrift = { module = "io.jaegertracing:jaeger-thrift", version.ref = "io-jaegertracing" }
 io-kotest-extensions-kotest-assertions-ktor = "io.kotest.extensions:kotest-assertions-ktor:1.0.3"
-io-kotest-kotest-assertions-core = "io.kotest:kotest-assertions-core:5.3.2"
-io-kotest-kotest-assertions-json = "io.kotest:kotest-assertions-json:5.3.0"
-io-kotest-kotest-runner-junit5 = "io.kotest:kotest-runner-junit5:5.3.2"
-io-kotest-kotest-runner-junit5-jvm = "io.kotest:kotest-runner-junit5-jvm:5.3.2"
+io-kotest-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "io-kotest" }
+io-kotest-kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "io-kotest" }
+io-kotest-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "io-kotest" }
+io-kotest-kotest-runner-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "io-kotest" }
 io-ktor-ktor-client-apache = { module = "io.ktor:ktor-client-apache", version.ref = "io-ktor" }
 io-ktor-ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "io-ktor" }
 io-ktor-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "io-ktor" }
