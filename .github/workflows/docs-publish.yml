@@ -9,9 +9,8 @@ on:
       - acme-web/acme-web-server/docs/**
 jobs:
   build:
-    uses: mattupstate/acme/.github/workflows/docs-build.yml@main
-  publish:
     name: Publish
+    uses: mattupstate/acme/.github/workflows/docs-build.yml@main
     runs-on: ubuntu-latest
     steps:
       - uses: peaceiris/actions-gh-pages@v3
