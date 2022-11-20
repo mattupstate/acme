@@ -210,7 +210,7 @@ class MessagesTest : ShouldSpec({
         runBlocking {
           uow.transaction {
             // Given
-            val start = Instant.now()
+            val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
             val command = CreateAppointmentCommand(
@@ -311,7 +311,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            val start = Instant.now()
+            val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
             // When
@@ -406,7 +406,7 @@ class MessagesTest : ShouldSpec({
                 uow
               )
 
-              val start = Instant.now()
+              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
               val end = start.plus(1, ChronoUnit.HOURS)
 
               schedulingMessageBus.handle(
@@ -509,7 +509,7 @@ class MessagesTest : ShouldSpec({
                 uow
               )
 
-              val start = Instant.now()
+              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
               val end = start.plus(1, ChronoUnit.HOURS)
 
               schedulingMessageBus.handle(
@@ -612,7 +612,7 @@ class MessagesTest : ShouldSpec({
                 uow
               )
 
-              val start = Instant.now()
+              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
               val end = start.plus(1, ChronoUnit.HOURS)
 
               schedulingMessageBus.handle(
