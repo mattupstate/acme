@@ -8,15 +8,13 @@ repositories {
 }
 
 dependencies {
-  dependencies {
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.6.21")
-    implementation("org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin:1.6.21")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.2.1")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.6.1")
-  }
+  implementation(libs.org.jetbrains.kotlin.jvm.gradle.plugin)
+  implementation(libs.org.jetbrains.kotlin.serialization.gradle.plugin)
+  implementation(libs.org.jlleitschuh.ktlint.gradle.plugin)
+  implementation(libs.com.diffplug.spotless.gradle.plugin)
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
 }

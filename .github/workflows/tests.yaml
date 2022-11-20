@@ -1,21 +1,33 @@
 name: Tests
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - .github/**
+      - .idea/**
+      - acme-docs/**
+      - acme-web/acme-web-server/docs/**
 jobs:
   test:
     name: Run All Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Tests
-        uses: gradle/gradle-build-action@v2
-        env:
-          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.0
+          cache: 'npm'
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
         with:
           arguments: test
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: mergeJacocoReports
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ./build/reports/jacoco/xml/coverage.xml

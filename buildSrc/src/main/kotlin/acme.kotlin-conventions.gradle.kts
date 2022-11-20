@@ -10,25 +10,12 @@ repositories {
   mavenCentral()
 }
 
-dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10")
-  implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-  implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.6.10")
-  implementation("org.slf4j:slf4j-api:1.7.31")
-  implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
-
-  testImplementation("io.kotest:kotest-runner-junit5:5.3.2")
-}
-
 group = "com.acme"
 version = "0.1.0"
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_11
-  targetCompatibility = JavaVersion.VERSION_11
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
 }
 
 jacoco {
@@ -53,7 +40,8 @@ tasks {
 
   jacocoTestReport {
     reports {
-      html.required.set(true)
+      csv.required.set(false)
+      html.required.set(false)
       xml.required.set(true)
     }
     dependsOn(test)
@@ -61,7 +49,7 @@ tasks {
 
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_11.toString()
+      jvmTarget = JavaVersion.VERSION_17.toString()
       freeCompilerArgs = listOf(
         "-Xemit-jvm-type-annotations",  // NOTE: necessary for validation annotations to work. Such as: `val things: List<@NotBlank String>`
         "-opt-in=kotlin.RequiresOptIn",
