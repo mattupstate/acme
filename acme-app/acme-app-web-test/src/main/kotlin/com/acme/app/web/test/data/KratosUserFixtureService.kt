@@ -39,9 +39,9 @@ class KratosUserFixtureService(host: String, port: Int) : UserFixtureService {
 
   private fun isoDateTimeNow() = ISO_DATE_TIME.format(Instant.now())
 
-  override suspend fun createVerifiedUser(email: String, password: String, id: String) {
+  override suspend fun createVerifiedUser(username: String, password: String, id: String) {
     val now = isoDateTimeNow()
-    val result = http.post("/admin/identities") {
+    http.post("/admin/identities") {
       contentType(ContentType.Application.Json)
       setBody(
         """
@@ -60,14 +60,14 @@ class KratosUserFixtureService(host: String, port: Int) : UserFixtureService {
                 "created_at": "$now",
                 "id": "${UUID.randomUUID()}",
                 "updated_at": "$now",
-                "value": "$email",
+                "value": "$username",
                 "via": "email"
               }
             ],
             "schema_id": "default",
             "state": "active",
             "traits": {
-              "email": "$email",
+              "email": "$username",
               "name": {
                 "given": "Test,
                 "family": "User",
@@ -80,7 +80,7 @@ class KratosUserFixtureService(host: String, port: Int) : UserFixtureService {
                 "id": "${UUID.randomUUID()}",
                 "status": "active",
                 "updated_at": "$now",
-                "value": "$email",
+                "value": "$username",
                 "verified": true,
                 "verified_at": "$now",
                 "via": "email"
