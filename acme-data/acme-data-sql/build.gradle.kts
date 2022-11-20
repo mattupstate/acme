@@ -72,6 +72,7 @@ tasks {
     outputs.cacheIf { true }
     javaExecSpec = Action {
       systemProperty("liquibase.changelogFile", liquibaseChangelogFile)
+      systemProperty("logback.configurationFile", projectDir.resolve("logback-jooq.xml"))
     }
   }
 }
