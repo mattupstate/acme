@@ -1,5 +1,13 @@
 name: Tests
 on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .github/**
+      - .idea/**
+      - acme-docs/**
+      - acme-web/acme-web-server/docs/**
   pull_request:
     branches:
       - main
@@ -10,7 +18,7 @@ on:
       - acme-web/acme-web-server/docs/**
 jobs:
   test:
-    name: Run All Tests
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,8 +34,10 @@ jobs:
         with:
           arguments: test
       - uses: gradle/gradle-build-action@v2
+        name: Collect Jacoco Reports
         with:
           arguments: mergeJacocoReports
       - uses: codecov/codecov-action@v3
+        name: Report to Codecov
         with:
           files: ./build/reports/jacoco/xml/coverage.xml

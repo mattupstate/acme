@@ -7,9 +7,11 @@ on:
       - .github/workflows/docs-*
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
+  workflow_call:
+
 jobs:
   build:
-    name: Build Antora Site
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
