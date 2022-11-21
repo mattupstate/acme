@@ -95,7 +95,8 @@ image::rancher-desktop-docker.png[]
 === Linux Users
 
 As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
-The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`:
+The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`.
+Run the following command and restart Rancher Desktop afterwards:
 
 [source,shellscript]
 ----

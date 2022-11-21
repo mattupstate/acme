@@ -6,7 +6,7 @@ tasks {
 
   val makeCerts = register<Exec>("makeCerts") {
     outputs.files(sslCertificateFile, sslCertificateKeyFile)
-    commandLine("mkcert", "*.nip.io")
+    commandLine("bash", "-c", "mkcert *.nip.io")
     workingDir(sslCertDir)
   }
 

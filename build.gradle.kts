@@ -27,7 +27,7 @@ plugins {
 
 tasks {
   register<Exec>("runDev") {
-    commandLine("bash", "-c", "eval $(minikube --profile=acme-dev docker-env); skaffold run --kube-context=acme-dev")
+    commandLine("bash", "-c", "skaffold run --kube-context=acme-dev")
     dependsOn("acme-ops:deployDev", "acme-app:acme-app-web:build")
   }
 

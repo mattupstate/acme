@@ -9,6 +9,7 @@ secretGenerator:
 
 resources:
   - ssl
+  - namespaces.yml
   - mailhog.yml
   - ingress.yml
 
