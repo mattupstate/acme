@@ -10,5 +10,6 @@ configMapGenerator:
 resources:
   - kratos.yml
   - keto.yml
+  - liquibase.yml
   - acme-web-server.yml
   - acme-app-web.yml

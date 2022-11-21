@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: liquibase
+spec:
+  activeDeadlineSeconds: 180
+  backoffLimit: 3
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: liquibase
+          image: acme/acme-data-sql
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              value: acme-web-server-postgres

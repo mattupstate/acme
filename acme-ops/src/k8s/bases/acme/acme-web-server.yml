@@ -77,14 +77,10 @@ spec:
         - name: liquibase
           image: acme/acme-data-sql
           imagePullPolicy: IfNotPresent
-          args:
-            - --classpath=/liquibase/changelog
-            - --changeLogFile=changelog.yaml
-            - --url=jdbc:postgresql://acme-web-server-postgres:5432/acme
-            - --username=acme
-            - --password=acme
-            - --logLevel=debug
-            - update
+          args: [ "status" ]
+          env:
+            - name: DB_HOST
+              value: acme-web-server-postgres
       containers:
         - name: web-server
           image: acme/acme-web-server
