@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1
+apiVersion: skaffold/v3
 kind: Config
 metadata:
   name: acme
@@ -22,6 +22,14 @@ build:
   local:
     push: false
 
-deploy:
+manifests:
   kustomize:
-    path: acme-ops/src/k8s/overlays/dev
+    paths:
+      - acme-ops/src/k8s/overlays/dev
+
+deploy:
+  kubectl:
+    hooks:
+      before:
+        - host:
+            command: [ "sh", "-c", "kubectl delete job liquibase || true" ]
