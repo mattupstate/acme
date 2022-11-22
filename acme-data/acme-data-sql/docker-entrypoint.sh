@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+
 liqui() {
     liquibase \
         --classpath=/liquibase/changelog \
@@ -16,9 +16,9 @@ if type "$1" > /dev/null 2>&1; then
   exec "$@"
 else
   if [[ "$1" == "update" ]]; then
-    liqui update
+    liqui update || exit 1
   fi
   if [[ "$1" == "status" ]]; then
-    liqui status | grep "changesets have not been applied" && false
+    liqui status | grep -E -e '' -e "changesets have not been applied" || exit 1
   fi
 fi
