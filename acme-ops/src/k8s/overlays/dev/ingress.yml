@@ -4,6 +4,13 @@ kind: Ingress
 metadata:
   name: kratos
   namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: https://app-127-0-0-1.nip.io
+    nginx.ingress.kubernetes.io/cors-allow-methods: OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE
+    nginx.ingress.kubernetes.io/cors-allow-headers: Authorization,Cookie,Content-Type
+    nginx.ingress.kubernetes.io/cors-expose-headers: Content-Type,Set-Cookie
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   ingressClassName: nginx
   tls:

@@ -1,4 +1,4 @@
-version: v0.10.1
+version: v0.11.0
 tracing:
   service_name: ory-kratos
   provider: jaeger
@@ -12,16 +12,10 @@ dsn: postgres://kratos:kratos@kratos-postgres:5432/kratos?sslmode=disable&max_co
 serve:
   public:
     base_url: https://kratos-127-0-0-1.nip.io
-    cors:
-      enabled: true
-      debug: true
-      allowed_origins:
-        - https://*.nip.io
-        - http://*.default.svc.cluster.local
-        - http://localhost:4200
-        - http://127.0.0.1:4200
   admin:
     base_url: https://kratos-admin-127-0-0-1.nip.io
+    request_log:
+      disable_for_health: true
 cookies:
   same_site: None
   domain: nip.io

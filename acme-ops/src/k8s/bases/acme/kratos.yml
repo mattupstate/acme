@@ -80,17 +80,9 @@ spec:
         prometheus.io/path: /admin/metrics/prometheus
         prometheus.io/port: "4434"
     spec:
-      initContainers:
-        - name: kratos-migrate
-          image: oryd/kratos:v0.10.1
-          imagePullPolicy: IfNotPresent
-          args: [ "migrate", "sql", "-e", "--yes" ]
-          volumeMounts:
-            - name: kratos-common
-              mountPath: /etc/kratos/common
       containers:
         - name: kratos
-          image: oryd/kratos:v0.10.1
+          image: oryd/kratos:v0.11.0
           imagePullPolicy: IfNotPresent
           args: [ "serve" ]
           envFrom: [ ]
@@ -102,6 +94,37 @@ spec:
           volumeMounts:
             - name: kratos-common
               mountPath: /etc/kratos/common
+          livenessProbe:
+            httpGet:
+              path: /admin/health/ready
+              port: 4434
+              httpHeaders:
+                - name: Host
+                  value: '127.0.0.1'
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /admin/health/ready
+              port: 4434
+              httpHeaders:
+                - name: Host
+                  value: '127.0.0.1'
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /admin/health/ready
+              port: 4434
+              httpHeaders:
+                - name: Host
+                  value: '127.0.0.1'
+            failureThreshold: 60
+            successThreshold: 1
+            periodSeconds: 1
+            timeoutSeconds: 1
       volumes:
         - name: kratos-common
           configMap:

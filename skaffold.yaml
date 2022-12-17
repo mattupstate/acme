@@ -33,3 +33,7 @@ deploy:
       before:
         - host:
             command: [ "sh", "-c", "kubectl delete job liquibase || true" ]
+        - host:
+            command: [ "sh", "-c", "kubectl delete job keto-migrate || true" ]
+        - host:
+            command: [ "sh", "-c", "kubectl delete job kratos-migrate || true" ]

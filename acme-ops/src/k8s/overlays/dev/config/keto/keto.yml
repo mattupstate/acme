@@ -1,4 +1,4 @@
-version: v0.8.0-alpha.2
+version: v0.10.0-alpha.0
 
 tracing:
   service_name: ory-keto
@@ -7,8 +7,6 @@ tracing:
     jaeger:
       sampling:
         server_url: http://jaeger:5778
-        type: const
-        value: 1
       local_agent_address: jaeger-agent:6831
 
 log:
