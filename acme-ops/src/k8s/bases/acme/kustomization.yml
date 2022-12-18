@@ -9,9 +9,9 @@ configMapGenerator:
 
 resources:
   - kratos.yml
-  - kratos-migrate.yml
+  - kratos-db.yml
   - keto.yml
-  - keto-migrate.yml
+  - keto-db.yml
   - liquibase.yml
   - acme-web-server.yml
   - acme-app-web.yml

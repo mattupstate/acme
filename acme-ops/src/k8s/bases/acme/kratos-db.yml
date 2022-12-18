@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kratos-postgres
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kratos
+      app.kubernetes.io/component: postgres
+  serviceName: kratos-postgres
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kratos
+        app.kubernetes.io/component: postgres
+      annotations:
+        linkerd.io/inject: enabled
+        promtail.io/scrape: "true"
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:12.3-alpine
+          env: [ ]
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgresdata
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+      volumes:
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgresdata
+  volumeClaimTemplates:
+    - metadata:
+        name: postgresdata
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kratos-postgres
+  labels:
+    app.kubernetes.io/name: kratos
+    app.kubernetes.io/component: postgres
+spec:
+  selector:
+    app.kubernetes.io/name: kratos
+    app.kubernetes.io/component: postgres
+  ports:
+    - port: 5432
+      protocol: TCP
+      name: postgres
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kratos-migrate
+spec:
+  activeDeadlineSeconds: 180
+  backoffLimit: 3
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: oryd/kratos:v0.11.0
+          imagePullPolicy: IfNotPresent
+          args: [ "migrate", "sql", "-e", "--yes" ]
+          volumeMounts: [ ]
+      volumes: [ ]
