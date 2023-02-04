@@ -1,0 +1,3 @@
+1. Get the schema migration logs by running these commands:
+
+  kubectl --namespace {{ .Release.Namespace }} logs -f $(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "acme-data-sql.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")

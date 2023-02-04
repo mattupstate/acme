@@ -1,0 +1,6 @@
+apiVersion: v2
+name: acme-web-oathkeeper
+description: Identity oriented proxy/gateway for the Acme system
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

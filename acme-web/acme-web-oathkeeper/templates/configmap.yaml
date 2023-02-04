@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: acme-web-oathkeeper-config
+data:
+  "config.yaml": |-
+    {{- .Values.config | toYaml | nindent 4 }}
+  "access-rules.yaml": |-
+    {{- .Values.access_rules | toYaml | nindent 4 }}
