@@ -1,0 +1,73 @@
+maester:
+  enabled: false
+oathkeeper:
+  config:
+    #    tracing:
+    #      service_name: ory-oathkeeper
+    #      provider: jaeger
+    #      providers:
+    #        jaeger:
+    #          sampling:
+    #            server_url: http://jaeger:5778
+    #            type: const
+    #            value: 1
+    #          local_agent_address: jaeger-agent:6831
+    log:
+      level: debug
+      format: text
+    serve:
+      proxy:
+        cors:
+          enabled: true
+          allowed_origins:
+            - "*.nip.io"
+            - "localhost:4200"
+            - "127.0.0.1:4200"
+          allowed_methods:
+            - POST
+            - GET
+            - PUT
+            - PATCH
+            - DELETE
+          allowed_headers:
+            - Authorization
+            - Content-Type
+          exposed_headers:
+            - Content-Type
+          allow_credentials: true
+          debug: true
+    errors:
+      fallback:
+        - json
+      handlers:
+        json:
+          enabled: true
+          config:
+            verbose: true
+    access_rules:
+      matching_strategy: glob
+    authenticators:
+      cookie_session:
+        enabled: true
+        config:
+          check_session_url: http://kratos-public:4433/sessions/whoami
+          preserve_path: true
+          extra_from: "@this"
+          subject_from: "identity.id"
+          only:
+            - ory_kratos_session
+    authorizers:
+      allow:
+        enabled: true
+    mutators:
+      header:
+        enabled: true
+        config:
+          headers:
+            X-Auth-Id: "{{ print .Subject }}"
+            X-Auth-Email: "{{ print .Extra.identity.traits.email }}"
+            X-Auth-Name-Given: "{{ print .Extra.identity.traits.name.given }}"
+            X-Auth-Name-Family: "{{ print .Extra.identity.traits.name.family }}"
+            X-Auth-Name-Preferred: "{{ print .Extra.identity.traits.name.preferred }}"
+            X-Auth-Name-Prefix: "{{ print .Extra.identity.traits.name.prefix }}"
+            X-Auth-Name-Suffix: "{{ print .Extra.identity.traits.name.suffix }}"

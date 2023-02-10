@@ -2,7 +2,11 @@ tasks {
   register<Exec>("install") {
     inputs.file("package.json")
     outputs.dir("node_modules")
-    commandLine("npm", "install", "--prune")
+    commandLine(
+      "/bin/bash", "-c", """
+        npm install --prune
+      """.trimIndent()
+    )
   }
 
   register<Exec>("build") {
@@ -11,14 +15,22 @@ tasks {
     inputs.file("tsconfig.json")
     inputs.dir("projects")
     outputs.dir("dist")
-    commandLine("npm", "run", "build")
+    commandLine(
+      "/bin/bash", "-c", """
+        npm run build
+      """.trimIndent()
+    )
     dependsOn("install")
   }
 
   register<Exec>("test") {
     inputs.dir("projects")
     outputs.dir("reports")
-    commandLine("npm", "run", "test-ci")
+    commandLine(
+      "/bin/bash", "-c", """
+        npm run test-ci
+      """.trimIndent()
+    )
     dependsOn("install")
   }
 }

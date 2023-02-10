@@ -1,0 +1,15 @@
+global:
+  tlsDisable: true
+
+server:
+  dev:
+    enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    tls:
+      - hosts:
+          - vault-127-0-0-1.nip.io
+        secretName: tls-io-nip-wildcard
+    hosts:
+      - host: vault-127-0-0-1.nip.io

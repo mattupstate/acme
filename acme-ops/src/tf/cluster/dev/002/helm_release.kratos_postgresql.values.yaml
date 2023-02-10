@@ -1,0 +1,24 @@
+auth:
+  usePasswordFiles: true
+primary:
+  persistence:
+    size: 256Mi
+  initdb:
+    scripts:
+      "init.sql": |-
+        CREATE ROLE vault WITH LOGIN SUPERUSER PASSWORD 'rotate-me-immediately';
+        CREATE ROLE kratos_dba;
+        CREATE ROLE kratos_app;
+        --
+        CREATE DATABASE kratos;
+        ALTER DATABASE kratos OWNER TO kratos_dba;
+        --
+        \c kratos;
+        --
+        REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+        GRANT CREATE ON SCHEMA public TO kratos_dba;
+        GRANT CREATE ON DATABASE kratos TO kratos_dba;
+        --
+        GRANT USAGE ON SCHEMA public TO kratos_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE kratos_dba IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO kratos_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE kratos_dba IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO kratos_app;

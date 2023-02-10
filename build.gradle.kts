@@ -26,11 +26,6 @@ plugins {
 }
 
 tasks {
-  register<Exec>("runDev") {
-    commandLine("bash", "-c", "skaffold run --kube-context=acme-dev")
-    dependsOn("acme-ops:deployDev", "acme-app:acme-app-web:build")
-  }
-
   register<JacocoReport>("mergeJacocoReports") {
     val javaSourceSets = subprojects.mapNotNull {
       it.extensions.findByType(JavaPluginExtension::class)?.sourceSets?.getByName("main")

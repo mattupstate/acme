@@ -1,0 +1,24 @@
+auth:
+  usePasswordFiles: true
+primary:
+  persistence:
+    size: 256Mi
+  initdb:
+    scripts:
+      "init.sql": |-
+        CREATE ROLE vault WITH LOGIN SUPERUSER PASSWORD 'rotate-me-immediately';
+        CREATE ROLE acme_data_sql_dba;
+        CREATE ROLE acme_data_sql_app;
+        --
+        CREATE DATABASE acme;
+        ALTER DATABASE keto OWNER TO acme_data_sql_dba;
+        --
+        \c acme;
+        --
+        REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+        GRANT CREATE ON SCHEMA public TO acme_data_sql_dba;
+        GRANT CREATE ON DATABASE acme TO acme_data_sql_dba;
+        --
+        GRANT USAGE ON SCHEMA public TO acme_data_sql_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE acme_data_sql_dba IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO acme_data_sql_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE acme_data_sql_dba IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO acme_data_sql_app;

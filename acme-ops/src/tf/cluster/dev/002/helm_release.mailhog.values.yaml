@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  tls:
+    - hosts:
+        - mailhog-127-0-0-1.nip.io
+      secretName: tls-io-nip-wildcard
+  hosts:
+    - host: mailhog-127-0-0-1.nip.io
+      paths:
+        - path: "/"
+          pathType: Prefix

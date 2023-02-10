@@ -55,3 +55,7 @@ out
 .DS_Store
 gradle.properties
 libs.versions.updates.toml
+.secrets
+.terraform
+*.tfstate*
+.terraform.lock.hcl

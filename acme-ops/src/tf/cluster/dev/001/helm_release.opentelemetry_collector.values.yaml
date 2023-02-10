@@ -1,0 +1,7 @@
+mode: deployment
+ports:
+  metrics:
+    enabled: true
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8888"

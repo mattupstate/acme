@@ -1,0 +1,8 @@
+apiVersion: v2
+name: deployment-rotator
+description: |-
+  Deploys a CronJob that rotates the pods of a specified set of deployments.
+  Useful for when pods needs to pickup new configuration or secrets and do not support reacting to file changes.
+type: application
+version: 0.1.0
+appVersion: "1.16.0"

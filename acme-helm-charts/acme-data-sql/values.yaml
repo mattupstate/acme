@@ -1,0 +1,81 @@
+# Default values for acme-data-sql.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: mattupstate/acme-data-sql
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+job:
+  ttlSecondsAfterFinished: 30
+  activeDeadlineSeconds: 120
+  backoffLimit: 3
+  completions: 1
+  parallelism: 1
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: { }
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "acme-data-sql-migrator"
+
+podAnnotations:
+  vault.hashicorp.com/role: "acme-data-sql-dba"
+  vault.hashicorp.com/agent-limits-cpu: ""
+  vault.hashicorp.com/agent-limits-mem: ""
+  vault.hashicorp.com/agent-requests-cpu: ""
+  vault.hashicorp.com/agent-requests-mem: ""
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-inject-file-credentials: "credentials"
+  vault.hashicorp.com/agent-inject-secret-credentials: "database/roles/acme-data-sql-dba"
+  vault.hashicorp.com/agent-inject-template-credentials: |
+    {{- with secret "database/creds/acme-data-sql-dba" -}}
+    DB_USERNAME="{{ .Data.username }}"
+    DB_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+
+podSecurityContext: { }
+# fsGroup: 2000
+
+securityContext: { }
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+
+resources: { }
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+#   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

@@ -1,0 +1,55 @@
+{{- if empty .Values.deployment }}{{ fail "deployment value is required" }}{{ end -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "deployment-rotator.fullname" . }}
+  labels:
+    {{- include "deployment-rotator.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule }}
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+      activeDeadlineSeconds: {{ .Values.job.activeDeadlineSeconds }}
+      backoffLimit:  {{ .Values.job.backoffLimit }}
+      completions:  {{ .Values.job.completions }}
+      parallelism:  {{ .Values.job.parallelism }}
+      template:
+        metadata:
+          {{- with .Values.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "deployment-rotator.selectorLabels" . | nindent 12 }}
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "deployment-rotator.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh", "-c", "kubectl rollout restart deployments/{{ .Values.deployment }} && kubectl rollout status -w deployments/{{ .Values.deployment }}"]
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          restartPolicy: OnFailure
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+

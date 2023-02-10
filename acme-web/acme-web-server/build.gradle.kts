@@ -80,7 +80,7 @@ jib {
     ports = listOf("8080")
     mainClass = application.mainClass.get()
     environment = mapOf(
-      "OTEL_SERVICE_NAME" to "com-acme-web-server"
+      "OTEL_SERVICE_NAME" to "acme-web-server"
     )
   }
 

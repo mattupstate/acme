@@ -5,35 +5,37 @@ metadata:
 
 build:
   artifacts:
-    - image: acme/acme-data-sql
+    - image: mattupstate/acme-data-sql
       context: ./acme-data/acme-data-sql
-    - image: acme/acme-web-server
+    - image: mattupstate/acme-web-server
       jib:
         project: "acme-web:acme-web-server"
-    - image: acme/acme-app-web
-      context: ./acme-app/acme-app-web
-      docker:
-        dockerfile: Dockerfile
-        target: dev
-      sync:
-        manual:
-          - src: 'projects/**/*.*'
-            dest: .
+  #    - image: mattupstate/acme-app-web
+  #      context: ./acme-app/acme-app-web
+  #      docker:
+  #        dockerfile: Dockerfile
+  #        target: dev
+  #      sync:
+  #        manual:
+  #          - src: 'projects/**/*.*'
+  #            dest: .
   local:
     push: false
 
-manifests:
-  kustomize:
-    paths:
-      - acme-ops/src/k8s/overlays/dev
-
 deploy:
-  kubectl:
-    hooks:
-      before:
-        - host:
-            command: [ "sh", "-c", "kubectl delete job liquibase || true" ]
-        - host:
-            command: [ "sh", "-c", "kubectl delete job keto-migrate || true" ]
-        - host:
-            command: [ "sh", "-c", "kubectl delete job kratos-migrate || true" ]
+  helm:
+    releases:
+      - name: acme-oathkeeper
+        chartPath: vendor/ory-helm-charts/helm/charts/oathkeeper
+        setFiles:
+          accessRules: skaffold.access-rules.yaml
+        valuesFiles:
+          - skaffold.oathkeeper.yaml
+      - name: acme-data-sql
+        chartPath: acme-data/acme-data-sql/helm/acme-data-sql
+      - name: acme-web-server
+        chartPath: acme-web/acme-web-server/helm/acme-web-server
+#      - name: acme-app-web
+#        chartPath: acme-app/acme-app-web/helm/acme-app-web
+#      - name: acme-web-oathkeeper
+#        chartPath: acme-web/acme-web-oathkeeper

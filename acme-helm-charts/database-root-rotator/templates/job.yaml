@@ -1,0 +1,60 @@
+{{- if .Values.job.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "database-root-rotator.fullname" . }}-init
+  labels:
+    {{- include "database-root-rotator.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+  activeDeadlineSeconds: {{ .Values.job.activeDeadlineSeconds }}
+  backoffLimit:  {{ .Values.job.backoffLimit }}
+  completions:  {{ .Values.job.completions }}
+  parallelism:  {{ .Values.job.parallelism }}
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/role: {{ .Values.vault.role }}
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-token: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "database-root-rotator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "database-root-rotator.serviceAccountName" . }}
+      restartPolicy: Never
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c", "VAULT_TOKEN=\"$(cat /vault/secrets/token)\" vault write -force database/rotate-root/{{ .Values.vault.database }}"]
+          env:
+            - name: VAULT_ADDR
+              value: {{ .Values.vault.addr }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      restartPolicy: OnFailure
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{ end }}

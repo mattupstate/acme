@@ -1,4 +1,4 @@
-FROM liquibase/liquibase:4.17.2
+FROM liquibase/liquibase:4.19.0
 COPY src/main/resources/db /liquibase
 
 USER root
@@ -10,11 +10,8 @@ USER liquibase
 
 COPY --chown=liquibase:liquibase docker-entrypoint.sh /liquibase/
 
-ENV DB_HOST=postgresql \
-    DB_PORT=5432 \
-    DB_NAME=acme \
-    DB_USERNAME=acme \
-    DB_PASSWORD=acme \
+ENV JDBC_URL="jdbc:postgresql://acme-postgresql.default.svc.cluster.local:5432/acme" \
     LOG_LEVEL=info
 
+ENTRYPOINT ["/liquibase/docker-entrypoint.sh"]
 CMD ["update"]

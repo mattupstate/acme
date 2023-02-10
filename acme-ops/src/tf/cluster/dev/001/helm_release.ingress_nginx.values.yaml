@@ -1,0 +1,19 @@
+controller:
+  metrics:
+    enabled: true
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: 10254
+  config:
+    data:
+      allow-snippet-annotations: "true"
+      enable-opentracing: "true"
+      opentracing-operation-name: "$request_method $host"
+      opentracing-location-operation-name: "$namespace $service_name"
+      jaeger-collector-host: jaeger.default.svc.cluster.local
+      jaeger-collector-port: "6831"
+      jaeger-service-name: ingress-nginx
+      jaeger-sampler-host: jaeger.default.svc.cluster.local
+      jaeger-sampler-port: "5778"
+      jaeger-sampler-type: const
+      jaeger-sampler-param: "1"

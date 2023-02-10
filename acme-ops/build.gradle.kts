@@ -1,6 +1,6 @@
 tasks {
   val devKubernetesClusterName = (project.properties["dev.kubernetes.name"] ?: "acme-dev")
-  val sslCertDir = projectDir.resolve("src/k8s/cluster/ssl")
+  val sslCertDir = projectDir.resolve("src/tf/cluster/dev/001/.secrets")
   val sslCertificateFile = sslCertDir.resolve("_wildcard.nip.io.pem")
   val sslCertificateKeyFile = sslCertDir.resolve("_wildcard.nip.io-key.pem")
 
@@ -10,19 +10,33 @@ tasks {
     workingDir(sslCertDir)
   }
 
-  val devKubernetesClusterStart = register<Exec>("devKubernetesClusterStart") {
+  val devKubernetesClusterCreate = register<Exec>("devKubernetesClusterCreate") {
     commandLine(
       "bash", "-c", """
         k3d cluster create $devKubernetesClusterName -p "80:80@loadbalancer" -p "443:443@loadbalancer" --k3s-arg "--disable=traefik@server:0"
-        kubectl kustomize --enable-helm src/k8s/cluster | kubectl apply -f -
       """.trimIndent()
     )
     dependsOn(makeCerts)
   }
 
+  val devSecretsFetch = register<Exec>("devSecretsFetch") {
+    commandLine("./fetch-secrets.sh")
+    workingDir(projectDir.resolve("src/tf/cluster/dev/002"))
+  }
+
+  val devKubernetesClusterProvision = register<Exec>("devKubernetesClusterProvision") {
+    commandLine(
+      "bash", "-c", """
+        terraform -chdir=src/tf/cluster/dev/001 apply -auto-approve
+        terraform -chdir=src/tf/cluster/dev/002 apply -auto-approve
+      """.trimIndent()
+    )
+    dependsOn(devSecretsFetch, devKubernetesClusterCreate)
+  }
+
   register("devStart") {
     dependsOn(
-      devKubernetesClusterStart,
+      devKubernetesClusterProvision,
     )
   }
 

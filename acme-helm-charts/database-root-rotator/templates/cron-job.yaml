@@ -1,0 +1,74 @@
+{{- if empty .Values.vault.database }}{{ fail "vault.database value is required" }}{{ end -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "database-root-rotator.fullname" . }}
+  labels:
+    {{- include "database-root-rotator.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+      activeDeadlineSeconds: {{ .Values.job.activeDeadlineSeconds }}
+      backoffLimit:  {{ .Values.job.backoffLimit }}
+      completions:  {{ .Values.job.completions }}
+      parallelism:  {{ .Values.job.parallelism }}
+      template:
+        metadata:
+          annotations:
+            vault.hashicorp.com/role: {{ .Values.vault.role }}
+            vault.hashicorp.com/agent-inject: "true"
+            vault.hashicorp.com/agent-inject-token: "true"
+            vault.hashicorp.com/agent-pre-populate-only: "true"
+            {{- with .Values.podAnnotations }}
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+          labels:
+            {{- include "database-root-rotator.selectorLabels" . | nindent 12 }}
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "database-root-rotator.serviceAccountName" . }}
+          restartPolicy: Never
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/bin/sh", "/vault/scripts/rotate-root.sh"]
+              env:
+                - name: VAULT_DATABASE
+                  value: {{ .Values.vault.database }}
+                - name: VAULT_ADDR
+                  value: {{ .Values.vault.addr }}
+                - name: VAULT_TOKEN_FILE
+                  value: /vault/secrets/token
+              volumeMounts:
+                - mountPath: /vault/scripts
+                  name: scripts
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            - name: scripts
+              configMap:
+                name: {{ include "database-root-rotator.fullname" . }}-script
+          restartPolicy: OnFailure
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
