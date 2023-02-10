@@ -32,10 +32,8 @@ deploy:
         valuesFiles:
           - skaffold.oathkeeper.yaml
       - name: acme-data-sql
-        chartPath: acme-data/acme-data-sql/helm/acme-data-sql
+        chartPath: acme-helm-charts/acme-data-sql
       - name: acme-web-server
-        chartPath: acme-web/acme-web-server/helm/acme-web-server
+        chartPath: acme-helm-charts/acme-web-server
 #      - name: acme-app-web
 #        chartPath: acme-app/acme-app-web/helm/acme-app-web
-#      - name: acme-web-oathkeeper
-#        chartPath: acme-web/acme-web-oathkeeper
