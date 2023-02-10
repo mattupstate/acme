@@ -1,0 +1,113 @@
+{{- include "keto.automigration.typeVerification" . -}}
+{{- if and  ( .Values.keto.automigration.enabled ) ( eq .Values.keto.automigration.type "job" ) }}
+{{- $extraLabels := ternary .Values.deployment.extraLabels .Values.extraLabels (not (empty .Values.deployment.extraLabels )) -}}
+{{- $extraVolumeMounts := ternary .Values.deployment.extraVolumeMounts .Values.extraVolumeMounts (not (empty .Values.deployment.extraVolumeMounts )) -}}
+{{- $extraVolumes := ternary .Values.deployment.extraVolumes .Values.extraVolumes (not (empty .Values.deployment.extraVolumes )) -}}
+{{- $nodeSelector := ternary .Values.job.nodeSelector .Values.deployment.nodeSelector (not (empty .Values.job.nodeSelector )) -}}
+{{- $migrationExtraEnv := ternary .Values.job.extraEnv .Values.deployment.extraEnv (not (empty .Values.job.extraEnv )) -}}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "keto.fullname" . }}-automigrate
+  {{- if .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels:
+    {{- include "keto.labels" . | nindent 4 }}
+    {{- with $extraLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- with .Values.job.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.job.annotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.job.podMetadata.annotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- with $extraLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.job.podMetadata.labels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "keto.job.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.job.automountServiceAccountToken }}
+      containers:
+      - name: {{ .Chart.Name }}-automigrate
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.keto.automigration.customCommand }}
+        command: {{- toYaml .Values.keto.automigration.customCommand | nindent 10 }}
+        {{- else }}
+        command: ["keto"]
+        {{- end }}
+        {{- if .Values.keto.automigration.customArgs }}
+        args: {{- toYaml .Values.keto.automigration.customArgs | nindent 10 }}
+        {{- else }}
+        args: [ "migrate", "up", "-y", "--config", "/etc/config/keto.yaml" ]
+        {{- end }}
+        {{- if .Values.job.lifecycle }}
+{{ tpl .Values.job.lifecycle . | indent 8 }}
+        {{- end }}
+        volumeMounts:
+          - name: {{ include "keto.name" . }}-config-volume
+            mountPath: /etc/config
+            readOnly: true
+        {{- with $extraVolumeMounts }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        env:
+          {{- if not (empty ( include "keto.dsn" . )) }}
+          - name: DSN
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "keto.secretname" . }}
+                key: dsn
+          {{- end }}
+          {{- with $migrationExtraEnv }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- if .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+      {{- if .Values.job.extraContainers }}
+        {{- tpl .Values.job.extraContainers . | nindent 6 }}
+      {{- end }}
+      {{- if .Values.job.extraInitContainers }}
+      initContainers:
+        {{- tpl .Values.job.extraInitContainers . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: {{ include "keto.name" . }}-config-volume
+          configMap:
+            name: {{ include "keto.fullname" . }}-migrate
+      {{- with $extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.job.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      shareProcessNamespace: {{ .Values.job.shareProcessNamespace }}
+  backoffLimit: {{ .Values.job.spec.backoffLimit }}
+{{- end }}
