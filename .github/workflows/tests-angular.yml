@@ -1,0 +1,26 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "acme-app/acme-app-web/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "acme-app/acme-app-web/**"
+jobs:
+  test-acme-app-web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: acme-app/acme-app-web
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: task test

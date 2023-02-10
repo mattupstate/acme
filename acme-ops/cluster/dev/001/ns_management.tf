@@ -45,8 +45,8 @@ resource "kubernetes_secret" "management_wildcard_ssl" {
   }
 
   data = {
-    "tls.crt" = file("${path.module}/.secrets/_wildcard.nip.io.pem")
-    "tls.key" = file("${path.module}/.secrets/_wildcard.nip.io-key.pem")
+    "tls.crt" = file("${path.module}/.certs/_wildcard.nip.io.pem")
+    "tls.key" = file("${path.module}/.certs/_wildcard.nip.io-key.pem")
   }
 
   type = "kubernetes.io/tls"

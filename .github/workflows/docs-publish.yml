@@ -4,21 +4,19 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/docs-*
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
 jobs:
-  build:
+  publish:
     name: Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.15.0
+          node-version-file: '.nvmrc'
           cache: 'npm'
-      - run: npm install
-      - run: npm run buildAntoraSite
+      - run: task build-docs
       - if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:

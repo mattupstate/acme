@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+  install:
+    cmds:
+      - npm install --prune
+    sources:
+      - package.json
+  build-docs:
+    deps: [install]
+    cmds:
+      - npm run build-docs

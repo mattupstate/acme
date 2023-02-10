@@ -1,5 +1,5 @@
 resource "helm_release" "keto_database_root_rotator" {
-  chart     = "../../../../../../acme-helm-charts/database-root-rotator"
+  chart     = var.database_root_rotator_chart
   name      = "keto-database-root-rotator"
   namespace = "default"
   atomic    = true
@@ -16,7 +16,7 @@ resource "helm_release" "keto_database_root_rotator" {
 }
 
 resource "helm_release" "kratos_database_root_rotator" {
-  chart     = "../../../../../../acme-helm-charts/database-root-rotator"
+  chart     = var.database_root_rotator_chart
   name      = "kratos-database-root-rotator"
   namespace = "default"
   atomic    = true
@@ -33,7 +33,7 @@ resource "helm_release" "kratos_database_root_rotator" {
 }
 
 resource "helm_release" "acme_database_root_rotator" {
-  chart     = "../../../../../../acme-helm-charts/database-root-rotator"
+  chart     = var.database_root_rotator_chart
   name      = "acme-database-root-rotator"
   namespace = "default"
   atomic    = true

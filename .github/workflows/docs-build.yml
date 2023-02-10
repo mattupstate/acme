@@ -4,11 +4,8 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/docs-*
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
-  workflow_call:
-
 jobs:
   build:
     name: Build
@@ -19,6 +16,5 @@ jobs:
         with:
           node-version: 16.15.0
           cache: 'npm'
-      - run: npm install
-      - run: npm run buildAntoraSite
+      - run: task build-docs
 

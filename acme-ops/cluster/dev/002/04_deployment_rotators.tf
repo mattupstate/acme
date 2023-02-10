@@ -1,6 +1,6 @@
 resource "helm_release" "keto_rotator" {
   # NOTE: Necessary given keto does not support reloading of database credentials.
-  chart     = "../../../../../../acme-helm-charts/deployment-rotator"
+  chart     = var.deployment_rotator_chart
   name      = "keto-deployment-rotator"
   namespace = "default"
   atomic    = true
@@ -24,7 +24,7 @@ resource "helm_release" "keto_rotator" {
 
 resource "helm_release" "kratos_rotator" {
   # NOTE: Necessary given kratos does not support reloading of database credentials.
-  chart     = "../../../../../../acme-helm-charts/deployment-rotator"
+  chart     = var.deployment_rotator_chart
   name      = "kratos-deployment-rotator"
   namespace = "default"
   atomic    = true
