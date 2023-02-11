@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
-import { recoverAccount } from '../../app.actions';
-import { selectBusy, selectRecoveryRequested, selectRecoverError } from '../../app.selectors';
-import { IdentityServiceRecoveryError } from './identity.service';
+import { requestRecoveryCode, submitRecoveryCode } from '../../app.actions';
+import {
+  selectBusy,
+  selectRecoveryCodeRequested,
+  selectRecoverError,
+} from '../../app.selectors';
 
 @Component({
   selector: 'app-recover-container',
@@ -12,10 +14,11 @@ import { IdentityServiceRecoveryError } from './identity.service';
       <app-recover
         fxFlex.xs
         fxFlex.gt-xs="400px"
-        [toggleView]="(requested$ | async)"
+        [toggleView]="requested$ | async"
         [errorCode]="errorCode$ | async"
         [enabled]="(busy$ | async) === false"
         (formSubmit)="dispatch($event)"
+        (recoverCodeSubmit)="dispatchCode($event)"
       >
       </app-recover>
     </div>
@@ -23,14 +26,16 @@ import { IdentityServiceRecoveryError } from './identity.service';
 })
 export class RecoverContainerComponent {
   errorCode$ = this.store.select(selectRecoverError);
-
   busy$ = this.store.select(selectBusy);
-
-  requested$ = this.store.select(selectRecoveryRequested);
+  requested$ = this.store.select(selectRecoveryCodeRequested);
 
   constructor(private store: Store) {}
 
   dispatch(data: { email: string }) {
-    this.store.dispatch(recoverAccount(data));
+    this.store.dispatch(requestRecoveryCode(data));
+  }
+
+  dispatchCode(data: { email: string; code: string }) {
+    this.store.dispatch(submitRecoveryCode(data));
   }
 }

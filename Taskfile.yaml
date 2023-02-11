@@ -13,8 +13,4 @@ tasks:
   run:
     deps: [ops:dev-provision]
     cmds:
-      - skaffold run --tail
-  run-dev:
-    deps: [ops:dev-provision]
-    cmds:
       - skaffold dev

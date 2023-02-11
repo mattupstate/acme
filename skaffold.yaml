@@ -10,15 +10,15 @@ build:
     - image: mattupstate/acme-web-server
       jib:
         project: "acme-web:acme-web-server"
-  #    - image: mattupstate/acme-app-web
-  #      context: ./acme-app/acme-app-web
-  #      docker:
-  #        dockerfile: Dockerfile
-  #        target: dev
-  #      sync:
-  #        manual:
-  #          - src: 'projects/**/*.*'
-  #            dest: .
+    - image: mattupstate/acme-app-web
+      context: ./acme-app/acme-app-web
+      docker:
+        dockerfile: Dockerfile
+        target: dev
+      sync:
+        manual:
+          - src: 'projects/**/*.*'
+            dest: .
   local:
     push: false
 
@@ -35,5 +35,7 @@ deploy:
         chartPath: acme-helm-charts/acme-data-sql
       - name: acme-web-server
         chartPath: acme-helm-charts/acme-web-server
-#      - name: acme-app-web
-#        chartPath: acme-app/acme-app-web/helm/acme-app-web
+      - name: acme-app-web
+        chartPath: acme-helm-charts/acme-app-web
+        valuesFiles:
+          - skaffold.acme-app-web.yaml

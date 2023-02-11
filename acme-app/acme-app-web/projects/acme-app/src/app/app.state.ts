@@ -13,7 +13,7 @@ export interface SecurityState {
   registrationRequested: boolean
   registrationError: RegistrationError | null
   recoveryError: RecoveryError | null
-  recoveryRequested: boolean
+  recoveryCodeRequested: boolean
   verifyRequested: boolean
   verifyError: VerifyError | null
 }
@@ -83,7 +83,7 @@ export const busyReducer = createReducer<boolean>(
 export const securityReducer = createReducer<SecurityState>(
   {
     principal: null,
-    recoveryRequested: false,
+    recoveryCodeRequested: false,
     signInError: null,
     recoveryError: null,
     registrationRequested: false,
@@ -134,13 +134,13 @@ export const securityReducer = createReducer<SecurityState>(
     principal: null,
     registrationError: props.error,
   })),
-  on(actions.recoverAccount, (state: SecurityState): SecurityState => ({
+  on(actions.requestRecoveryCode, (state: SecurityState): SecurityState => ({
     ...state,
-    recoveryRequested: false,
+    recoveryCodeRequested: false,
   })),
-  on(actions.recoverRequestComplete, (state: SecurityState): SecurityState => ({
+  on(actions.recoveryCompleted, (state: SecurityState): SecurityState => ({
     ...state,
-    recoveryRequested: true,
+    recoveryCodeRequested: true,
   })),
   on(actions.verifyAccount, (state: SecurityState): SecurityState => ({
     ...state,

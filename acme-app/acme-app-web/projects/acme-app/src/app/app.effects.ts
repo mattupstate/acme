@@ -21,29 +21,30 @@ import * as actions from './app.actions';
 import { GlobalErrorsService } from './app.global-errors.service';
 import { SignInError } from './app.state';
 
-import { IdentityService, IdentityServiceRegistrationError, IdentityServiceSignInError } from './features/identity/identity.service';
+import {
+  IdentityService,
+  IdentityServiceRegistrationError,
+  IdentityServiceSignInError,
+} from './features/identity/identity.service';
 
 @Injectable()
 export class StartupAffects implements OnRunEffects {
   constructor(
     private actions$: Actions,
     private authService: IdentityService
-  ) { }
+  ) {}
 
   appStartup$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(actions.appStartup),
       switchMap(() =>
         this.authService.whoAmI().pipe(
-          map((principal) =>
-            actions.appStartupComplete({ principal })
-          ),
+          map((principal) => actions.appStartupComplete({ principal })),
           catchError(() => of(actions.appStartupComplete({ principal: null })))
         )
       )
-    )
-  }
-  );
+    );
+  });
 
   ngrxOnRunEffects(
     resolvedEffects$: Observable<EffectNotification>
@@ -66,24 +67,27 @@ export class AppEffects implements OnRunEffects {
           ),
           catchError((e) => {
             if (e instanceof IdentityServiceSignInError) {
-              return of(actions.signInFailure({
-                error: {
-                  INVALID_CREDENTIALS: SignInError.INVALID_CREDENTIALS,
-                  INACTIVE_ACCOUNT: SignInError.INACTIVE_ACCOUNT,
-                  UNKNOWN: SignInError.UNEXPECTED
-                }[e.cause]
-              }))
+              return of(
+                actions.signInFailure({
+                  error: {
+                    INVALID_CREDENTIALS: SignInError.INVALID_CREDENTIALS,
+                    INACTIVE_ACCOUNT: SignInError.INACTIVE_ACCOUNT,
+                    UNKNOWN: SignInError.UNEXPECTED,
+                  }[e.cause],
+                })
+              );
             } else {
-              return of(actions.signInFailure({
-                error: SignInError.UNEXPECTED
-              }))
+              return of(
+                actions.signInFailure({
+                  error: SignInError.UNEXPECTED,
+                })
+              );
             }
           })
         )
       )
-    )
-  }
-  );
+    );
+  });
 
   signInViaOpenId$ = createEffect(() => {
     return this.actions$.pipe(
@@ -95,9 +99,8 @@ export class AppEffects implements OnRunEffects {
             map((redirectUrl) => actions.externalLink({ url: redirectUrl }))
           )
       )
-    )
-  }
-  );
+    );
+  });
 
   register$ = createEffect(() => {
     return this.actions$.pipe(
@@ -111,27 +114,26 @@ export class AppEffects implements OnRunEffects {
             action.familyName
           )
           .pipe(
-            map(() =>
-              actions.registerComplete()
-            ),
+            map(() => actions.registerComplete()),
             catchError((error: IdentityServiceRegistrationError) => {
-              return of(actions.registerFailure({
-                error: {
-                  errors: error.errors,
-                  attributes: {
-                    givenName: error.attributes.givenName,
-                    familyName: error.attributes.familyName,
-                    password: error.attributes.password,
-                    email: error.attributes.email
-                  }
-                }
-              }))
+              return of(
+                actions.registerFailure({
+                  error: {
+                    errors: error.errors,
+                    attributes: {
+                      givenName: error.attributes.givenName,
+                      familyName: error.attributes.familyName,
+                      password: error.attributes.password,
+                      email: error.attributes.email,
+                    },
+                  },
+                })
+              );
             })
           )
       )
-    )
-  }
-  );
+    );
+  });
 
   registerViaOpenId$ = createEffect(() => {
     return this.actions$.pipe(
@@ -143,31 +145,55 @@ export class AppEffects implements OnRunEffects {
             map((redirectUrl) => actions.externalLink({ url: redirectUrl }))
           )
       )
-    )
-  }
-  );
+    );
+  });
 
   redirectToDashboard$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(actions.signInComplete),
         tap((action) => this.router.navigate(['']))
-      )
+      );
     },
     { dispatch: false }
   );
 
-  recoverAccount$ = createEffect(() => {
+  requestRecoveryCode$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(actions.recoverAccount),
+      ofType(actions.requestRecoveryCode),
+      exhaustMap((action) =>
+        this.authService.recover(action.email).pipe(
+          map((res) => actions.recoveryCodeSent()),
+          catchError((error: IdentityServiceRegistrationError) => {
+            return of(
+              actions.registerFailure({
+                error: {
+                  errors: error.errors,
+                  attributes: {
+                    givenName: error.attributes.givenName,
+                    familyName: error.attributes.familyName,
+                    password: error.attributes.password,
+                    email: error.attributes.email,
+                  },
+                },
+              })
+            );
+          })
+        )
+      )
+    );
+  });
+
+  submitRecoveryCode$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(actions.submitRecoveryCode),
       exhaustMap((action) =>
         this.authService
-          .recover(action.email)
-          .pipe(map((res) => actions.recoverRequestComplete()))
+          .recover(action.email, action.code)
+          .pipe(map((res) => actions.recoveryCompleted()))
       )
-    )
-  }
-  );
+    );
+  });
 
   verifyAccount$ = createEffect(() => {
     return this.actions$.pipe(
@@ -175,23 +201,17 @@ export class AppEffects implements OnRunEffects {
       exhaustMap((action) =>
         this.authService
           .verify(action.email)
-          .pipe(
-            map((res) => actions.verifyRequestComplete())
-          )
+          .pipe(map((res) => actions.verifyRequestComplete()))
       )
-    )
-  }
-  );
+    );
+  });
 
   redirectToSignIn$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(
-          actions.logoutComplete,
-          actions.unauthenticatedAccess
-        ),
+        ofType(actions.logoutComplete, actions.unauthenticatedAccess),
         tap((res) => this.router.navigate(['sign-in']))
-      )
+      );
     },
     { dispatch: false }
   );
@@ -201,7 +221,7 @@ export class AppEffects implements OnRunEffects {
       return this.actions$.pipe(
         ofType(actions.unauthenticatedAccess),
         tap((res) => this.globalErrors.unauthenticatedAccess())
-      )
+      );
     },
     { dispatch: false }
   );
@@ -211,7 +231,7 @@ export class AppEffects implements OnRunEffects {
       return this.actions$.pipe(
         ofType(actions.invalidAccess),
         tap((res) => this.router.navigate(['']))
-      )
+      );
     },
     { dispatch: false }
   );
@@ -225,25 +245,25 @@ export class AppEffects implements OnRunEffects {
           catchError((error) => of(actions.logoutFailure({ error })))
         )
       )
-    )
-  }
-  );
+    );
+  });
 
-  redirect$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(actions.externalLink),
-      tap((action) => window.location.replace(action.url))
-    )
-  },
+  redirect$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(actions.externalLink),
+        tap((action) => window.location.replace(action.url))
+      );
+    },
     { dispatch: false }
-  )
+  );
 
   constructor(
     private authService: IdentityService,
     private globalErrors: GlobalErrorsService,
     private actions$: Actions,
     private router: Router
-  ) { }
+  ) {}
 
   ngrxOnRunEffects(
     resolvedEffects$: Observable<EffectNotification>

@@ -1,29 +1,42 @@
-import { HttpClient } from "@angular/common/http";
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
-import { TestBed } from "@angular/core/testing";
-import { SelfServiceLoginFlow, Session } from "@ory/kratos-client";
-import { IdentityServiceSignInError, IdentityServiceUnauthorizedError, IdentityServiceUnexpectedError, KratosIdentityService, SignInErrorCause } from "./identity.service";
+import { TestBed } from '@angular/core/testing';
+import { SelfServiceLoginFlow, Session } from '@ory/kratos-client';
+import {
+  IdentityServiceSignInError,
+  IdentityServiceUnauthorizedError,
+  IdentityServiceUnexpectedError,
+  KratosIdentityService,
+  SignInErrorCause,
+} from './identity.service';
 
 describe('KratosIdentityService', () => {
-  const baseUrl = 'https://api'
-  const registrationReturnUrl = 'http://localhost'
+  const baseUrl = 'https://api';
+  const registrationReturnUrl = 'http://localhost';
+  const recoveryReturnUrl = 'http://localhost';
 
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
-  let service: KratosIdentityService
+  let service: KratosIdentityService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
 
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = new KratosIdentityService(httpClient, baseUrl, registrationReturnUrl)
-  })
+    service = new KratosIdentityService(
+      httpClient,
+      baseUrl,
+      registrationReturnUrl,
+      recoveryReturnUrl
+    );
+  });
 
   describe('::signIn', () => {
     it('should return an Identity object from a successful sign in flow', () => {
@@ -35,18 +48,20 @@ describe('KratosIdentityService', () => {
             name: {
               given: 'Hello',
               family: 'World',
-              preferred: 'Hello World'
-            }
+              preferred: 'Hello World',
+            },
           });
         },
-        (error) => { fail(error) }
+        (error) => {
+          fail(error);
+        }
       );
 
       mockSignInFlowWithTraits('user123', {
         name: {
           given: 'Hello',
           family: 'World',
-          preferred: 'Hello World'
+          preferred: 'Hello World',
         },
         email: 'hello@world.com',
       });
@@ -55,14 +70,14 @@ describe('KratosIdentityService', () => {
     it('should throw an IdentityServiceSignInError from a 400 response', () => {
       service.signIn('hello@world.com', 'password').subscribe(
         () => {
-          fail('should throw error but did not')
+          fail('should throw error but did not');
         },
         (error: IdentityServiceSignInError) => {
           expect(error.cause).toEqual(SignInErrorCause.INVALID_CREDENTIALS);
         }
       );
 
-      mockSignInFlowWithInvalidCredentials()
+      mockSignInFlowWithInvalidCredentials();
     });
   });
 
@@ -78,12 +93,12 @@ describe('KratosIdentityService', () => {
             name: {
               given: 'Hello',
               family: 'World',
-              preferred: 'Hello World'
+              preferred: 'Hello World',
             },
             email: 'hello@world.com',
-          }
-        }
-      }
+          },
+        },
+      };
 
       service.whoAmI().subscribe((result) => {
         expect(result).toEqual({
@@ -92,8 +107,8 @@ describe('KratosIdentityService', () => {
           name: {
             given: 'Hello',
             family: 'World',
-            preferred: 'Hello World'
-          }
+            preferred: 'Hello World',
+          },
         });
       });
 
@@ -104,36 +119,45 @@ describe('KratosIdentityService', () => {
     });
 
     it('should throw an IdentityServiceUnauthorizedError from a 401 response', () => {
-      service.whoAmI().subscribe(() => { }, (error) => {
-        expect(error).toBeInstanceOf(IdentityServiceUnauthorizedError);
-      });
+      service.whoAmI().subscribe(
+        () => {},
+        (error) => {
+          expect(error).toBeInstanceOf(IdentityServiceUnauthorizedError);
+        }
+      );
 
       const req = httpTestingController.expectOne(`${baseUrl}/sessions/whoami`);
-      req.flush({}, { status: 401, statusText: 'Not found' })
+      req.flush({}, { status: 401, statusText: 'Not found' });
 
       httpTestingController.verify();
     });
 
     it('should throw an IdentityServiceUnexpectedError from anything other than a 401 response', () => {
-      service.whoAmI().subscribe(() => { }, (error) => {
-        expect(error).toBeInstanceOf(IdentityServiceUnexpectedError);
-      });
+      service.whoAmI().subscribe(
+        () => {},
+        (error) => {
+          expect(error).toBeInstanceOf(IdentityServiceUnexpectedError);
+        }
+      );
 
       const req = httpTestingController.expectOne(`${baseUrl}/sessions/whoami`);
-      req.flush({}, { status: 0, statusText: 'Unexpected error' })
+      req.flush({}, { status: 0, statusText: 'Unexpected error' });
 
       httpTestingController.verify();
     });
   });
 
-  function mockSignInFlowWithTraits(userId: string, traits: {
-    name: {
-      given: string,
-      family: string,
-      preferred: string
-    },
-    email: string,
-  }) {
+  function mockSignInFlowWithTraits(
+    userId: string,
+    traits: {
+      name: {
+        given: string;
+        family: string;
+        preferred: string;
+      };
+      email: string;
+    }
+  ) {
     mockSignInFlow(
       {
         id: 'uuid-123',
@@ -144,20 +168,22 @@ describe('KratosIdentityService', () => {
         ui: {
           action: `${baseUrl}/self-service/login/browser`,
           method: '',
-          nodes: [{
-            attributes: {
-              name: 'csrf_token',
-              value: 'a value',
-              disabled: false,
-              node_type: '',
-              type: ''
+          nodes: [
+            {
+              attributes: {
+                name: 'csrf_token',
+                value: 'a value',
+                disabled: false,
+                node_type: '',
+                type: '',
+              },
+              group: '',
+              messages: [],
+              meta: {},
+              type: '',
             },
-            group: '',
-            messages: [],
-            meta: {},
-            type: ''
-          }]
-        }
+          ],
+        },
       },
       {
         session: {
@@ -166,18 +192,25 @@ describe('KratosIdentityService', () => {
             id: userId,
             schema_id: '123',
             schema_url: '',
-            traits
-          }
-        }
+            traits,
+          },
+        },
       }
-    )
-  };
+    );
+  }
 
-  function mockSignInFlow(flowGetResponse: SelfServiceLoginFlow, flowPostResponse: { session: Session }) {
-    const req = httpTestingController.expectOne(`${baseUrl}/self-service/login/browser`);
+  function mockSignInFlow(
+    flowGetResponse: SelfServiceLoginFlow,
+    flowPostResponse: { session: Session }
+  ) {
+    const req = httpTestingController.expectOne(
+      `${baseUrl}/self-service/login/browser`
+    );
     req.flush(flowGetResponse);
 
-    const req2 = httpTestingController.expectOne(`${baseUrl}/self-service/login/browser`);
+    const req2 = httpTestingController.expectOne(
+      `${baseUrl}/self-service/login/browser`
+    );
     req2.flush(flowPostResponse);
 
     httpTestingController.verify();
@@ -201,21 +234,23 @@ describe('KratosIdentityService', () => {
       ui: {
         action: `${baseUrl}/self-service/login/browser`,
         method: '',
-        nodes: [{
-          attributes: {
-            name: 'csrf_token',
-            value: 'a value',
-            disabled: false,
-            node_type: '',
-            type: ''
+        nodes: [
+          {
+            attributes: {
+              name: 'csrf_token',
+              value: 'a value',
+              disabled: false,
+              node_type: '',
+              type: '',
+            },
+            group: '',
+            messages: [],
+            meta: {},
+            type: '',
           },
-          group: '',
-          messages: [],
-          meta: {},
-          type: ''
-        }]
-      }
-    }
+        ],
+      },
+    };
 
     const mockErrorResponse: SelfServiceLoginFlow = {
       ...mockKratosSignInFlow,
@@ -223,18 +258,24 @@ describe('KratosIdentityService', () => {
         action: `${baseUrl}/self-service/login/browser`,
         method: '',
         nodes: [],
-        messages: [{
-          id: code,
-          text: '',
-          type: ''
-        }]
-      }
-    }
+        messages: [
+          {
+            id: code,
+            text: '',
+            type: '',
+          },
+        ],
+      },
+    };
 
-    const req = httpTestingController.expectOne(`${baseUrl}/self-service/login/browser`);
+    const req = httpTestingController.expectOne(
+      `${baseUrl}/self-service/login/browser`
+    );
     req.flush(mockKratosSignInFlow);
 
-    const req2 = httpTestingController.expectOne(`${baseUrl}/self-service/login/browser`);
+    const req2 = httpTestingController.expectOne(
+      `${baseUrl}/self-service/login/browser`
+    );
     req2.flush(mockErrorResponse, { status: 400, statusText: 'Bad request' });
 
     httpTestingController.verify();

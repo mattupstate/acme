@@ -11,6 +11,10 @@ export class RecoverComponent {
     email: ['', Validators.required],
   });
 
+  recoveryCodeForm = this.formBuilder.group({
+    recoverCode: ['', Validators.required]
+  })
+
   @Input() set enabled(value: boolean) {
     value ? this.recoverForm.enable() : this.recoverForm.disable();
   }
@@ -23,9 +27,11 @@ export class RecoverComponent {
   @Input() signInLink = '/sign-in';
 
   @Output() formSubmit = new EventEmitter<{ email: string }>();
+  @Output() recoverCodeSubmit = new EventEmitter<{ email: string, code: string }>();
   @Output() formReset = new EventEmitter();
 
   requested: boolean = false;
+  forEmail: string = ""
 
   constructor(private formBuilder: UntypedFormBuilder) {}
 
@@ -37,6 +43,11 @@ export class RecoverComponent {
   }
 
   onSubmit(data: { email: string }) {
+    this.forEmail = data.email;
     this.formSubmit.emit(data);
+  }
+
+  onCodeSubmit(data: {code: string}) {
+    this.recoverCodeSubmit.emit({code: data.code, email: this.forEmail});
   }
 }
