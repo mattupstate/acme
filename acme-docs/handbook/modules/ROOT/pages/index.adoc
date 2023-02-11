@@ -2,54 +2,55 @@
 
 TIP: These instructions assume all tools mentioned in the xref:setup.adoc[Setup] section have been installed.
 
-== Kotlin
+== Kotlin Modules
 
-Run all Kotlin project/module tests by executing the following command from within the root project directory:
+Run all Kotlin module tests by executing the following command from within the root directory:
 
-[source, shell script]
+[source,shell script]
 ----
 $ ./gradlew test
 ----
 
-Run one Kotlin project's tests by specifying the module name.
+Run one Kotlin module's tests by specifying the module name.
 For example:
 
-[source, shell script]
+[source,shell script]
 ----
 $ ./gradlew acme-web:acme-web-server:test
 ----
 
-Run a subset of a project's tests by specifying a package or class name.
+Run a subset of a module's tests by specifying a package or class name.
 For example:
 
-[source, shell script]
+[source,shell script]
 ----
 $ ./gradlew acme-web:acme-web-test:test --tests 'com.acme.web.test.*'
 $ ./gradlew acme-web:acme-web-test:test --tests com.acme.web.test.scheduling.api.SchedulingClientCollectionApiSpec
 ----
 
-== TypeScript
+== TypeScript Modules
 
-Activate the required version of `node` by running the following command from the root project directory:
+Typescript module's tests can be executed by running `task test` from within the module's directory.
+In most cases For example:
 
-[source, shellscript]
+[source,shellscript]
 ----
-$ nvm use
-----
-
-From within a TypeScript project directory, such as `acme-app/acme-app-web`, install the project dependencies:
-
-[source, shellscript]
-----
-$ npm install
-----
-
-Run the tests for the current TypeScript project:
-
-[source, shellscript]
-----
-$ npm run test
+$ cd acme-app/acme-app-web
+$ task test
 ----
 
 This will start a long-running process that re-runs tests when code is changed.
+Press `Ctrl+C` to terminate the process.
+
+== Run Locally
+
+If desired, the system can be run locally on a {k3d-href}[k3d] cluster.
+Run the following command from the root of the project:
+
+[source,shellscript]
+----
+$ task run
+----
+
+This will start a long-running process that will redeploy services when code is changed.
 Press `Ctrl+C` to terminate the process.

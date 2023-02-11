@@ -1,10 +1,8 @@
-= Development
-
-== Meta
+= Meta
 
 This section describes guiding principles and methodologies.
 
-=== CUPID
+== CUPID
 
 https://dannorth.net/2022/02/10/cupid-for-joyful-coding/[CUPID] is a set of properties/characteristics that aim to make software a joy to work.
 The five CUPID properties are:
@@ -15,21 +13,15 @@ The five CUPID properties are:
 * Idiomatic: feels natural
 * Domain-based: the solution domain models the problem domain in language and structure
 
-=== Pragmatism
+== Pragmatism
 
 > https://en.wikipedia.org/wiki/Pragmatism[Pragmatism] is a philosophical tradition that considers words and thought as tools and instruments for prediction, problem solving, and action, and rejects the idea that the function of thought is to describe, represent, or mirror reality.
 
-There is often tension between the desire to create a high quality code  and delivering value to end-users in a timely fashion.
+There is often tension between the desire to create a high quality code and delivering value to end-users in a timely fashion.
 Pragmatism may be applied when it is necessary to focus more on delivery than on the quality of the code.
 
-=== Iterative Development
+== Iterative Development
 
 Developers shall use methods that support https://en.wikipedia.org/wiki/Iterative_and_incremental_development[iterative and incremental development].
 Applying https://en.wikipedia.org/wiki/Test-driven_development[Test-Driven Development] principles where possible is therefore encouraged.
 However, while TDD is not strictly required, all new code should be tested to a reasonable degree before being merged into the `main` branch.
-
-== Frameworks
-
-=== Ktor
-
-=== Angular

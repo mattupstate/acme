@@ -18,11 +18,38 @@ tasks:
       OP_SECRET_ID: "tqq6mw5rylzps2t6ip7hlavnma"
     cmds:
       - ./cluster/dev/fetch-secrets.sh
-  dev-provision:
-    deps: [dev-create-cluster, dev-make-certs, dev-fetch-secrets]
+  dev-provision-001-init:
+    dir: cluster/dev/001
     cmds:
-      - terraform -chdir=cluster/dev/001 apply -auto-approve
-      - terraform -chdir=cluster/dev/002 apply -auto-approve
+      - terraform init
+    sources:
+      - main.tf
+    generates:
+      - .terraform.lock.hcl
+      - .terraform/**/*
+  dev-provision-002-init:
+    dir: cluster/dev/002
+    cmds:
+      - terraform init
+    sources:
+      - main.tf
+    generates:
+      - .terraform.lock.hcl
+      - .terraform/**/*
+  dev-provision-001:
+    deps: [ dev-provision-001-init, dev-create-cluster, dev-make-certs, dev-fetch-secrets ]
+    dir: cluster/dev/001
+    cmds:
+      - terraform apply -auto-approve
+  dev-provision-002:
+    deps: [ dev-provision-002-init, dev-provision-001 ]
+    dir: cluster/dev/002
+    cmds:
+      - terraform apply -auto-approve
+  dev-provision:
+    cmds:
+      - task: dev-provision-001
+      - task: dev-provision-002
   dev-destroy:
     cmds:
       - k3d cluster delete acme-dev

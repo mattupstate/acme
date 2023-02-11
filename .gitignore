@@ -62,3 +62,4 @@ libs.versions.updates.toml
 .terraform.lock.hcl
 .task
 .angular
+*.tgz

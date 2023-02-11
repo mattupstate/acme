@@ -1,4 +1,4 @@
-name: Tests
+name: Test Kotlin
 on:
   push:
     branches:
@@ -36,8 +36,8 @@ on:
       - "settings.gradle.kts"
       - "versions.properties"
 jobs:
-  test:
-    name: Test
+  unit-test:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -1,12 +1,20 @@
 version: '3'
 
+includes:
+  acme-app-web:
+    taskfile: ./acme-app/acme-app-web/Taskfile.yaml
+    dir: ./acme-app/acme-app-web
+  docs: ./acme-docs
+  ops:
+    taskfile: ./acme-ops/Taskfile.yaml
+    dir: ./acme-ops
+
 tasks:
-  install:
+  run:
+    deps: [ops:dev-provision]
     cmds:
-      - npm install --prune
-    sources:
-      - package.json
-  build-docs:
-    deps: [install]
+      - skaffold run --tail
+  run-dev:
+    deps: [ops:dev-provision]
     cmds:
-      - npm run build-docs
+      - skaffold dev

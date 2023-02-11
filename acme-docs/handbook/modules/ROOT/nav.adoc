@@ -1,4 +1,4 @@
 * xref:setup.adoc[]
-* xref:development.adoc[]
+* xref:meta.adoc[]
 * xref:architecture.adoc[]
-* xref:deployment.adoc[]
+* xref:tips.adoc[]

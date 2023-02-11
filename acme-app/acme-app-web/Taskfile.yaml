@@ -22,6 +22,10 @@ tasks:
   test:
     deps: [install]
     cmds:
+      - npm run test
+  test-ci:
+    deps: [install]
+    cmds:
       - npm run test-ci
     sources:
       - projects/**/*

@@ -1,4 +1,4 @@
-name: Build Antora Site
+name: Build Docs
 on:
   pull_request:
     branches:
@@ -8,13 +8,14 @@ on:
       - acme-web/acme-web-server/docs/**
 jobs:
   build:
-    name: Build
+    name: Test Antora build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: arduino/setup-task@v1
       - uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
           cache: 'npm'
-      - run: task build-docs
+      - run: task docs:build
 
