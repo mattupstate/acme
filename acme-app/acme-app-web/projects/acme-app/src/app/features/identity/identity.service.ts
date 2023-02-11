@@ -55,7 +55,7 @@ export abstract class IdentityService {
 
   abstract registerViaOpenId(provider: string): Observable<string>;
 
-  abstract recover(email: string): Observable<void>;
+  abstract recover(email: string, code?: string): Observable<void>;
 
   abstract verify(email: string): Observable<void>;
 }
@@ -208,7 +208,8 @@ export class KratosIdentityService implements IdentityService {
   constructor(
     private http: HttpClient,
     private baseUrl: string,
-    private registrationReturnTo: string
+    private registrationReturnTo: string,
+    private recoveryReturnTo: string,
   ) { }
 
   whoAmI(): Observable<Identity> {
@@ -421,9 +422,9 @@ export class KratosIdentityService implements IdentityService {
       );
   }
 
-  recover(email: string): Observable<void> {
+  recover(email: string, code?: string): Observable<void> {
     return this.http
-      .get<SelfServiceRecoveryFlow>(`${this.baseUrl}/self-service/recovery/browser`)
+      .get<SelfServiceRecoveryFlow>(`${this.baseUrl}/self-service/recovery/browser?return_to=${this.recoveryReturnTo}`)
       .pipe(
         mergeMap((res) =>
           this.http
@@ -431,8 +432,9 @@ export class KratosIdentityService implements IdentityService {
               res.ui.action,
               {
                 csrf_token: extractCsrfToken(res),
-                email: email,
-                method: 'link',
+                email,
+                method: 'code',
+                code
               }
             )
             .pipe(

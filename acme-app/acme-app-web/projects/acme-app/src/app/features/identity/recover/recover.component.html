@@ -14,8 +14,17 @@
   </mat-card-content>
   <mat-card-content *ngIf="requested">
     <div fxLayout="column" class="requested">
-      <p>Check your email for instructions to reset your password.</p>
-      <p>Didn't receive the email? <a href="" (click)="reset($event)">Try again</a>.
+      Check your email for a confirmation code and enter it below.
+      <form [formGroup]="recoveryCodeForm" (ngSubmit)="onCodeSubmit(recoveryCodeForm.value)" class="recover">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <mat-label>Code</mat-label>
+            <input matInput formControlName="recoveryCode">
+          </mat-form-field>
+          <button type="submit" mat-raised-button color="primary" class="btn-block">Submit</button>
+        </div>
+      </form>
+      <p>Didn't receive the email?<br/>Maybe there was a typo in your address?<br/><a href="" (click)="reset($event)">Try again</a> or check your spam folder.</p>
       <a class="remember" mat-button color="accent" [routerLink]="signInLink">Remember your password?</a>
     </div>
   </mat-card-content>

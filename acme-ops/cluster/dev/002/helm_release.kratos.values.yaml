@@ -38,6 +38,8 @@ kratos:
           enabled: true
           config:
             providers: [ ]
+        code:
+          enabled: true
       flows:
         error:
           ui_url: https://app-127-0-0-1.nip.io/error
@@ -46,6 +48,8 @@ kratos:
           privileged_session_max_age: 15m
         recovery:
           enabled: true
+          lifespan: 2h
+          use: code
           ui_url: https://app-127-0-0-1.nip.io/recover
         verification:
           enabled: true
@@ -257,3 +261,24 @@ job:
       {{- with secret "database/creds/kratos-dba" -}}
       dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@kratos-postgresql.default.svc.cluster.local:5432/kratos?sslmode=disable
       {{- end }}
+
+ingress:
+  public:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/cors-allow-origin: https://app-127-0-0-1.nip.io
+      nginx.ingress.kubernetes.io/cors-allow-methods: OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE
+      nginx.ingress.kubernetes.io/cors-allow-headers: Authorization,Cookie,Content-Type
+      nginx.ingress.kubernetes.io/cors-expose-headers: Content-Type,Set-Cookie
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    tls:
+      - hosts:
+          - kratos-127-0-0-1.nip.io
+        secretName: tls-io-nip-wildcard
+    hosts:
+      - host: kratos-127-0-0-1.nip.io
+        paths:
+          - path: "/"
+            pathType: Prefix

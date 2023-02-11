@@ -76,13 +76,22 @@ export const verifyAccount = createAction(
 
 export const verifyRequestComplete = createAction('[@acme/app] verifyRequestComplete');
 
-export const recoverAccount = createAction(
-  '[@acme/app] recoverAccount',
+export const requestRecoveryCode = createAction(
+  '[@acme/app] requestRecoveryCode',
   props<{ email: string }>()
 );
 
-export const recoverRequestComplete = createAction(
-  '[@acme/app] recoverRequestComplete'
+export const recoveryCodeSent = createAction(
+  '[@acme/app] recoveryCodeSent'
+);
+
+export const submitRecoveryCode = createAction(
+  '[@acme/app] submitRecoveryCode',
+  props<{ email: string, code: string }>()
+)
+
+export const recoveryCompleted = createAction(
+  '[@acme/app] recoveryCompleted'
 );
 
 export const externalLink = createAction(

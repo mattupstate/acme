@@ -71,3 +71,15 @@ oathkeeper:
             X-Auth-Name-Preferred: "{{ print .Extra.identity.traits.name.preferred }}"
             X-Auth-Name-Prefix: "{{ print .Extra.identity.traits.name.prefix }}"
             X-Auth-Name-Suffix: "{{ print .Extra.identity.traits.name.suffix }}"
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    - hosts:
+        - api-127-0-0-1.nip.io
+      secretName: tls-io-nip-wildcard
+  hosts:
+    - host: api-127-0-0-1.nip.io
+      paths:
+        - path: "/"
+          pathType: Prefix

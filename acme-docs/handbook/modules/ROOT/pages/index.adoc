@@ -54,3 +54,10 @@ $ task run
 
 This will start a long-running process that will redeploy services when code is changed.
 Press `Ctrl+C` to terminate the process.
+
+If you'd rather avoid running `terraform` and the like before running locally, invoke `skaffold` manually:
+
+[source,shellscript]
+----
+$ skaffold dev
+----

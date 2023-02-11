@@ -61,9 +61,9 @@ export const selectRecoverError = createSelector(
   }
 );
 
-export const selectRecoveryRequested = createSelector(
+export const selectRecoveryCodeRequested = createSelector(
   selectSecurity,
-  (state: SecurityState) => state.recoveryRequested
+  (state: SecurityState) => state.recoveryCodeRequested
 );
 
 export const selectVerifyRequested = createSelector(
