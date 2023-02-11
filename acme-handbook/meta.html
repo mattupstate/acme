@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Development :: Acme</title>
-    <link rel="canonical" href="https://mattupstate.com/acme/acme-handbook/development.html">
+    <title>Meta :: Acme</title>
+    <link rel="canonical" href="https://mattupstate.com/acme/acme-handbook/meta.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-552135-7"></script>
@@ -54,13 +54,13 @@
     <a class="nav-link" href="setup.html">Setup</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="development.html">Development</a>
+    <a class="nav-link" href="meta.html">Meta</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="architecture.html">Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deployment.html">Deployment</a>
+    <a class="nav-link" href="tips.html">Tips &amp; Tricks</a>
   </li>
 </ul>
   </li>
@@ -99,25 +99,27 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Handbook</a></li>
-    <li><a href="development.html">Development</a></li>
+    <li><a href="meta.html">Meta</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/mattupstate/acme/blob/main/acme-docs/handbook/modules/ROOT/pages/development.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/mattupstate/acme/blob/main/acme-docs/handbook/modules/ROOT/pages/meta.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Development</h1>
-<div class="sect1">
-<h2 id="_meta"><a class="anchor" href="#_meta"></a>Meta</h2>
+<h1 class="page">Meta</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This section describes guiding principles and methodologies.</p>
 </div>
-<div class="sect2">
-<h3 id="_cupid"><a class="anchor" href="#_cupid"></a>CUPID</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cupid"><a class="anchor" href="#_cupid"></a>CUPID</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://dannorth.net/2022/02/10/cupid-for-joyful-coding/">CUPID</a> is a set of properties/characteristics that aim to make software a joy to work.
 The five CUPID properties are:</p>
@@ -142,8 +144,10 @@ The five CUPID properties are:</p>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_pragmatism"><a class="anchor" href="#_pragmatism"></a>Pragmatism</h3>
+</div>
+<div class="sect1">
+<h2 id="_pragmatism"><a class="anchor" href="#_pragmatism"></a>Pragmatism</h2>
+<div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -152,30 +156,18 @@ The five CUPID properties are:</p>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>There is often tension between the desire to create a high quality code  and delivering value to end-users in a timely fashion.
+<p>There is often tension between the desire to create a high quality code and delivering value to end-users in a timely fashion.
 Pragmatism may be applied when it is necessary to focus more on delivery than on the quality of the code.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_iterative_development"><a class="anchor" href="#_iterative_development"></a>Iterative Development</h3>
-<div class="paragraph">
-<p>Developers shall use methods that support <a href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative and incremental development</a>.
-Applying <a href="https://en.wikipedia.org/wiki/Test-driven_development">Test-Driven Development</a> principles where possible is therefore encouraged.
-However, while TDD is not strictly required, all new code should be tested to a reasonable degree before being merged into the <code>main</code> branch.</p>
-</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_frameworks"><a class="anchor" href="#_frameworks"></a>Frameworks</h2>
+<h2 id="_iterative_development"><a class="anchor" href="#_iterative_development"></a>Iterative Development</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_ktor"><a class="anchor" href="#_ktor"></a>Ktor</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_angular"><a class="anchor" href="#_angular"></a>Angular</h3>
-
+<div class="paragraph">
+<p>Developers shall use methods that support <a href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">iterative and incremental development</a>.
+Applying <a href="https://en.wikipedia.org/wiki/Test-driven_development">Test-Driven Development</a> principles where possible is therefore encouraged.
+However, while TDD is not strictly required, all new code should be tested to a reasonable degree before being merged into the <code>main</code> branch.</p>
 </div>
 </div>
 </div>

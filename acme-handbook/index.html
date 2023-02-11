@@ -54,13 +54,13 @@
     <a class="nav-link" href="setup.html">Setup</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="development.html">Development</a>
+    <a class="nav-link" href="meta.html">Meta</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="architecture.html">Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deployment.html">Deployment</a>
+    <a class="nav-link" href="tips.html">Tips &amp; Tricks</a>
   </li>
 </ul>
   </li>
@@ -127,10 +127,10 @@ These instructions assume all tools mentioned in the <a href="setup.html" class=
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kotlin"><a class="anchor" href="#_kotlin"></a>Kotlin</h2>
+<h2 id="_kotlin_modules"><a class="anchor" href="#_kotlin_modules"></a>Kotlin Modules</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Run all Kotlin project/module tests by executing the following command from within the root project directory:</p>
+<p>Run all Kotlin module tests by executing the following command from within the root directory:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -138,7 +138,7 @@ These instructions assume all tools mentioned in the <a href="setup.html" class=
 </div>
 </div>
 <div class="paragraph">
-<p>Run one Kotlin project&#8217;s tests by specifying the module name.
+<p>Run one Kotlin module&#8217;s tests by specifying the module name.
 For example:</p>
 </div>
 <div class="listingblock">
@@ -147,7 +147,7 @@ For example:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Run a subset of a project&#8217;s tests by specifying a package or class name.
+<p>Run a subset of a module&#8217;s tests by specifying a package or class name.
 For example:</p>
 </div>
 <div class="listingblock">
@@ -159,34 +159,38 @@ $ ./gradlew acme-web:acme-web-test:test --tests com.acme.web.test.scheduling.api
 </div>
 </div>
 <div class="sect1">
-<h2 id="_typescript"><a class="anchor" href="#_typescript"></a>TypeScript</h2>
+<h2 id="_typescript_modules"><a class="anchor" href="#_typescript_modules"></a>TypeScript Modules</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Activate the required version of <code>node</code> by running the following command from the root project directory:</p>
+<p>Typescript module&#8217;s tests can be executed by running <code>task test</code> from within the module&#8217;s directory.
+In most cases For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ nvm use</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>From within a TypeScript project directory, such as <code>acme-app/acme-app-web</code>, install the project dependencies:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ npm install</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Run the tests for the current TypeScript project:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ npm run test</code></pre>
+<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ cd acme-app/acme-app-web
+$ task test</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This will start a long-running process that re-runs tests when code is changed.
+Press <code>Ctrl+C</code> to terminate the process.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_run_locally"><a class="anchor" href="#_run_locally"></a>Run Locally</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If desired, the system can be run locally on a <a href="https://k3d.io/">k3d</a> cluster.
+Run the following command from the root of the project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ task run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will start a long-running process that will redeploy services when code is changed.
 Press <code>Ctrl+C</code> to terminate the process.</p>
 </div>
 </div>
