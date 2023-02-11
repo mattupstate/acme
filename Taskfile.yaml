@@ -1,0 +1,20 @@
+version: '3'
+
+includes:
+  acme-app-web:
+    taskfile: ./acme-app/acme-app-web/Taskfile.yaml
+    dir: ./acme-app/acme-app-web
+  docs: ./acme-docs
+  ops:
+    taskfile: ./acme-ops/Taskfile.yaml
+    dir: ./acme-ops
+
+tasks:
+  run:
+    deps: [ops:dev-provision]
+    cmds:
+      - skaffold run --tail
+  run-dev:
+    deps: [ops:dev-provision]
+    cmds:
+      - skaffold dev

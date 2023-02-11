@@ -1,0 +1,58 @@
+name: Test Kotlin
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "acme-app/acme-app-web-test/**"
+      - "acme-data/**"
+      - "acme-domain/**"
+      - "acme-ktor/**"
+      - "acme-lib/**"
+      - "acme-web/**"
+      - "!acme-web/acme-web-server/docs/**"
+      - "buildSrc/**"
+      - "gradle/**"
+      - "gradle.properties"
+      - "gradlew*"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "versions.properties"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "acme-data/**"
+      - "acme-domain/**"
+      - "acme-ktor/**"
+      - "acme-lib/**"
+      - "acme-web/**"
+      - "!acme-web/acme-web-server/docs/**"
+      - "buildSrc/**"
+      - "gradle/**"
+      - "gradle.properties"
+      - "gradlew*"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "versions.properties"
+jobs:
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
+      - uses: gradle/gradle-build-action@v2
+        name: Collect Jacoco Reports
+        with:
+          arguments: mergeJacocoReports
+      - uses: codecov/codecov-action@v3
+        name: Report to Codecov
+        with:
+          files: ./build/reports/jacoco/xml/coverage.xml

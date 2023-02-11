@@ -15,6 +15,8 @@ NOTE: Decisions made in service of this goal are often loaded with tradeoffs and
 
 |{sdkman-href}[SDKMAN!]
 |Manages the installation and activation of various JVM tools.
+|{go-task-href}[Task]
+|Task is a task runner that aims to be simpler and easier to use than, for example, GNU Make.
 |{nvm-href}[nvm]
 |Manages the installation and activation of the NodeJS runtime.
 |{mkcert-href}[mkcert]
@@ -23,8 +25,14 @@ NOTE: Decisions made in service of this goal are often loaded with tradeoffs and
 |Lightweight local Kubernetes distrubtion used for local development.
 |{helm-href}[Helm]
 |Manages applications deployed to Kubernetes.
+|{terraform-href}[Terraform]
+|Terraform Cloud enables infrastructure automation for provisioning, compliance, and management of any cloud, datacenter, and service.
 |{skaffold-href}[skaffold]
 |CLI for continuous development for Kubernetes-native applications.
+|{direnv-href}[direnv]
+|direnv is an extension for your shell. It augments existing shells with a new feature that can load and unload environment variables depending on the current directory.
+|{jq-href}[jq]
+|jq is a lightweight and flexible command-line JSON processor.
 |===
 
 == SDKs

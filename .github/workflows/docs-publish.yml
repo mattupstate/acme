@@ -1,26 +1,24 @@
-name: Publish Antora Site
+name: Publish Docs
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/docs-*
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
 jobs:
-  build:
-    name: Publish
+  publish:
+    name: Publish Antora Site
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: arduino/setup-task@v1
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.15.0
+          node-version-file: '.nvmrc'
           cache: 'npm'
-      - run: npm install
-      - run: npm run buildAntoraSite
-      - if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
+      - run: task docs:build
+      - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/site

@@ -15,6 +15,7 @@ asciidoc:
     direnv-href: https://direnv.net/
     docker-engine-href: https://docs.docker.com/engine/
     eslint-vscode-href: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+    go-task-href: https://taskfile.dev
     gradle-href: https://gradle.org/
     grafana-href: https://grafana.com/
     hal-href: http://stateless.co/hal_specification.html
@@ -27,6 +28,7 @@ asciidoc:
     java-jdk-href: https://openjdk.java.net/projects/jdk/
     jib-href: https://github.com/GoogleContainerTools/jib
     jooq-href: https://www.jooq.org/
+    jq-href: https://stedolan.github.io/jq/
     k3d-href: https://k3d.io/
     karma-href: https://karma-runner.github.io/
     kotest-href: https://kotest.io/

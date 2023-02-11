@@ -1,0 +1,34 @@
+version: '3'
+
+tasks:
+  install:
+    cmds:
+      - npm install --prune
+    sources:
+      - package.json
+    generates:
+      - node_modules/**/*
+  build:
+    deps: [install]
+    cmds:
+      - npm run build
+    sources:
+      - .eslintrc.json
+      - angular.json
+      - tsconfig.json
+      - projects/**/*
+    generates:
+      - dist/**/*
+  test:
+    deps: [install]
+    cmds:
+      - npm run test
+  test-ci:
+    deps: [install]
+    cmds:
+      - npm run test-ci
+    sources:
+      - projects/**/*
+    generates:
+      - reports/**/*
+

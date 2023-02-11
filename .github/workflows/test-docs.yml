@@ -1,24 +1,21 @@
-name: Build Antora Site
+name: Build Docs
 on:
   pull_request:
     branches:
       - main
     paths:
-      - .github/workflows/docs-*
       - acme-docs/**
       - acme-web/acme-web-server/docs/**
-  workflow_call:
-
 jobs:
   build:
-    name: Build
+    name: Test Antora build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: arduino/setup-task@v1
       - uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
           cache: 'npm'
-      - run: npm install
-      - run: npm run buildAntoraSite
+      - run: task docs:build
 

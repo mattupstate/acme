@@ -1,0 +1,21 @@
+version: '3'
+
+tasks:
+  install:
+    cmds:
+      - npm install --prune
+    sources:
+      - package.json
+    generates:
+      - node_modules/**/*
+  build:
+    deps: [install]
+    cmds:
+      - npm run build-docs
+    sources:
+      - acme-docs/decisions/**/*
+      - acme-docs/handbook/**/*
+      - acme-docs/root/**/*
+      - acme-web/acme-web-server/docs/**/*
+    generates:
+      - acme-docs/build/**/*

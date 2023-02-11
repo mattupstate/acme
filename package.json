@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Acme project documentation",
   "scripts": {
-    "buildAntoraSite": "antora --fetch antora-playbook.yml"
+    "build-docs": "antora --fetch antora-playbook.yml"
   },
   "devDependencies": {
     "@antora/cli": "3.0.0",
