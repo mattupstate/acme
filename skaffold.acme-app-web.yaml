@@ -1,5 +1,6 @@
 deployment:
   port: 4200
+
 ingress:
   enabled: true
   className: nginx

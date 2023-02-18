@@ -1,0 +1,3 @@
+podEnv:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://opentelemetry-collector.ops.svc.cluster.local:4317"

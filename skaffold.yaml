@@ -35,6 +35,8 @@ deploy:
         chartPath: acme-helm-charts/acme-data-sql
       - name: acme-web-server
         chartPath: acme-helm-charts/acme-web-server
+        valuesFiles:
+          - skaffold.acme-web-server.yaml
       - name: acme-app-web
         chartPath: acme-helm-charts/acme-app-web
         valuesFiles:

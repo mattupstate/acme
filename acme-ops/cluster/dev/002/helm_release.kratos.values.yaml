@@ -2,14 +2,14 @@ kratos:
   useSecretFiles: true
   config:
     version: v0.11.0
-    #    tracing:
-    #      service_name: ory-kratos
-    #      provider: jaeger
-    #      providers:
-    #        jaeger:
-    #          sampling:
-    #            server_url: http://jaeger:5778
-    #          local_agent_address: jaeger-agent:6831
+    tracing:
+      service_name: ory-kratos
+      provider: jaeger
+      providers:
+        jaeger:
+          # sampling:
+          #   server_url: http://jaeger:5778
+          local_agent_address: opentelemetry-collector.ops.svc.cluster.local:6831
     watch-courier: true
     serve:
       public:

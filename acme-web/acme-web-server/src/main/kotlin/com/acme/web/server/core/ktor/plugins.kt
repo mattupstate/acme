@@ -38,19 +38,15 @@ private val appLogger = KotlinLogging.logger {}
 fun Application.installCallLogging() {
   install(CallLogging) {
     logger = appLogger
+    filter { call ->
+      !call.request.path().startsWith("/health")
+    }
     format { call ->
       "${call.request.httpMethod.value} - ${call.request.path()}"
     }
     mdc("principal") {
       it.getPrincipalAsString()
     }
-    // mdc("trace") {
-    //   try {
-    //     it.span.context().toTraceId()
-    //   } catch (e: Exception) {
-    //     null
-    //   }
-    // }
   }
 }
 

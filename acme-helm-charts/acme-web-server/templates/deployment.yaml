@@ -33,11 +33,13 @@ spec:
           imagePullPolicy: {{ .Values.initContainers.schemaCheck.image.pullPolicy }}
           args: ["status"]
       containers:
-        - name: api
+        - name: acme-web-server
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- toYaml .Values.podEnv | nindent 12 }}
           ports:
             - name: http
               containerPort: 8080
