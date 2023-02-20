@@ -63,3 +63,4 @@ libs.versions.updates.toml
 .task
 .angular
 *.tgz
+.env
