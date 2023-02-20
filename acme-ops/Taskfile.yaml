@@ -14,10 +14,8 @@ tasks:
     status:
       - ls _wildcard.nip.io*
   dev-fetch-secrets:
-    env:
-      OP_SECRET_ID: "tqq6mw5rylzps2t6ip7hlavnma"
     cmds:
-      - ./cluster/dev/fetch-secrets.sh
+      - OP_SECRET_ID=$DEV_OP_SECRET_ID ./cluster/dev/fetch-secrets.sh
   dev-provision-001-init:
     dir: cluster/dev/001
     cmds:

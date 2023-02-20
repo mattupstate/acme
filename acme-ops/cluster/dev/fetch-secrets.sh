@@ -1,4 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -e
+set -o pipefail
 
 : "${OP_SECRET_ID:?OP_SECRET_ID not set or empty}"
 
