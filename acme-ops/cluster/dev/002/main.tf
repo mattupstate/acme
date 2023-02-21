@@ -13,7 +13,7 @@ terraform {
 
 provider "vault" {
   address = "https://vault-127-0-0-1.nip.io"
-  token   = "root"
+  token   = var.vault_root_token
 }
 
 provider "kubernetes" {

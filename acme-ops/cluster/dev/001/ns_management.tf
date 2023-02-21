@@ -4,6 +4,25 @@ resource "kubernetes_namespace" "management" {
   }
 }
 
+resource "kubernetes_secret" "management_wildcard_ssl" {
+
+  metadata {
+    namespace = kubernetes_namespace.management.metadata[0].name
+    name      = "tls-io-nip-wildcard"
+  }
+
+  data = {
+    "tls.crt" = file("${path.module}/.certs/_wildcard.nip.io.pem")
+    "tls.key" = file("${path.module}/.certs/_wildcard.nip.io-key.pem")
+  }
+
+  type = "kubernetes.io/tls"
+
+  depends_on = [
+    kubernetes_namespace.management
+  ]
+}
+
 resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io/"
   chart      = "cert-manager"
@@ -37,21 +56,26 @@ resource "helm_release" "ingress_nginx" {
   ]
 }
 
-resource "kubernetes_secret" "management_wildcard_ssl" {
-
+resource "kubernetes_config_map" "vault_post_start_script" {
   metadata {
+    name      = "vault-post-start-script"
     namespace = kubernetes_namespace.management.metadata[0].name
-    name      = "tls-io-nip-wildcard"
   }
 
-  data = {
-    "tls.crt" = file("${path.module}/.certs/_wildcard.nip.io.pem")
-    "tls.key" = file("${path.module}/.certs/_wildcard.nip.io-key.pem")
+  binary_data = {
+    "vault-post-start.sh" = "${filebase64("${path.module}/vault-post-start.sh")}"
   }
+}
 
-  type = "kubernetes.io/tls"
+resource "helm_release" "vault" {
+  repository = "https://helm.releases.hashicorp.com"
+  chart      = "vault"
+  version    = local.vault_chart_version
+  name       = "vault"
+  namespace  = kubernetes_namespace.management.metadata[0].name
+  atomic     = true
 
-  depends_on = [
-    kubernetes_namespace.management
+  values = [
+    file("${path.module}/helm_release.vault.values.yaml")
   ]
 }

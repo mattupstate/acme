@@ -47,7 +47,7 @@ The following is a non-exhaustive list of things that are used, or attempted to 
 ** {jib-href}[Jib]
 * Development Tools
 ** {rancher-desktop-href}[Rancher Desktop]
-** {k3d-href}[k3d]
+** {minikube-href}[minikube]
 ** {mkcert-href}[mkcert]
 ** {kustomize-href}[Kustomize]
 ** {skaffold-href}[Skaffold]

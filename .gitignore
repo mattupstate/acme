@@ -64,3 +64,5 @@ libs.versions.updates.toml
 .angular
 *.tgz
 .env
+.auto.tfvars
+.auto.tfvars.json

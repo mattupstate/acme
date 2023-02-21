@@ -21,8 +21,8 @@ NOTE: Decisions made in service of this goal are often loaded with tradeoffs and
 |Manages the installation and activation of the NodeJS runtime.
 |{mkcert-href}[mkcert]
 |Creates and installs locally trusted development SSL certificates.
-|{k3d-href}[k3d]
-|Lightweight local Kubernetes distrubtion used for local development.
+|{minikube-href}[minikube]
+Quickly sets up a local Kubernetes cluster on macOS, Linux, and Windows.
 |{helm-href}[Helm]
 |Manages applications deployed to Kubernetes.
 |{terraform-href}[Terraform]

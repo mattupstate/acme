@@ -5,7 +5,7 @@
 # Specifies the name of the Vault role to assume
 vault:
   role: database-root-rotator
-  addr: http://vault.vault:8200
+  addr: http://vault.management.svc.cluster.local:8200
   # Specifies the name of the Vault database connection to rotate
   database: ""
 

@@ -69,7 +69,7 @@ resource "vault_kubernetes_auth_backend_role" "database_root_rotator" {
   role_name = "database-root-rotator"
 
   bound_service_account_namespaces = ["default"]
-  bound_service_account_names      = [
+  bound_service_account_names = [
     "keto-database-root-rotator",
     "kratos-database-root-rotator",
     "acme-web-server-database-root-rotator"

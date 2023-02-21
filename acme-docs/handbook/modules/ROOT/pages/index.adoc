@@ -44,7 +44,7 @@ Press `Ctrl+C` to terminate the process.
 
 == Run Locally
 
-If desired, the system can be run locally on a {k3d-href}[k3d] cluster.
+If desired, the system can be run locally on a local Kubernetes cluster.
 Run the following command from the root of the project:
 
 [source,shellscript]

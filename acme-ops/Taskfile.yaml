@@ -1,11 +1,7 @@
 version: '3'
 
 tasks:
-  dev-create-cluster:
-    cmds:
-      - k3d cluster create acme-dev -p "80:80@loadbalancer" -p "443:443@loadbalancer" --k3s-arg "--disable=traefik@server:0"
-    status:
-      - k3d cluster list acme-dev
+  # Certs and secrets
   dev-make-certs:
     dir: cluster/dev/001/.certs
     cmds:
@@ -13,9 +9,12 @@ tasks:
       - mkcert -install
     status:
       - ls _wildcard.nip.io*
+
   dev-fetch-secrets:
     cmds:
       - OP_SECRET_ID=$DEV_OP_SECRET_ID ./cluster/dev/fetch-secrets.sh
+
+  # Layer 001
   dev-provision-001-init:
     dir: cluster/dev/001
     cmds:
@@ -25,6 +24,14 @@ tasks:
     generates:
       - .terraform.lock.hcl
       - .terraform/**/*
+
+  dev-provision-001:
+    deps: [ dev-provision-001-init, dev-make-certs ]
+    dir: cluster/dev/001
+    cmds:
+      - terraform apply -auto-approve
+
+  # Layer 002
   dev-provision-002-init:
     dir: cluster/dev/002
     cmds:
@@ -34,25 +41,42 @@ tasks:
     generates:
       - .terraform.lock.hcl
       - .terraform/**/*
-  dev-provision-001:
-    deps: [ dev-provision-001-init, dev-create-cluster, dev-make-certs, dev-fetch-secrets ]
-    dir: cluster/dev/001
-    cmds:
-      - terraform apply -auto-approve
+
   dev-provision-002:
-    deps: [ dev-provision-002-init, dev-provision-001 ]
+    deps: [ dev-provision-002-init, dev-fetch-secrets ]
     dir: cluster/dev/002
     cmds:
+      - >-
+        kubectl -n management exec vault-0 -- cat /home/vault/init.json | \
+          jq '{"vault_root_token": .root_token}' > .auto.tfvars.json
       - terraform apply -auto-approve
+
+  # All layers
   dev-provision:
+    deps: [dev-start]
     cmds:
       - task: dev-provision-001
       - task: dev-provision-002
-  dev-destroy:
+
+  # Minikube lifecycle
+  dev-start:
+    env:
+      MINIKUBE_CPUS: 4
     cmds:
-      - k3d cluster delete acme-dev
+      - >-
+        minikube start --driver docker \
+          --cpus $MINIKUBE_CPUS \
+          --ports 80:80 --ports 443:443 \
+          --extra-config=apiserver.service-node-port-range=1-65535
+    status:
+      - minikube status
+
+  dev-delete:
+    cmds:
+      - minikube delete
+
   dev-rebuild:
     cmds:
-      - task: dev-destroy
+      - task: dev-delete
       - task: dev-provision
 

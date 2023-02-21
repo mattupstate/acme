@@ -1,4 +1,9 @@
 controller:
+  service:
+    type: NodePort
+    nodePorts:
+      http: 80
+      https: 443
   metrics:
     enabled: true
   podAnnotations:
@@ -10,10 +15,10 @@ controller:
       enable-opentracing: "true"
       opentracing-operation-name: "$request_method $host"
       opentracing-location-operation-name: "$namespace $service_name"
-      jaeger-collector-host: jaeger.default.svc.cluster.local
+      jaeger-collector-host: opentelemetry-collector.ops.svc.cluster.local:6831
       jaeger-collector-port: "6831"
       jaeger-service-name: ingress-nginx
-      jaeger-sampler-host: jaeger.default.svc.cluster.local
-      jaeger-sampler-port: "5778"
-      jaeger-sampler-type: const
-      jaeger-sampler-param: "1"
+      # jaeger-sampler-host: opentelemetry-collector.ops.svc.cluster.local:6831
+      # jaeger-sampler-port: "5778"
+      # jaeger-sampler-type: const
+      # jaeger-sampler-param: "1"
