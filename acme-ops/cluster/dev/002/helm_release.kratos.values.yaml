@@ -77,8 +77,8 @@ kratos:
     #          hooks:
     #            - hook: session
     log:
-      level: debug
-      format: text
+      level: info
+      format: json
       leak_sensitive_values: true
     ciphers:
       algorithm: xchacha20-poly1305

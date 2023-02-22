@@ -10,7 +10,9 @@ keto:
           #   server_url: http://jaeger:5778
           local_agent_address: opentelemetry-collector.ops.svc.cluster.local:6831
     log:
-      level: debug
+      level: info
+      format: json
+      leak_sensitive_values: true
     namespaces:
       - id: 0
         name: scheduling
