@@ -8,50 +8,50 @@ export enum StartupState {
 }
 
 export interface SecurityState {
-  principal: Principal | null
-  signInError: SignInError | null
-  registrationRequested: boolean
-  registrationError: RegistrationError | null
-  recoveryError: RecoveryError | null
-  recoveryCodeRequested: boolean
-  verifyRequested: boolean
-  verifyError: VerifyError | null
+  principal: Principal | null;
+  signInError: SignInError | null;
+  registrationRequested: boolean;
+  registrationError: RegistrationError | null;
+  recoveryError: RecoveryError | null;
+  recoveryCodeRequested: boolean;
+  verifyRequested: boolean;
+  verifyError: VerifyError | null;
 }
 
 export interface Principal {
-  id: string
-  email: string
+  id: string;
+  email: string;
   name: {
-    given: string
-    family: string
-    preferred: string
-    prefix?: string
-    suffix?: string
-  }
+    given: string;
+    family: string;
+    preferred: string;
+    prefix?: string;
+    suffix?: string;
+  };
 }
 
 export enum SignInError {
   INVALID_CREDENTIALS,
   INACTIVE_ACCOUNT,
-  UNEXPECTED
+  UNEXPECTED,
 }
 
 export interface RegistrationError {
-  errors: Array<string>
+  errors: Array<string>;
   attributes: {
-    givenName: Array<string>
-    familyName: Array<string>
-    email: Array<string>
-    password: Array<string>
-  }
+    givenName: Array<string>;
+    familyName: Array<string>;
+    email: Array<string>;
+    password: Array<string>;
+  };
 }
 
 export interface RecoveryError {
-  errors: Array<string>
+  errors: Array<string>;
 }
 
 export interface VerifyError {
-  errors: Array<string>
+  errors: Array<string>;
 }
 
 export interface ApplicationState {
@@ -75,6 +75,8 @@ export const busyReducer = createReducer<boolean>(
   on(actions.register, (): boolean => true),
   on(actions.registerComplete, (): boolean => false),
   on(actions.registerFailure, (): boolean => false),
+  on(actions.requestRecoveryCode, (): boolean => true),
+  on(actions.recoveryCodeSent, (): boolean => false),
   on(actions.logout, (): boolean => true),
   on(actions.logoutComplete, (): boolean => false),
   on(actions.logoutFailure, (): boolean => false)
@@ -91,65 +93,108 @@ export const securityReducer = createReducer<SecurityState>(
     verifyRequested: false,
     verifyError: null,
   },
-  on(actions.appStartupComplete, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    principal: props.principal,
-    signInError: null,
-  })),
-  on(actions.signIn, (state: SecurityState): SecurityState => ({
-    ...state,
-    principal: null,
-    signInError: null,
-  })),
-  on(actions.signInComplete, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    principal: props.principal,
-    signInError: null,
-  })),
-  on(actions.signInFailure, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    principal: null,
-    signInError: props.error,
-  })),
-  on(actions.logoutComplete, (state: SecurityState): SecurityState => ({
-    ...state,
-    principal: null,
-  })),
-  on(actions.unauthorizedAccess, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    principal: null,
-    signInError: props.error,
-  })),
+  on(
+    actions.appStartupComplete,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      principal: props.principal,
+      signInError: null,
+    })
+  ),
+  on(
+    actions.signIn,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      principal: null,
+      signInError: null,
+    })
+  ),
+  on(
+    actions.signInComplete,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      principal: props.principal,
+      signInError: null,
+    })
+  ),
+  on(
+    actions.signInFailure,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      principal: null,
+      signInError: props.error,
+    })
+  ),
+  on(
+    actions.logoutComplete,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      principal: null,
+    })
+  ),
+  on(
+    actions.unauthorizedAccess,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      principal: null,
+      signInError: props.error,
+    })
+  ),
   // on(actions.register, (state: SecurityState, props): SecurityState => ({
   //   ...state,
   //   registrationRequested: true,
   // })),
-  on(actions.registerComplete, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    registrationRequested: true,
-    registrationError: null,
-  })),
-  on(actions.registerFailure, (state: SecurityState, props): SecurityState => ({
-    ...state,
-    principal: null,
-    registrationError: props.error,
-  })),
-  on(actions.requestRecoveryCode, (state: SecurityState): SecurityState => ({
-    ...state,
-    recoveryCodeRequested: false,
-  })),
-  on(actions.recoveryCompleted, (state: SecurityState): SecurityState => ({
-    ...state,
-    recoveryCodeRequested: true,
-  })),
-  on(actions.verifyAccount, (state: SecurityState): SecurityState => ({
-    ...state,
-    verifyRequested: false,
-  })),
-  on(actions.verifyRequestComplete, (state: SecurityState): SecurityState => ({
-    ...state,
-    verifyRequested: true,
-  })),
+  on(
+    actions.registerComplete,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      registrationRequested: true,
+      registrationError: null,
+    })
+  ),
+  on(
+    actions.registerFailure,
+    (state: SecurityState, props): SecurityState => ({
+      ...state,
+      principal: null,
+      registrationError: props.error,
+    })
+  ),
+  on(
+    actions.requestRecoveryCode,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      recoveryCodeRequested: false,
+    })
+  ),
+  on(
+    actions.recoveryCodeSent,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      recoveryCodeRequested: true,
+    })
+  ),
+  on(
+    actions.recoveryCompleted,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      recoveryCodeRequested: true,
+    })
+  ),
+  on(
+    actions.verifyAccount,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      verifyRequested: false,
+    })
+  ),
+  on(
+    actions.verifyRequestComplete,
+    (state: SecurityState): SecurityState => ({
+      ...state,
+      verifyRequested: true,
+    })
+  )
 );
 
 export const reducers: ActionReducerMap<ApplicationState> = {

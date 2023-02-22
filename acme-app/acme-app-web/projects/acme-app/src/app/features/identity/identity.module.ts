@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +11,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { environment } from 'projects/acme-app/src/environments/environment';
-import { IdentityServiceHttpInterceptor } from './http-interceptor';
+import {
+  OryKratosHttpInterceptor,
+  OryKratosHttpClient,
+  ORY_KRATOS_HTTP_INTERCEPTORS,
+} from './identity.http';
 import { IdentityService, KratosIdentityService } from './identity.service';
 import { RecoverContainerComponent } from './recover-container.component';
 import { RecoverComponent } from './recover/recover.component';
@@ -54,16 +58,22 @@ export class IdentityModule {
       providers: [
         {
           provide: IdentityService,
-          useFactory: (http: HttpClient) => {
-            return new KratosIdentityService(http, baseUrl, environment.identity.afterVerificationReturnTo, environment.identity.afterVerificationReturnTo);
+          useFactory: (http: OryKratosHttpClient) => {
+            return new KratosIdentityService(
+              http,
+              baseUrl,
+              environment.identity.afterVerificationReturnTo,
+              environment.identity.afterVerificationReturnTo
+            );
           },
-          deps: [HttpClient],
+          deps: [OryKratosHttpClient],
         },
         {
-          provide: HTTP_INTERCEPTORS,
-          useClass: IdentityServiceHttpInterceptor,
+          provide: ORY_KRATOS_HTTP_INTERCEPTORS,
+          useClass: OryKratosHttpInterceptor,
           multi: true,
         },
+        OryKratosHttpClient,
       ],
     };
   }

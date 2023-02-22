@@ -12,6 +12,7 @@ import {
 } from '@ory/kratos-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
+import { OryKratosHttpClient } from './identity.http';
 
 export interface RefreshResult {
   refreshed: boolean;
@@ -19,16 +20,20 @@ export interface RefreshResult {
 }
 
 export interface Identity {
-  id: string
-  email: string
+  id: string;
+  email: string;
   name: {
-    given: string
-    family: string
-    preferred: string
-    prefix?: string
-    suffix?: string
-  }
+    given: string;
+    family: string;
+    preferred: string;
+    prefix?: string;
+    suffix?: string;
+  };
+}
 
+export interface RequestRecoveryCodeResult {
+  action: string;
+  response: any;
 }
 
 export abstract class IdentityService {
@@ -55,22 +60,13 @@ export abstract class IdentityService {
 
   abstract registerViaOpenId(provider: string): Observable<string>;
 
-  abstract recover(email: string, code?: string): Observable<void>;
+  abstract requestRecoveryCode(
+    email: string
+  ): Observable<RequestRecoveryCodeResult>;
+
+  abstract completeRecovery(email: string, code: string): Observable<void>;
 
   abstract verify(email: string): Observable<void>;
-}
-
-function extractCsrfToken(
-  res:
-    | SelfServiceLoginFlow
-    | SelfServiceRegistrationFlow
-    | SelfServiceRecoveryFlow
-    | SelfServiceVerificationFlow
-) {
-  const inputAttrs = res.ui.nodes
-    .map((n) => n.attributes)
-    .filter((a) => 'name' in a && 'value' in a) as UiNodeInputAttributes[];
-  return inputAttrs.filter((a) => a.name === 'csrf_token')[0].value;
 }
 
 function mapKratosIdentityToIdentity(identity: KratosIdentity): Identity {
@@ -81,29 +77,33 @@ function mapKratosIdentityToIdentity(identity: KratosIdentity): Identity {
   };
 }
 
-function extractAttributeErrorMessages(res:
-  | SelfServiceLoginFlow
-  | SelfServiceRegistrationFlow
-  | SelfServiceRecoveryFlow
-  | SelfServiceVerificationFlow
+function extractAttributeErrorMessages(
+  res:
+    | SelfServiceLoginFlow
+    | SelfServiceRegistrationFlow
+    | SelfServiceRecoveryFlow
+    | SelfServiceVerificationFlow
 ): {
-  givenName: Array<string>
-  familyName: Array<string>
-  email: Array<string>
-  password: Array<string>
+  givenName: Array<string>;
+  familyName: Array<string>;
+  email: Array<string>;
+  password: Array<string>;
 } {
   const errors: { [field: string]: Array<string> } = res.ui.nodes
     .map((node) => ({
       field: (node.attributes as UiNodeInputAttributes).name,
       messages: node.messages.filter((msg) => msg.type === 'error'),
     }))
-    .reduce((ac, a) => ({ ...ac, [a.field]: a.messages.map(msg => msg.text) }), {});
+    .reduce(
+      (ac, a) => ({ ...ac, [a.field]: a.messages.map((msg) => msg.text) }),
+      {}
+    );
   return {
     givenName: errors['traits.name.given'],
     familyName: errors['traits.name.family'],
     password: errors['password'],
     email: errors['traits.email'],
-  }
+  };
 }
 
 function extractRootErrorMessages(
@@ -113,9 +113,13 @@ function extractRootErrorMessages(
     | SelfServiceRecoveryFlow
     | SelfServiceVerificationFlow
 ): Array<string> {
-  return res.ui.messages && res.ui.messages
-    .filter((msg) => msg.type === 'error')
-    .map((msg) => msg.text) || [];
+  return (
+    (res.ui.messages &&
+      res.ui.messages
+        .filter((msg) => msg.type === 'error')
+        .map((msg) => msg.text)) ||
+    []
+  );
 }
 
 function extractErrorMessages(
@@ -149,82 +153,90 @@ function extractNodeErrorMessages(
     .reduce((ac, a) => ({ ...ac, [a.field]: a.messages }), {});
 }
 
-function extractSignInCause(res:
-  | SelfServiceLoginFlow
-  | SelfServiceRegistrationFlow
-  | SelfServiceRecoveryFlow): SignInErrorCause {
-  return {
-    4000006: SignInErrorCause.INVALID_CREDENTIALS,
-    4000010: SignInErrorCause.INACTIVE_ACCOUNT,
-  }[res.ui.messages?.[0]?.id || -1] || SignInErrorCause.UNKNOWN
+function extractSignInCause(
+  res:
+    | SelfServiceLoginFlow
+    | SelfServiceRegistrationFlow
+    | SelfServiceRecoveryFlow
+): SignInErrorCause {
+  return (
+    {
+      4000006: SignInErrorCause.INVALID_CREDENTIALS,
+      4000010: SignInErrorCause.INACTIVE_ACCOUNT,
+    }[res.ui.messages?.[0]?.id || -1] || SignInErrorCause.UNKNOWN
+  );
 }
 
 export enum SignInErrorCause {
-  INVALID_CREDENTIALS = "INVALID_CREDENTIALS",
-  INACTIVE_ACCOUNT = "INACTIVE_ACCOUNT",
-  UNKNOWN = "UNKNOWN",
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  INACTIVE_ACCOUNT = 'INACTIVE_ACCOUNT',
+  UNKNOWN = 'UNKNOWN',
 }
 
-export class IdentityServiceError { }
+export class IdentityServiceError {}
 
 export class IdentityServiceSignInError extends IdentityServiceError {
-  constructor(public cause: SignInErrorCause, public errors: { [field: string]: Array<string> }) {
-    super()
+  constructor(
+    public cause: SignInErrorCause,
+    public errors: { [field: string]: Array<string> }
+  ) {
+    super();
   }
 }
 
 export class IdentityServiceRecoveryError extends IdentityServiceError {
   constructor(public errors: { [field: string]: Array<string> }) {
-    super()
+    super();
   }
 }
 
 export class IdentityServiceVerifyError extends IdentityServiceError {
   constructor(public errors: { [field: string]: Array<string> }) {
-    super()
+    super();
   }
 }
 
 export class IdentityServiceRegistrationError extends IdentityServiceError {
-  constructor(public errors: Array<string>, public attributes: {
-    givenName: Array<string>
-    familyName: Array<string>
-    email: Array<string>
-    password: Array<string>
-  }) {
-    super()
+  constructor(
+    public errors: Array<string>,
+    public attributes: {
+      givenName: Array<string>;
+      familyName: Array<string>;
+      email: Array<string>;
+      password: Array<string>;
+    }
+  ) {
+    super();
   }
 }
 
-export class IdentityServiceUnauthorizedError extends IdentityServiceError { }
+export class IdentityServiceUnauthorizedError extends IdentityServiceError {}
 
 export class IdentityServiceUnexpectedError extends IdentityServiceError {
   constructor(public res: HttpErrorResponse) {
-    super()
+    super();
   }
 }
 
 export class KratosIdentityService implements IdentityService {
   constructor(
-    private http: HttpClient,
+    private http: OryKratosHttpClient,
     private baseUrl: string,
     private registrationReturnTo: string,
-    private recoveryReturnTo: string,
-  ) { }
+    private recoveryReturnTo: string
+  ) {}
 
   whoAmI(): Observable<Identity> {
-    return this.http
-      .get<Session>(`${this.baseUrl}/sessions/whoami`)
-      .pipe(
-        map((res: Session) => mapKratosIdentityToIdentity(res.identity)),
-        catchError((res: HttpErrorResponse) => {
-          if (res.status === 401) {
-            return throwError(new IdentityServiceUnauthorizedError());
-          } else {
-            return throwError(new IdentityServiceUnexpectedError(res));
-          }
-        })
-      );
+    return this.http.get<Session>(`${this.baseUrl}/sessions/whoami`).pipe(
+      map((res: Session) => mapKratosIdentityToIdentity(res.identity)),
+      catchError((res: HttpErrorResponse) => {
+        if (res.status === 401) {
+          return throwError(new IdentityServiceUnauthorizedError());
+        } else {
+          return throwError(new IdentityServiceUnexpectedError(res));
+        }
+      })
+    );
   }
 
   signIn(email: string, password: string): Observable<Identity> {
@@ -233,15 +245,11 @@ export class KratosIdentityService implements IdentityService {
       .pipe(
         mergeMap((res) =>
           this.http
-            .post<{ session: Session }>(
-              res.ui.action,
-              {
-                password_identifier: email,
-                password: password,
-                method: 'password',
-                csrf_token: extractCsrfToken(res),
-              }
-            )
+            .post<{ session: Session }>(res.ui.action, {
+              password_identifier: email,
+              password: password,
+              method: 'password',
+            })
             .pipe(
               map((res: { session: Session }) =>
                 mapKratosIdentityToIdentity(res.session.identity)
@@ -265,18 +273,16 @@ export class KratosIdentityService implements IdentityService {
 
   signInViaOpenId(provider: string): Observable<string> {
     return this.http
-      .get<SelfServiceRegistrationFlow>(`${this.baseUrl}/self-service/login/browser`)
+      .get<SelfServiceRegistrationFlow>(
+        `${this.baseUrl}/self-service/login/browser`
+      )
       .pipe(
         mergeMap((res) =>
           this.http
-            .post<Session>(
-              res.ui.action,
-              {
-                provider,
-                method: 'oidc',
-                csrf_token: extractCsrfToken(res),
-              }
-            )
+            .post<Session>(res.ui.action, {
+              provider,
+              method: 'oidc',
+            })
             .pipe(
               map((res: Session) => 'google'),
               catchError((res: HttpErrorResponse) => {
@@ -284,18 +290,23 @@ export class KratosIdentityService implements IdentityService {
                   return throwError(
                     new IdentityServiceSignInError(
                       extractSignInCause(res.error as SelfServiceLoginFlow),
-                      extractAttributeErrorMessages(res.error as SelfServiceLoginFlow)
+                      extractAttributeErrorMessages(
+                        res.error as SelfServiceLoginFlow
+                      )
                     )
                   );
                 } else if (res.status === 422) {
-                  const body = res.error as SelfServiceBrowserLocationChangeRequiredError
+                  const body =
+                    res.error as SelfServiceBrowserLocationChangeRequiredError;
                   if (body.redirect_browser_to) {
-                    return of(body.redirect_browser_to)
+                    return of(body.redirect_browser_to);
                   } else {
                     return throwError(
                       new IdentityServiceSignInError(
                         extractSignInCause(res.error as SelfServiceLoginFlow),
-                        extractAttributeErrorMessages(res.error as SelfServiceLoginFlow)
+                        extractAttributeErrorMessages(
+                          res.error as SelfServiceLoginFlow
+                        )
                       )
                     );
                   }
@@ -310,31 +321,34 @@ export class KratosIdentityService implements IdentityService {
 
   registerViaOpenId(provider: string): Observable<string> {
     return this.http
-      .get<SelfServiceRegistrationFlow>(`${this.baseUrl}/self-service/registration/browser?return_to=${this.registrationReturnTo}`)
+      .get<SelfServiceRegistrationFlow>(
+        `${this.baseUrl}/self-service/registration/browser?return_to=${this.registrationReturnTo}`
+      )
       .pipe(
         mergeMap((res) =>
           this.http
-            .post<Session>(
-              res.ui.action,
-              {
-                provider,
-                method: 'oidc',
-                csrf_token: extractCsrfToken(res),
-              }
-            )
+            .post<Session>(res.ui.action, {
+              provider,
+              method: 'oidc',
+            })
             .pipe(
               map((res: Session) => 'google'),
               catchError((res: HttpErrorResponse) => {
                 if (res.status === 400) {
                   return throwError(
                     new IdentityServiceRegistrationError(
-                      extractRootErrorMessages(res.error as SelfServiceRegistrationFlow),
-                      extractAttributeErrorMessages(res.error as SelfServiceRegistrationFlow)
+                      extractRootErrorMessages(
+                        res.error as SelfServiceRegistrationFlow
+                      ),
+                      extractAttributeErrorMessages(
+                        res.error as SelfServiceRegistrationFlow
+                      )
                     )
                   );
                 } else if (res.status === 422) {
-                  const body = res.error as SelfServiceBrowserLocationChangeRequiredError
-                  return of(body.redirect_browser_to!)
+                  const body =
+                    res.error as SelfServiceBrowserLocationChangeRequiredError;
+                  return of(body.redirect_browser_to!);
                 } else {
                   return throwError(new IdentityServiceUnexpectedError(res));
                 }
@@ -351,34 +365,36 @@ export class KratosIdentityService implements IdentityService {
     familyName: string
   ): Observable<void> {
     return this.http
-      .get<SelfServiceRegistrationFlow>(`${this.baseUrl}/self-service/registration/browser?verified=true&after_verification_return_to=${this.registrationReturnTo}`)
+      .get<SelfServiceRegistrationFlow>(
+        `${this.baseUrl}/self-service/registration/browser?verified=true&after_verification_return_to=${this.registrationReturnTo}`
+      )
       .pipe(
         mergeMap((res) =>
           this.http
-            .post<Session>(
-              res.ui.action,
-              {
-                traits: {
-                  email,
-                  name: {
-                    given: givenName,
-                    family: familyName,
-                    preferred: givenName
-                  },
+            .post<Session>(res.ui.action, {
+              traits: {
+                email,
+                name: {
+                  given: givenName,
+                  family: familyName,
+                  preferred: givenName,
                 },
-                method: 'password',
-                password,
-                csrf_token: extractCsrfToken(res),
-              }
-            )
+              },
+              method: 'password',
+              password,
+            })
             .pipe(
-              map(() => { }),
+              map(() => {}),
               catchError((res: HttpErrorResponse) => {
                 if (res.status === 400) {
                   return throwError(
                     new IdentityServiceRegistrationError(
-                      extractRootErrorMessages(res.error as SelfServiceRegistrationFlow),
-                      extractAttributeErrorMessages(res.error as SelfServiceRegistrationFlow)
+                      extractRootErrorMessages(
+                        res.error as SelfServiceRegistrationFlow
+                      ),
+                      extractAttributeErrorMessages(
+                        res.error as SelfServiceRegistrationFlow
+                      )
                     )
                   );
                 } else {
@@ -392,25 +408,25 @@ export class KratosIdentityService implements IdentityService {
 
   verify(email: string): Observable<void> {
     return this.http
-      .get<SelfServiceVerificationFlow>(`${this.baseUrl}/self-service/verification/browser`)
+      .get<SelfServiceVerificationFlow>(
+        `${this.baseUrl}/self-service/verification/browser`
+      )
       .pipe(
         mergeMap((res) =>
           this.http
-            .post(
-              res.ui.action,
-              {
-                csrf_token: extractCsrfToken(res),
-                email: email,
-                method: 'link',
-              }
-            )
+            .post(res.ui.action, {
+              email: email,
+              method: 'link',
+            })
             .pipe(
-              map(() => { }),
+              map(() => {}),
               catchError((res: HttpErrorResponse) => {
                 if (res.status === 400) {
                   return throwError(
                     new IdentityServiceVerifyError(
-                      extractErrorMessages(res.error as SelfServiceVerificationFlow)
+                      extractErrorMessages(
+                        res.error as SelfServiceVerificationFlow
+                      )
                     )
                   );
                 } else {
@@ -422,23 +438,58 @@ export class KratosIdentityService implements IdentityService {
       );
   }
 
-  recover(email: string, code?: string): Observable<void> {
+  requestRecoveryCode(email: string): Observable<RequestRecoveryCodeResult> {
     return this.http
-      .get<SelfServiceRecoveryFlow>(`${this.baseUrl}/self-service/recovery/browser?return_to=${this.recoveryReturnTo}`)
+      .get<SelfServiceRecoveryFlow>(
+        `${this.baseUrl}/self-service/recovery/browser?return_to=${this.recoveryReturnTo}`
+      )
       .pipe(
         mergeMap((res) =>
           this.http
-            .post(
-              res.ui.action,
-              {
-                csrf_token: extractCsrfToken(res),
-                email,
-                method: 'code',
-                code
-              }
-            )
+            .post<SelfServiceRecoveryFlow>(res.ui.action, {
+              email,
+              method: 'code',
+            })
             .pipe(
-              map(() => { }),
+              map(
+                (
+                  response: SelfServiceRecoveryFlow
+                ): RequestRecoveryCodeResult => {
+                  return {
+                    action: res.ui.action,
+                    response,
+                  };
+                }
+              ),
+              catchError((res: HttpErrorResponse) => {
+                if (res.status === 400) {
+                  return throwError(
+                    new IdentityServiceRecoveryError(
+                      extractErrorMessages(res.error as SelfServiceRecoveryFlow)
+                    )
+                  );
+                } else {
+                  return throwError(new IdentityServiceUnexpectedError(res));
+                }
+              })
+            )
+        )
+      );
+  }
+
+  completeRecovery(email: string, code: string): Observable<void> {
+    return this.http
+      .get<SelfServiceRecoveryFlow>(`${this.baseUrl}/self-service/recovery`)
+      .pipe(
+        mergeMap((res) =>
+          this.http
+            .post(res.ui.action, {
+              email,
+              method: 'code',
+              code,
+            })
+            .pipe(
+              map(() => {}),
               catchError((res: HttpErrorResponse) => {
                 if (res.status === 400) {
                   return throwError(
@@ -459,11 +510,7 @@ export class KratosIdentityService implements IdentityService {
     return this.http
       .get<SelfServiceLogoutUrl>(`${this.baseUrl}/self-service/logout/browser`)
       .pipe(
-        mergeMap((res) =>
-          this.http
-            .get(res.logout_url!)
-            .pipe(map(() => { }))
-        )
+        mergeMap((res) => this.http.get(res.logout_url!).pipe(map(() => {})))
       );
   }
 

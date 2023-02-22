@@ -25,6 +25,7 @@ import {
   IdentityService,
   IdentityServiceRegistrationError,
   IdentityServiceSignInError,
+  RequestRecoveryCodeResult,
 } from './features/identity/identity.service';
 
 @Injectable()
@@ -162,8 +163,8 @@ export class AppEffects implements OnRunEffects {
     return this.actions$.pipe(
       ofType(actions.requestRecoveryCode),
       exhaustMap((action) =>
-        this.authService.recover(action.email).pipe(
-          map((res) => actions.recoveryCodeSent()),
+        this.authService.requestRecoveryCode(action.email).pipe(
+          map((res: RequestRecoveryCodeResult) => actions.recoveryCodeSent()),
           catchError((error: IdentityServiceRegistrationError) => {
             return of(
               actions.registerFailure({
@@ -188,9 +189,18 @@ export class AppEffects implements OnRunEffects {
     return this.actions$.pipe(
       ofType(actions.submitRecoveryCode),
       exhaustMap((action) =>
-        this.authService
-          .recover(action.email, action.code)
-          .pipe(map((res) => actions.recoveryCompleted()))
+        this.authService.completeRecovery(action.email, action.code).pipe(
+          map((res) => actions.recoveryCompleted()),
+          catchError((error: IdentityServiceRegistrationError) => {
+            return of(
+              actions.recoveryFailure({
+                error: {
+                  errors: error.errors,
+                },
+              })
+            );
+          })
+        )
       )
     );
   });
