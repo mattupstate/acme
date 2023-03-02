@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kratos-selfservice-ui-node.fullname" . }}
+  labels:
+{{ include "kratos-selfservice-ui-node.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: {{ .Values.service.name }}
+  selector:
+    app.kubernetes.io/name: {{ include "kratos-selfservice-ui-node.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
