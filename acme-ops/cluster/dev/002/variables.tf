@@ -1,13 +1,6 @@
 variable "vault_root_token" {
   type        = string
   description = "The Vault root token"
-  default     = "root"
-}
-
-variable "kubectx" {
-  type        = string
-  description = "The kubectl context to interact with"
-  default     = "minikube"
 }
 
 variable "keto_chart" {
