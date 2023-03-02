@@ -1,0 +1,15 @@
+namespaceOverride: "prometheus"
+alertmanager:
+  enabled: false
+coreDns:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeStateMetrics:
+  enabled: false
+grafana:
+  enabled: true
