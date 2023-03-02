@@ -1,3 +1,5 @@
 podEnv:
-  - name: OTEL_EXPORTER_OTLP_ENDPOINT
-    value: "http://opentelemetry-collector.ops.svc.cluster.local:4317"
+  - name: LOG_FORMAT
+    value: text
+  - name: OTEL_SDK_DISABLED
+    value: "true"

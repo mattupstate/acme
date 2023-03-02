@@ -1,16 +1,193 @@
-version: '3'
+version: 3
 
-includes:
-  acme-app-web:
-    taskfile: ./acme-app/acme-app-web/Taskfile.yaml
-    dir: ./acme-app/acme-app-web
-  docs: ./acme-docs
-  ops:
-    taskfile: ./acme-ops/Taskfile.yaml
-    dir: ./acme-ops
+env:
+  KUBERNETES_VERSION: 1.26.1
 
 tasks:
-  run:
-    deps: [ops:dev-provision]
+  dev:setup:1password-darwin:
+    platforms: [darwin]
+    silent: true
     cmds:
-      - skaffold dev
+      - brew install --cask 1password/tap/1password-cli
+
+  dev:setup:1password-linux:
+    platforms: [linux]
+    silent: true
+    env:
+      OP_DEB_URL: https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+      OP_RPM_URL: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm
+      TEMPORARY_PACKAGE:
+        sh: mktemp
+    cmds:
+      - |
+        if command -v dpkg; then
+          wget -O "$TEMPORARY_PACKAGE" "$OP_DEB_URL"
+          sudo dpkg -i "$TEMPORARY_PACKAGE"
+        elif command -v rpm; then
+          wget -O "$TEMPORARY_PACKAGE" '$OP_RPM_URL'
+          sudo rpm -i "$TEMPORARY_PACKAGE"
+        else
+          echo "Could not find dpkg or rpm commands"
+          exit 1
+        fi
+      - defer: rm -f "$TEMPORARY_PACKAGE"
+
+  dev:setup:
+    silent: true
+    env:
+      NVM_VERSION:
+        sh: |
+            git -c 'versionsort.suffix=-' \
+              ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/nvm-sh/nvm.git '*.*.*' \
+              | tail --lines=1 \
+              | cut --delimiter='/' --fields=3
+    cmds:
+      - task: dev:setup:1password-linux
+      - task: dev:setup:1password-darwin
+      - curl -s "https://get.sdkman.io" | bash
+      - curl -s "https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh" | bash
+      - brew install mkcert helm terraform skaffold direnv jq
+      - bash -c "source $HOME/.sdkman/bin/sdkman-init.sh; sdk env install"
+      - bash -c "source $NVM_DIR/nvm.sh; nvm install"
+      - echo
+      - echo -e "\033[32mAutomated setup was successful."
+      - echo -e "Be sure to hook the following tools into your shell before continuing:\033[0m"
+      - echo "sdkman > https://sdkman.io/install"
+      - echo "nvm    > https://github.com/nvm-sh/nvm#installing-and-updating"
+      - echo "direnv > https://direnv.net/docs/hook.html"
+
+  dev:validate-kubectx:
+    internal: true
+    silent: true
+    env:
+      VALID_CONTEXTS: docker-desktop|rancher-desktop|minikube|k3d-acme
+    cmds:
+      - |
+        if [[ ! "$(kubectl config current-context)" =~ "$VALID_CONTEXTS" ]]; then
+          echo "Invalid kubectl context: $(kubectl config current-context)"
+          echo "Must be one of: ${VALID_CONTEXTS//|/, }"
+          exit 1
+        fi
+
+  dev:make-certs:
+    dir: acme-ops/cluster/dev/001/.certs
+    cmds:
+      - mkcert '*.nip.io'
+      - mkcert -install
+    status:
+      - ls _wildcard.nip.io*
+
+  dev:fetch-secrets:
+    # silent: true
+    dir: acme-ops/cluster/dev/002/.secrets
+    env:
+      DEV_OP_SECRET_ID: tqq6mw5rylzps2t6ip7hlavnma
+    cmds:
+      - op item get --format json $DEV_OP_SECRET_ID > _secrets_.json
+      - |
+        jq -r '.fields[] | select(.label != "notesPlain") | .label' _secrets_.json | \
+          xargs -I{} bash -c "jq '.fields[] | select(.label== \"{}\") | .value | fromjson' _secrets_.json > {}.json"
+
+  dev:fetch-vault-token:
+    silent: true
+    dir: acme-ops/cluster/dev/002
+    cmds:
+      - >-
+        kubectl -n management wait --for=condition=Ready --timeout=120s pod/vault-0  > /dev/null
+      - >-
+        kubectl -n management exec vault-0 -- cat /vault/data/init.json | \
+            jq '{"vault_root_token": .root_token}' > .auto.tfvars.json
+
+  dev:enable-overlay-module:
+    platforms: [linux]
+    silent: true
+    cmds:
+      - modprobe overlay
+
+  # Layer 001
+  dev:provision-001-init:
+    dir: acme-ops/cluster/dev/001
+    cmds:
+      - terraform init
+    sources:
+      - main.tf
+    generates:
+      - .terraform.lock.hcl
+      - .terraform/**/*
+
+  dev:provision-001:
+    deps: [ dev:validate-kubectx, dev:provision-001-init, dev:make-certs ]
+    dir: acme-ops/cluster/dev/001
+    env:
+      KUBE_CTX:
+        sh: kubectl config current-context
+      TF_VAR_metrics_server_enabled:
+        sh: >-
+          [[ "$(kubectl config current-context)" == "minikube" ]] && echo "true" || echo "false"
+    cmds:
+      - terraform apply -auto-approve
+
+  # Layer 002
+  dev:provision-002-init:
+    dir: acme-ops/cluster/dev/002
+    cmds:
+      - terraform init
+    sources:
+      - main.tf
+    generates:
+      - .terraform.lock.hcl
+      - .terraform/**/*
+
+  dev:provision-002:
+    deps: [dev:validate-kubectx, dev:provision-002-init, dev:fetch-secrets, dev:fetch-vault-token]
+    dir: acme-ops/cluster/dev/002
+    env:
+      KUBE_CTX:
+        sh: kubectl config current-context
+    cmds:
+        - terraform apply -auto-approve
+
+  # All layers
+  dev:provision:
+    cmds:
+      - task: dev:provision-001
+      - task: dev:provision-002
+
+  # Minikube
+  minikube:start:
+    deps: [dev:enable-overlay-module]
+    env:
+      MINIKUBE_CPUS: "4"
+      MINIKUBE_MEM: "4g"
+      MINIKUBE_DISK_SIZE: "48g"
+    cmds:
+      - >-
+        minikube start --kubernetes-version=v$KUBERNETES_VERSION \
+            --cpus $MINIKUBE_CPUS \
+            --memory "$MINIKUBE_MEM" \
+            --disk-size "$MINIKUBE_DISK_SIZE" \
+            --extra-config=apiserver.service-node-port-range=1-65535 \
+            --ports=80:80 \
+            --ports=443:443
+    status:
+      - minikube status > /dev/null 2>&1
+
+  minikube:delete:
+    cmds:
+      - minikube delete
+
+  # K3D
+  k3d:start:
+    cmds:
+      - >-
+        k3d cluster create acme \
+          -p "80:80@loadbalancer" \
+          -p "443:443@loadbalancer" \
+          --k3s-arg "--disable=traefik@server:0" \
+          --image rancher/k3s:v$KUBERNETES_VERSION-k3s1
+    status:
+      - k3d cluster list -o json | jq -e '.[] | select(.name == "'acme'")' > /dev/null
+
+  k3d:delete:
+    cmds:
+      - k3d cluster delete acme
