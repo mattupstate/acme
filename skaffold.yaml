@@ -37,9 +37,6 @@ deploy:
         chartPath: acme-helm-charts/acme-web-server
         valuesFiles:
           - skaffold.acme-web-server.yaml
-        setValues:
-          podEnv[0].name: LOG_FORMAT
-          podEnv[0].value: text
       - name: acme-app-web
         chartPath: acme-helm-charts/acme-app-web
         valuesFiles:
@@ -51,6 +48,6 @@ profiles:
       - env: OPS_STACK_ENABLED=true
     patches:
       - op: replace
-        path: /deploy/helm/releases/2/setValues/podEnv[0].value
-        value: json
+        path: /deploy/helm/releases/2/valuesFiles/0
+        value: skaffold.acme-web-server.ops.yaml
 
