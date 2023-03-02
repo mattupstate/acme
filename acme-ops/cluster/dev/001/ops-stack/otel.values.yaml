@@ -1,0 +1,56 @@
+mode: deployment
+ports:
+  metrics:
+    enabled: true
+resources:
+  limits: {}
+config:
+  processors:
+    attributes:
+      actions:
+        - action: insert
+          key: log_file_name
+          from_attribute: log.file.name
+        - action: insert
+          key: loki.attribute.labels
+          value: log_file_name
+  exporters:
+    otlp:
+      endpoint: tempo.ops.svc.cluster.local:4317
+      tls:
+        insecure: true
+    prometheus:
+      endpoint: "prometheus-server.ops.svc.cluster.local:80"
+      namespace: "default"
+    loki:
+      endpoint: "loki.ops.svc.cluster.local:3100"
+  service:
+    pipelines:
+      logs:
+        exporters:
+          - logging
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - otlp
+      metrics:
+        exporters:
+          - logging
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - otlp
+          - prometheus
+      traces:
+        exporters:
+          - logging
+          - otlp
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - otlp
+          - jaeger
+          - zipkin

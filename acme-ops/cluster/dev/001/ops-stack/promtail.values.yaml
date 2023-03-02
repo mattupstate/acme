@@ -1,0 +1,29 @@
+configmap:
+  enabled: true
+config:
+  clients:
+    - url: http://loki.ops.svc.cluster.local:3100/loki/api/v1/push
+  snippets:
+    pipelineStages:
+      - json:
+          expressions:
+            output: log
+            stream: stream
+      - labels:
+          stream:
+      - output:
+          source: output
+      - json:
+          expressions:
+            level:
+            logger:
+            timestamp:
+      - timestamp:
+          source: "@timestamp"
+          format: RFC3339Nano
+      - template:
+          source: level
+          template: "{{ .Value | ToLower }}"
+      - labels:
+          level:
+          logger:

@@ -20,3 +20,9 @@ provider "helm" {
     config_path = "~/.kube/config"
   }
 }
+
+module "ops_stack" {
+  source                 = "./ops-stack"
+  metrics_server_enabled = var.metrics_server_enabled
+  count                  = var.ops_stack_enabled ? 1 : 0
+}

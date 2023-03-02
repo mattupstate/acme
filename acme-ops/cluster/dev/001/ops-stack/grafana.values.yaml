@@ -1,0 +1,45 @@
+adminPassword: admin
+
+grafana.ini:
+  server:
+    domain: grafana-127-0-0-1.nip.io
+    root_url: http://grafana-127-0-0-1.nip.io
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        uid: prometheus
+        access: proxy
+        url: http://prometheus-server
+        isDefault: true
+      - name: Tempo
+        type: tempo
+        uid: tempo
+        access: proxy
+        url: http://tempo:3100
+      - name: Loki
+        type: loki
+        uid: loki
+        access: proxy
+        url: http://loki:3100
+        jsonData:
+          maxLines: 1000
+          derivedFields:
+            - datasourceUid: tempo
+              matcherRegex: '"trace_id": "([a-zA-Z0-9]+)"'
+              name: trace_id
+              url: "$${__value.raw}"
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  tls:
+    - secretName: tls-io-nip-wildcard
+      hosts:
+        - grafana-127-0-0-1.nip.io
+  hosts:
+    - "grafana-127-0-0-1.nip.io"
+  path: "/"

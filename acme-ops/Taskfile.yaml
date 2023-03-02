@@ -6,6 +6,7 @@ env:
 tasks:
   # Certs and secrets
   dev:validate-kubectx:
+    silent: true
     cmds:
       - |
         kubectl config current-context |
@@ -23,13 +24,26 @@ tasks:
       - ls _wildcard.nip.io*
 
   dev:fetch-secrets:
+    silent: true
+    dir: cluster/dev/002
     cmds:
-      - OP_SECRET_ID=$DEV_OP_SECRET_ID ./cluster/dev/fetch-secrets.sh
+      - OP_SECRET_ID=$DEV_OP_SECRET_ID ./fetch-secrets.sh
+
+  dev:fetch-vault-token:
+    silent: true
+    dir: cluster/dev/002
+    cmds:
+      - >-
+        kubectl -n management wait --for=condition=Ready --timeout=120s pod/vault-0  > /dev/null
+      - >-
+        kubectl -n management exec vault-0 -- cat /vault/data/init.json | \
+            jq '{"vault_root_token": .root_token}' > .auto.tfvars.json
 
   dev:enable-overlay-module:
     platforms: [linux]
+    silent: true
     cmds:
-      - sudo modprobe overlay
+      - modprobe overlay
 
   # Layer 001
   dev:provision-001-init:
@@ -48,6 +62,9 @@ tasks:
     env:
       KUBE_CTX:
         sh: kubectl config current-context
+      TF_VAR_metrics_server_enabled:
+        sh: >-
+          [[ "$(kubectl config current-context)" == "minikube" ]] && echo "true" || echo "false"
     cmds:
       - terraform apply -auto-approve
 
@@ -63,25 +80,24 @@ tasks:
       - .terraform/**/*
 
   dev:provision-002:
-    deps: [dev:validate-kubectx, dev:provision-002-init, dev:fetch-secrets]
+    deps: [dev:validate-kubectx, dev:provision-002-init, dev:fetch-secrets, dev:fetch-vault-token]
     dir: cluster/dev/002
     env:
       KUBE_CTX:
         sh: kubectl config current-context
     cmds:
-      - >-
-        kubectl -n management wait --for=condition=Ready --timeout=120s pod/vault-0
-      - >-
-        kubectl -n management exec vault-0 -- cat /vault/data/init.json | \
-            jq '{"vault_root_token": .root_token}' > .auto.tfvars.json
-      - >-
-        terraform apply -auto-approve
+        - terraform apply -auto-approve
 
   # All layers
   dev:provision:
     cmds:
       - task: dev:provision-001
       - task: dev:provision-002
+
+  dev:clean:
+    cmds:
+      - rm -f cluster/dev/002/.auto.tfvars.json
+      - find . -type f -name "*.tfstate*" -delete
 
   # Minikube
   minikube:start:
@@ -103,8 +119,10 @@ tasks:
       - minikube status > /dev/null 2>&1
 
   minikube:delete:
+    deps: [dev:clean]
     cmds:
       - minikube delete
+      - task: dev:clean
 
   # K3D
   k3d:start:
@@ -117,3 +135,8 @@ tasks:
           --image rancher/k3s:v$KUBERNETES_VERSION-k3s1
     status:
       - k3d cluster list -o json | jq -e '.[] | select(.name == "'acme'")' > /dev/null
+
+  k3d:delete:
+    cmds:
+      - k3d cluster delete acme
+      - task: dev:clean
