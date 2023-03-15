@@ -1,9 +1,9 @@
 controller:
-  service:
-    type: NodePort
-    nodePorts:
-      http: 80
-      https: 443
+  # service:
+  #   type: NodePort
+  #   nodePorts:
+  #     http: 8080
+  #     https: 4443
   metrics:
     enabled: true
   podAnnotations:

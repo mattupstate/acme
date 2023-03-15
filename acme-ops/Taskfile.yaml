@@ -6,14 +6,17 @@ env:
 tasks:
   # Certs and secrets
   dev:validate-kubectx:
+    internal: true
     silent: true
+    env:
+      VALID_CONTEXTS: docker-desktop|rancher-desktop|minikube|k3d-acme
     cmds:
       - |
-        kubectl config current-context |
-        python -c '
-        import sys
-        current = sys.stdin.readlines()[0].rstrip()
-        current in ("minikube", "k3d-acme") or sys.exit(1)'
+        if [[ ! "$(kubectl config current-context)" =~ "$VALID_CONTEXTS" ]]; then
+          echo "Invalid kubectl context: $(kubectl config current-context)"
+          echo "Must be one of: ${VALID_CONTEXTS//|/, }"
+          exit 1
+        fi
 
   dev:make-certs:
     dir: cluster/dev/001/.certs
@@ -25,9 +28,14 @@ tasks:
 
   dev:fetch-secrets:
     silent: true
-    dir: cluster/dev/002
+    dir: cluster/dev/002/.secrets
+    env:
+      DEV_OP_SECRET_ID: tqq6mw5rylzps2t6ip7hlavnma
     cmds:
-      - OP_SECRET_ID=$DEV_OP_SECRET_ID ./fetch-secrets.sh
+      - op item get --format json $DEV_OP_SECRET_ID > _secrets_.json
+      - |
+        jq -r '.fields[] | select(.label != "notesPlain") | .label' _secrets_.json | \
+          xargs -I{} bash -c "jq '.fields[] | select(.label== \"{}\") | .value | fromjson' _secrets_.json > {}.json"
 
   dev:fetch-vault-token:
     silent: true
@@ -94,11 +102,6 @@ tasks:
       - task: dev:provision-001
       - task: dev:provision-002
 
-  dev:clean:
-    cmds:
-      - rm -f cluster/dev/002/.auto.tfvars.json
-      - find . -type f -name "*.tfstate*" -delete
-
   # Minikube
   minikube:start:
     deps: [dev:enable-overlay-module]
@@ -119,10 +122,8 @@ tasks:
       - minikube status > /dev/null 2>&1
 
   minikube:delete:
-    deps: [dev:clean]
     cmds:
       - minikube delete
-      - task: dev:clean
 
   # K3D
   k3d:start:
@@ -139,4 +140,3 @@ tasks:
   k3d:delete:
     cmds:
       - k3d cluster delete acme
-      - task: dev:clean

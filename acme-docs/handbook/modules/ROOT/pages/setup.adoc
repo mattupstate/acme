@@ -7,42 +7,94 @@ Please install tools as they are mentioned in the documentation.
 
 NOTE: Decisions made in service of this goal are often loaded with tradeoffs and are documented as a xref:acme-adr::index.adoc[Decision Record].
 
-== CLIs
+== Quick Start
 
-[cols="1,3"]
-|===
-|Name |Description
+NOTE: These instructions are designed to work on macOS and Ubuntu.
+They should also work for Windows under WSL but have not been verified.
 
-|{sdkman-href}[SDKMAN!]
-|Manages the installation and activation of various JVM tools.
-|{go-task-href}[Task]
-|Task is a task runner that aims to be simpler and easier to use than, for example, GNU Make.
-|{nvm-href}[nvm]
-|Manages the installation and activation of the NodeJS runtime.
-|{mkcert-href}[mkcert]
-|Creates and installs locally trusted development SSL certificates.
-|{minikube-href}[minikube]
-Quickly sets up a local Kubernetes cluster on macOS, Linux, and Windows.
-|{helm-href}[Helm]
-|Manages applications deployed to Kubernetes.
-|{terraform-href}[Terraform]
-|Terraform Cloud enables infrastructure automation for provisioning, compliance, and management of any cloud, datacenter, and service.
-|{skaffold-href}[skaffold]
-|CLI for continuous development for Kubernetes-native applications.
-|{direnv-href}[direnv]
-|direnv is an extension for your shell. It augments existing shells with a new feature that can load and unload environment variables depending on the current directory.
-|{jq-href}[jq]
-|jq is a lightweight and flexible command-line JSON processor.
-|===
+1. Install {homebrew-href}[Homebrew]
 
-== SDKs
+1. Install https://taskfile.dev/installation/[Task]
 
-Install the required SDKs by running the following command from within the root project directory:
+1. Install the rest of the development tools:
 
-[source,shell script]
+  $ task dev:setup
+
+1. https://developer.1password.com/docs/cli/get-started#sign-in[Setup the 1Password CLI]
+
+1. Install your preferred <<Docker Manager>>
+
+1. Install your preferred <<Kubernetes Manager>>
+
+== Docker Manager
+
+To run containers you'll need to install a Docker engine manager.
+The following products are supported by this tooling:
+
+* https://www.docker.com/products/docker-desktop/[Docker Desktop]
+
+=== Rancher Desktop
+
+https://docs.rancherdesktop.io/[Rancher Desktop] is an alternative to Docker Desktop.
+Once installed, configure Rancher Desktop with sudo access and `dockerd` as the container runtime:
+
+[#img-rancher-desktop-sudo]
+.Administrative Access > Allow sudo access
+image::rancher-desktop-sudo.png[]
+
+[#img-rancher-desktop-docker]
+.Container Runtime > dockerd (moby)
+image::rancher-desktop-docker.png[]
+
+====
+As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
+The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`.
+Run the following command and restart Rancher Desktop afterwards:
+
+[source,shellscript]
 ----
-$ sdk env install && nvm install
+sudo sysctl net.ipv4.ip_unprivileged_port_start=80
 ----
+
+This configuration makes it possible to access Kubernetes Ingress resources on `localhost` over privileged ports `80` (HTTP) and `443` (HTTPS).
+It also affords the user of friendly local URLs via http://nip.io/.
+====
+
+== Kubernetes Manager
+
+There are many tools that will run a local Kubernetes cluster The following products are supported by this tooling:
+
+=== GUIs
+
+The following products require a user to point-and-click a GUI to manage a Kubernetes cluster.
+
+==== Docker Desktop
+
+Using Docker Desktop is, arguably, the easiest way to run Kubernetes locally given its ubiquity.
+It is also widely supported and actively maintained for all major operating systems.
+The main trade-off when choosing Docker Desktop is that the version of Kubernetes **cannot** be changed.
+
+==== Rancher Desktop
+
+Rancher Desktop, similar to Docker Desktop, can also be used to run a local Kubernetes cluster.
+An advantage Rancher Desktop has over Docker Desktop is that the version of Kubernetes **can** be changed
+
+> When choosing the Kubernetes version, choose a version with the same minor version specified by the `KUBERNETES_VERSION` environment variable in `Taskfile.yaml`
+
+=== CLIs
+
+The following products are command-line interfaces.
+Subjectively, they may offer a better user-experience for developers.
+
+==== minikube
+
+{minikube-href}[minikube] is a command-line tool for running Kubernetes clusters locally.
+Follow https://minikube.sigs.k8s.io/docs/start/#what-youll-need[these instructions] to install `minikube`.
+
+==== k3d
+
+{k3d-href}[k3d] is another command-line tool for running Kubernetes clusters.
+Follow https://k3d.io/v5.4.8/#installation[these instructions] to install `k3d`.
 
 == IDEs
 
@@ -83,33 +135,6 @@ The following plugins are recommended for the best development experience:
 
 Visual Studio Code does not require further configuration for this project.
 
-== Docker
-
-WARNING: As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
-There is a simple workaround described in the <<Linux Users>> section.
-
-{rancher-desktop-href}[Rancher Desktop] is recommended for running Docker locally.
-Other tools, such as Docker Desktop, will have to be uninstalled or disabled before using Rancher Desktop.
-Once installed, configure Rancher Desktop with:
-
-[#img-rancher-desktop-sudo]
-.Administrative Access > Allow sudo access
-image::rancher-desktop-sudo.png[]
-
-[#img-rancher-desktop-docker]
-.Container Runtime > dockerd (moby)
-image::rancher-desktop-docker.png[]
-
 === Linux Users
 
-As of this writing Rancher Desktop https://github.com/rancher-sandbox/rancher-desktop/issues/1668[has an issue] with binding to privileged ports on Linux.
-The workaround is to adjust the default `net.ipv4.ip_unprivileged_port_start` value to `80`.
-Run the following command and restart Rancher Desktop afterwards:
 
-[source,shellscript]
-----
-sudo sysctl net.ipv4.ip_unprivileged_port_start=80
-----
-
-This configuration makes it possible to access Kubernetes Ingress resources on `localhost` over privileged ports `80` (HTTP) and `443` (HTTPS).
-It also affords the user of friendly local URLs via http://nip.io/.
