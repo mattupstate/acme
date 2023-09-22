@@ -77,7 +77,7 @@ val PrometheusMetrics = createApplicationPlugin(
 
   application.routing {
     get(path) {
-      if (call.request.local.port == port) {
+      if (call.request.local.serverPort == port) {
         call.respondText(registry.scrape())
       } else {
         call.respond(HttpStatusCode.NotFound)
