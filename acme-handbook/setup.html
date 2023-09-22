@@ -133,70 +133,156 @@ Decisions made in service of this goal are often loaded with tradeoffs and are d
 </div>
 </div>
 <div class="sect1">
-<h2 id="_clis"><a class="anchor" href="#_clis"></a>CLIs</h2>
+<h2 id="_quick_start"><a class="anchor" href="#_quick_start"></a>Quick Start</h2>
 <div class="sectionbody">
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<thead>
+<div class="admonitionblock note">
+<table>
 <tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+These instructions are designed to work on macOS and Ubuntu.
+They should also work for Windows under WSL but have not been verified.
+</td>
 </tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://sdkman.io/">SDKMAN!</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Manages the installation and activation of various JVM tools.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://taskfile.dev">Task</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Task is a task runner that aims to be simpler and easier to use than, for example, GNU Make.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/nvm-sh/nvm">nvm</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Manages the installation and activation of the NodeJS runtime.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/FiloSottile/mkcert">mkcert</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Creates and installs locally trusted development SSL certificates.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://minikube.sigs.k8s.io/">minikube</a>
-Quickly sets up a local Kubernetes cluster on macOS, Linux, and Windows.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://helm.sh/">Helm</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Manages applications deployed to Kubernetes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.terraform.io/">Terraform</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Terraform Cloud enables infrastructure automation for provisioning, compliance, and management of any cloud, datacenter, and service.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://skaffold.dev/">skaffold</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CLI for continuous development for Kubernetes-native applications.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://direnv.net/">direnv</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">direnv is an extension for your shell. It augments existing shells with a new feature that can load and unload environment variables depending on the current directory.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://stedolan.github.io/jq/">jq</a></p></td>
-</tr>
-</tbody>
 </table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://brew.sh">Homebrew</a></p>
+</li>
+<li>
+<p>Install <a href="https://taskfile.dev/installation/">Task</a></p>
+</li>
+<li>
+<p>Install the rest of the development tools:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ task dev:setup</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="https://developer.1password.com/docs/cli/get-started#sign-in">Setup the 1Password CLI</a></p>
+</li>
+<li>
+<p>Install your preferred <a href="#_docker_manager">Docker Manager</a></p>
+</li>
+<li>
+<p>Install your preferred <a href="#_kubernetes_manager">Kubernetes Manager</a></p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_sdks"><a class="anchor" href="#_sdks"></a>SDKs</h2>
+<h2 id="_docker_manager"><a class="anchor" href="#_docker_manager"></a>Docker Manager</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Install the required SDKs by running the following command from within the root project directory:</p>
+<p>To run containers you&#8217;ll need to install a Docker engine manager.
+The following products are supported by this tooling:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_rancher_desktop"><a class="anchor" href="#_rancher_desktop"></a>Rancher Desktop</h3>
+<div class="paragraph">
+<p><a href="https://docs.rancherdesktop.io/">Rancher Desktop</a> is an alternative to Docker Desktop.
+Once installed, configure Rancher Desktop with sudo access and <code>dockerd</code> as the container runtime:</p>
+</div>
+<div id="img-rancher-desktop-sudo" class="imageblock">
+<div class="content">
+<img src="_images/rancher-desktop-sudo.png" alt="rancher desktop sudo">
+</div>
+<div class="title">Figure 1. Administrative Access &gt; Allow sudo access</div>
+</div>
+<div id="img-rancher-desktop-docker" class="imageblock">
+<div class="content">
+<img src="_images/rancher-desktop-docker.png" alt="rancher desktop docker">
+</div>
+<div class="title">Figure 2. Container Runtime &gt; dockerd (moby)</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>As of this writing Rancher Desktop <a href="https://github.com/rancher-sandbox/rancher-desktop/issues/1668">has an issue</a> with binding to privileged ports on Linux.
+The workaround is to adjust the default <code>net.ipv4.ip_unprivileged_port_start</code> value to <code>80</code>.
+Run the following command and restart Rancher Desktop afterwards:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">$ sdk env install &amp;&amp; nvm install</code></pre>
+<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">sudo sysctl net.ipv4.ip_unprivileged_port_start=80</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This configuration makes it possible to access Kubernetes Ingress resources on <code>localhost</code> over privileged ports <code>80</code> (HTTP) and <code>443</code> (HTTPS).
+It also affords the user of friendly local URLs via <a href="http://nip.io/" class="bare">http://nip.io/</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kubernetes_manager"><a class="anchor" href="#_kubernetes_manager"></a>Kubernetes Manager</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are many tools that will run a local Kubernetes cluster The following products are supported by this tooling:</p>
+</div>
+<div class="sect2">
+<h3 id="_guis"><a class="anchor" href="#_guis"></a>GUIs</h3>
+<div class="paragraph">
+<p>The following products require a user to point-and-click a GUI to manage a Kubernetes cluster.</p>
+</div>
+<div class="sect3">
+<h4 id="_docker_desktop"><a class="anchor" href="#_docker_desktop"></a>Docker Desktop</h4>
+<div class="paragraph">
+<p>Using Docker Desktop is, arguably, the easiest way to run Kubernetes locally given its ubiquity.
+It is also widely supported and actively maintained for all major operating systems.
+The main trade-off when choosing Docker Desktop is that the version of Kubernetes <strong>cannot</strong> be changed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rancher_desktop_2"><a class="anchor" href="#_rancher_desktop_2"></a>Rancher Desktop</h4>
+<div class="paragraph">
+<p>Rancher Desktop, similar to Docker Desktop, can also be used to run a local Kubernetes cluster.
+An advantage Rancher Desktop has over Docker Desktop is that the version of Kubernetes <strong>can</strong> be changed</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>When choosing the Kubernetes version, choose a version with the same minor version specified by the <code>KUBERNETES_VERSION</code> environment variable in <code>Taskfile.yaml</code></p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_clis"><a class="anchor" href="#_clis"></a>CLIs</h3>
+<div class="paragraph">
+<p>The following products are command-line interfaces.
+Subjectively, they may offer a better user-experience for developers.</p>
+</div>
+<div class="sect3">
+<h4 id="_minikube"><a class="anchor" href="#_minikube"></a>minikube</h4>
+<div class="paragraph">
+<p><a href="https://minikube.sigs.k8s.io/">minikube</a> is a command-line tool for running Kubernetes clusters locally.
+Follow <a href="https://minikube.sigs.k8s.io/docs/start/#what-youll-need">these instructions</a> to install <code>minikube</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_k3d"><a class="anchor" href="#_k3d"></a>k3d</h4>
+<div class="paragraph">
+<p><a href="https://k3d.io/">k3d</a> is another command-line tool for running Kubernetes clusters.
+Follow <a href="https://k3d.io/v5.4.8/#installation">these instructions</a> to install <code>k3d</code>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -274,57 +360,9 @@ Under the <code>Preferences</code> menu, navigate to <code>Build, Execution, Dep
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
-<div class="sectionbody">
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-As of this writing Rancher Desktop <a href="https://github.com/rancher-sandbox/rancher-desktop/issues/1668">has an issue</a> with binding to privileged ports on Linux.
-There is a simple workaround described in the <a href="#_linux_users">Linux Users</a> section.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><a href="https://rancherdesktop.io/">Rancher Desktop</a> is recommended for running Docker locally.
-Other tools, such as Docker Desktop, will have to be uninstalled or disabled before using Rancher Desktop.
-Once installed, configure Rancher Desktop with:</p>
-</div>
-<div id="img-rancher-desktop-sudo" class="imageblock">
-<div class="content">
-<img src="_images/rancher-desktop-sudo.png" alt="rancher desktop sudo">
-</div>
-<div class="title">Figure 1. Administrative Access &gt; Allow sudo access</div>
-</div>
-<div id="img-rancher-desktop-docker" class="imageblock">
-<div class="content">
-<img src="_images/rancher-desktop-docker.png" alt="rancher desktop docker">
-</div>
-<div class="title">Figure 2. Container Runtime &gt; dockerd (moby)</div>
-</div>
 <div class="sect2">
 <h3 id="_linux_users"><a class="anchor" href="#_linux_users"></a>Linux Users</h3>
-<div class="paragraph">
-<p>As of this writing Rancher Desktop <a href="https://github.com/rancher-sandbox/rancher-desktop/issues/1668">has an issue</a> with binding to privileged ports on Linux.
-The workaround is to adjust the default <code>net.ipv4.ip_unprivileged_port_start</code> value to <code>80</code>.
-Run the following command and restart Rancher Desktop afterwards:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">sudo sysctl net.ipv4.ip_unprivileged_port_start=80</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This configuration makes it possible to access Kubernetes Ingress resources on <code>localhost</code> over privileged ports <code>80</code> (HTTP) and <code>443</code> (HTTPS).
-It also affords the user of friendly local URLs via <a href="http://nip.io/" class="bare">http://nip.io/</a>.</p>
-</div>
+
 </div>
 </div>
 </div>
