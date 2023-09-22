@@ -42,13 +42,14 @@ tasks:
               | tail --lines=1 \
               | cut --delimiter='/' --fields=3
     cmds:
+      - brew install unzip zip
       - task: dev:setup:1password-linux
       - task: dev:setup:1password-darwin
       - curl -s "https://get.sdkman.io" | bash
       - curl -s "https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh" | bash
       - brew install mkcert helm terraform skaffold direnv jq
       - bash -c "source $HOME/.sdkman/bin/sdkman-init.sh; sdk env install"
-      - bash -c "source $NVM_DIR/nvm.sh; nvm install"
+      - bash -c "source $HOME/.nvm/nvm.sh; nvm install"
       - echo
       - echo -e "\033[32mAutomated setup was successful."
       - echo -e "Be sure to hook the following tools into your shell before continuing:\033[0m"
