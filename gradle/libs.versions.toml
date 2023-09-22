@@ -2,7 +2,7 @@
 com-appmattus-fixture = "1.2.0"
 io-jaegertracing = "1.8.1"
 io-kotest = "5.5.5"
-io-ktor = "2.2.3"
+io-ktor = "2.3.3"
 io-opentelemetry = "1.23.0"
 kotlin = "1.8.10"
 org-jooq = "3.17.4"
