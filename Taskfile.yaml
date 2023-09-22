@@ -192,3 +192,24 @@ tasks:
   k3d:delete:
     cmds:
       - k3d cluster delete acme
+
+  # Docs
+  docs:install:
+    cmds:
+      - npm install --prune
+    sources:
+      - package.json
+    generates:
+      - node_modules/**/*
+
+  docs:build:
+    deps: [ docs:install ]
+    cmds:
+      - npm run build-docs
+    sources:
+      - acme-docs/decisions/**/*
+      - acme-docs/handbook/**/*
+      - acme-docs/root/**/*
+      - acme-web/acme-web-server/docs/**/*
+    generates:
+      - acme-docs/build/**/*
