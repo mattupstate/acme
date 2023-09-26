@@ -9,25 +9,25 @@ class InMemoryAggregateRepositoryTest : ShouldSpec({
 
   data class FakeAggregate(
     override val id: String,
-    override val revision: Int,
-  ) : Identifiable<String>, HasRevision
+  ) : Identifiable<String>
 
   class FakeException : RuntimeException()
 
   should("contain aggregates provided through constructor") {
-    val aggregate = FakeAggregate("id123", 1)
+    val aggregate = FakeAggregate("id123")
     val repo = InMemoryAggregateRepository(setOf(aggregate))
-    aggregate.shouldBe(repo.get(aggregate.id))
     repo.exists(aggregate.id).shouldBeTrue()
+    val persistedAggregate = repo.get(aggregate.id)
+    persistedAggregate.aggregate.shouldBe(aggregate)
   }
 
   should("should save new aggregate") {
     val repo = InMemoryAggregateRepository<FakeAggregate, String>()
-    val aggregate = FakeAggregate("id123", 1)
+    val aggregate = FakeAggregate("id123")
     repo.save(aggregate)
-
-    aggregate.shouldBe(repo.get(aggregate.id))
     repo.exists(aggregate.id).shouldBeTrue()
+    val persistedAggregate = repo.get(aggregate.id)
+    persistedAggregate.aggregate.shouldBe(aggregate)
   }
 
   should("throw user supplied exception") {

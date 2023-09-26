@@ -1,7 +1,5 @@
 package com.acme.scheduling
 
-import com.acme.core.HasRevision
-import com.acme.core.HasRevision.Companion.MIN_REVISION_NUMBER
 import com.acme.core.Identifiable
 import kotlinx.serialization.Serializable
 
@@ -11,16 +9,7 @@ data class Practice(
   val owner: Practitioner.Id,
   val name: Name,
   val contactPoints: Set<ContactPoint>,
-  override val revision: Int = MIN_REVISION_NUMBER
-) : Identifiable<Practice.Id>, HasRevision {
-
-  override fun equals(other: Any?): Boolean =
-    when (other) {
-      is Practice -> {
-        other.id == id
-      }
-      else -> false
-    }
+) : Identifiable<Practice.Id> {
 
   override fun hashCode(): Int {
     return id.hashCode()

@@ -1,5 +1,6 @@
 package com.acme.scheduling.data
 
+import com.acme.liquibase.update
 import com.acme.scheduling.Gender
 import com.acme.scheduling.HumanName
 import com.acme.scheduling.Name
@@ -32,20 +33,35 @@ class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
 
   should("save new aggregate") {
     jooq.testTransaction {
-      val repo = JooqPractitionerAggregateRepository(it.dsl())
+      val time: TimeFixture = timeFixtureFactory()
+      val repo = JooqPractitionerAggregateRepository(it.dsl(), time.clock)
       repo.save(practitioner)
-      repo.get(practitioner.id).shouldBe(practitioner)
       repo.exists(practitioner.id).shouldBeTrue()
+
+      val persistedPractitioner = repo.get(practitioner.id)
+      persistedPractitioner.aggregate.shouldBe(practitioner)
+      persistedPractitioner.metaData.revision.shouldBe(1)
+      persistedPractitioner.metaData.createdAt.shouldBe(time.now)
+      persistedPractitioner.metaData.updatedAt.shouldBe(time.now)
     }
   }
 
-  should("update existing aggregate") {
+  should("update existing aggregate and increment revision") {
     jooq.testTransaction {
-      val repo = JooqPractitionerAggregateRepository(it.dsl())
-      repo.save(practitioner)
-      val updatedPractitioner = practitioner.copy(gender = Gender.FEMALE, revision = 2)
-      repo.save(updatedPractitioner)
-      repo.get(practitioner.id).shouldBe(updatedPractitioner)
+      val createTime = timeFixtureFactory()
+      val createRepo = JooqPractitionerAggregateRepository(it.dsl(), createTime.clock)
+      createRepo.save(practitioner)
+
+      val updateTime = timeFixtureFactory()
+      val updateRepo = JooqPractitionerAggregateRepository(it.dsl(), updateTime.clock)
+      val expectedPractitioner = practitioner.copy(gender = Gender.FEMALE)
+      updateRepo.save(expectedPractitioner)
+
+      val persistedPractitioner = createRepo.get(practitioner.id)
+      persistedPractitioner.aggregate.shouldBe(expectedPractitioner)
+      persistedPractitioner.metaData.revision.shouldBe(2)
+      persistedPractitioner.metaData.createdAt.shouldBe(createTime.now)
+      persistedPractitioner.metaData.updatedAt.shouldBe(updateTime.now)
     }
   }
 

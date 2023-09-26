@@ -1,7 +1,8 @@
 package com.acme.scheduling.data
 
 import com.acme.core.AggregateRepository
-import com.acme.core.HasRevision
+import com.acme.core.PersistedAggregate
+import com.acme.core.PersistenceMetaData
 import com.acme.scheduling.Practice
 import com.acme.sql.scheduling.tables.Practices.Companion.PRACTICES
 import kotlinx.serialization.decodeFromString
@@ -9,46 +10,60 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
 import org.jooq.JSONB
+import org.jooq.impl.asExcluded
+import java.time.Clock
+import java.time.LocalDateTime
 
 class JooqPracticeAggregateRepository(
-  private val dsl: DSLContext
+  private val dsl: DSLContext,
+  private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Practice, Practice.Id> {
 
-  override fun find(id: Practice.Id): Practice? =
+  override fun find(id: Practice.Id): PersistedAggregate<Practice>? =
     dsl.selectFrom(PRACTICES)
       .where(PRACTICES.ID.eq(id.value))
       .fetchOne {
-        Json.decodeFromString<Practice>(it.aggregate!!.data())
+        PersistedAggregate(
+          aggregate = Json.decodeFromString<Practice>(it.aggregate!!.data()),
+          metaData = PersistenceMetaData(
+            createdAt = it.createdAt!!,
+            updatedAt = it.updatedAt!!,
+            revision = it.revision!!,
+          )
+        )
       }
 
-  override fun get(id: Practice.Id): Practice = getOrThrow(id) { NoSuchElementException() }
+  override fun get(id: Practice.Id): PersistedAggregate<Practice> = getOrThrow(id) { NoSuchElementException() }
 
-  override fun getOrThrow(id: Practice.Id, block: () -> Throwable): Practice =
+  override fun getOrThrow(id: Practice.Id, block: () -> Throwable): PersistedAggregate<Practice> =
     find(id) ?: throw block()
 
   override fun exists(id: Practice.Id): Boolean =
     dsl.fetchExists(PRACTICES, PRACTICES.ID.eq(id.value))
 
   override fun save(aggregate: Practice) {
+    val now = LocalDateTime.now(clock)
     val json = JSONB.valueOf(Json.encodeToString(aggregate))
-    if (HasRevision.aggregateIsNew(aggregate)) {
-      dsl.insertInto(
-        PRACTICES,
-        PRACTICES.ID,
-        PRACTICES.VERSION_NUMBER,
-        PRACTICES.AGGREGATE,
-      ).values(
-        aggregate.id.value,
-        aggregate.revision,
-        json
-      ).execute()
-    } else {
-      dsl.update(PRACTICES)
-        .set(PRACTICES.AGGREGATE, json)
-        .set(PRACTICES.VERSION_NUMBER, aggregate.revision)
-        .where(PRACTICES.ID.eq(aggregate.id.value))
-        .and(PRACTICES.VERSION_NUMBER.eq(aggregate.revision - 1))
-        .execute()
-    }
+
+    dsl.insertInto(
+      PRACTICES,
+      PRACTICES.ID,
+      PRACTICES.REVISION,
+      PRACTICES.AGGREGATE,
+      PRACTICES.CREATED_AT,
+      PRACTICES.UPDATED_AT,
+    ).values(
+      aggregate.id.value,
+      1,
+      json,
+      now,
+      now
+    )
+      .onConflict(PRACTICES.ID)
+      .doUpdate()
+      .set(PRACTICES.AGGREGATE, PRACTICES.AGGREGATE.asExcluded())
+      .set(PRACTICES.REVISION, PRACTICES.REVISION.add(1))
+      .set(PRACTICES.UPDATED_AT, now)
+      .execute()
   }
 }

@@ -29,24 +29,37 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
 
   should("save new aggregate") {
     jooq.testTransaction {
-      val repo = JooqPracticeAggregateRepository(it.dsl())
+      val time: TimeFixture = timeFixtureFactory()
+      val repo = JooqPracticeAggregateRepository(it.dsl(), time.clock)
       repo.save(practice)
-      val persistedPractice = repo.get(practice.id)
-      persistedPractice.shouldBe(practice)
       repo.exists(practice.id).shouldBeTrue()
+
+      val persistedPractice = repo.get(practice.id)
+      persistedPractice.aggregate.shouldBe(practice)
+      persistedPractice.metaData.revision.shouldBe(1)
+      persistedPractice.metaData.createdAt.shouldBe(time.now)
+      persistedPractice.metaData.updatedAt.shouldBe(time.now)
     }
   }
 
-  should("update an existing aggregate") {
+  should("update an existing aggregate and increment revision") {
     jooq.testTransaction {
-      val repo = JooqPracticeAggregateRepository(it.dsl())
-      repo.save(practice)
-      val updatedPractice = practice.copy(
+      val createTime = timeFixtureFactory()
+      val createRepo = JooqPracticeAggregateRepository(it.dsl(), createTime.clock)
+      createRepo.save(practice)
+
+      val updateTime = timeFixtureFactory()
+      val updateRepo = JooqPracticeAggregateRepository(it.dsl(), updateTime.clock)
+      val expectedPractice = practice.copy(
         name = Practice.Name("Smith & Associates"),
-        revision = 2,
       )
-      repo.save(updatedPractice)
-      repo.get(practice.id).shouldBe(updatedPractice)
+      updateRepo.save(expectedPractice)
+
+      val persistedPractice = createRepo.get(practice.id)
+      persistedPractice.aggregate.shouldBe(expectedPractice)
+      persistedPractice.metaData.revision.shouldBe(2)
+      persistedPractice.metaData.createdAt.shouldBe(createTime.now)
+      persistedPractice.metaData.updatedAt.shouldBe(updateTime.now)
     }
   }
 

@@ -110,11 +110,13 @@ val markAppointmentAttended = { command: MarkAppointmentAttendedCommand, uow: Sc
         "Invalid appointment"
       )
     )
-  }.markAttended()
-    .also(uow.repositories.appointments::save)
-    .also {
-      uow.addEvent(AppointmentAttendedEvent(it.id))
-    }
+  }
+  .let { it.aggregate }
+  .markAttended()
+  .also(uow.repositories.appointments::save)
+  .also {
+    uow.addEvent(AppointmentAttendedEvent(it.id))
+  }
 }
 
 val markAppointmentUnattended = { command: MarkAppointmentUnattendedCommand, uow: SchedulingUnitOfWork ->
@@ -127,6 +129,8 @@ val markAppointmentUnattended = { command: MarkAppointmentUnattendedCommand, uow
         "Invalid appointment"
       )
     )
+  }.let {
+    it.aggregate
   }.markUnattended()
     .also(uow.repositories.appointments::save)
     .also {
@@ -144,7 +148,7 @@ val cancelAppointment = { command: CancelAppointmentCommand, uow: SchedulingUnit
         "Invalid appointment"
       )
     )
-  }.cancel()
+  }.let { it.aggregate }.cancel()
     .also(uow.repositories.appointments::save)
     .also {
       uow.addEvent(AppointmentCanceledEvent(it.id))

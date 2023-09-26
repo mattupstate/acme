@@ -1,9 +1,15 @@
 // SEE: https://github.com/jOOQ/jOOQ/issues/9335#issuecomment-770352060
+// TODO: https://www.jooq.org/doc/latest/manual/sql-building/kotlin-sql-building/kotlin-coroutines/
 package org.jooq.impl
 
 import org.jooq.Configuration
 import org.jooq.DSLContext
+import org.jooq.Field
+import org.jooq.TableField
+import org.jooq.Record
 import org.jooq.exception.DataAccessException
+
+fun <R : Record, T> TableField<R, T>.asExcluded(): Field<T> = DSL.field("EXCLUDED.$name", dataType)
 
 suspend fun <T> DSLContext.transactionResult(block: suspend (Configuration) -> T): T =
   transactionResult(block, configuration())

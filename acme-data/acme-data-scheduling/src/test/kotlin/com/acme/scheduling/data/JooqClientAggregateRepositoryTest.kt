@@ -11,7 +11,7 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
 class JooqClientAggregateRepositoryTest : ShouldSpec({
-  
+
   val jooq = listener(JooqAndPostgresListener())
 
   val client = Client(
@@ -30,20 +30,35 @@ class JooqClientAggregateRepositoryTest : ShouldSpec({
 
   should("should save new aggregate") {
     jooq.testTransaction {
-      val repo = JooqClientAggregateRepository(it.dsl())
+      val time: TimeFixture = timeFixtureFactory()
+      val repo = JooqClientAggregateRepository(it.dsl(), time.clock)
       repo.save(client)
-      repo.get(client.id).shouldBe(client)
       repo.exists(client.id).shouldBeTrue()
+
+      val persistedClient = repo.get(client.id)
+      persistedClient.aggregate.shouldBe(client)
+      persistedClient.metaData.revision.shouldBe(1)
+      persistedClient.metaData.createdAt.shouldBe(time.now)
+      persistedClient.metaData.updatedAt.shouldBe(time.now)
     }
   }
 
-  should("should update existing aggregate") {
+  should("update existing aggregate and increment revision") {
     jooq.testTransaction {
-      val repo = JooqClientAggregateRepository(it.dsl())
-      repo.save(client)
-      val updatedClient = client.copy(revision = 2, gender = Gender.FEMALE)
-      repo.save(updatedClient)
-      repo.get(client.id).shouldBe(updatedClient)
+      val createTime: TimeFixture = timeFixtureFactory()
+      val createRepo = JooqClientAggregateRepository(it.dsl(), createTime.clock)
+      createRepo.save(client)
+
+      val updateTime: TimeFixture = timeFixtureFactory()
+      val updateRepo = JooqClientAggregateRepository(it.dsl(), updateTime.clock)
+      val expectedClient = client.copy(gender = Gender.FEMALE)
+      updateRepo.save(expectedClient)
+
+      val persistedClient = updateRepo.get(client.id)
+      persistedClient.aggregate.shouldBe(expectedClient)
+      persistedClient.metaData.revision.shouldBe(2)
+      persistedClient.metaData.createdAt.shouldBe(createTime.now)
+      persistedClient.metaData.updatedAt.shouldBe(updateTime.now)
     }
   }
 

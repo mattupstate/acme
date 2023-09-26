@@ -31,8 +31,7 @@ class CommandHandlerTest : ShouldSpec({
               id = Practice.Id("Practice123"),
               owner = Practitioner.Id("Practitioner123"),
               name = Practice.Name("Somebody & Associates"),
-              contactPoints = emptySet(),
-              revision = 1
+              contactPoints = emptySet()
             )
           )
         )
@@ -80,8 +79,9 @@ class CommandHandlerTest : ShouldSpec({
                 )
               ),
               gender = Gender.UNKNOWN,
-              contactPoints = emptySet(),
-              revision = 1
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555")
+              )
             )
           )
         )
@@ -127,7 +127,9 @@ class CommandHandlerTest : ShouldSpec({
                 )
               ),
               gender = Gender.UNKNOWN,
-              revision = 1
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555")
+              )
             )
           )
         )

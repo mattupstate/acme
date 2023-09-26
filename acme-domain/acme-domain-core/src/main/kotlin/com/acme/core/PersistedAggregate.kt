@@ -1,5 +1,6 @@
 package com.acme.core
 
-interface IsPersisted {
-  val persistenceMetaData: PersistenceMetaData?
-}
+data class PersistedAggregate<T>(
+  val aggregate: T,
+  val metaData: PersistenceMetaData
+)

@@ -5,6 +5,6 @@ create function set_updated_at()
 returns trigger as '
 begin
   new.updated_at = now();
-return new;
+  return new;
 end;
 ' language plpgsql;
