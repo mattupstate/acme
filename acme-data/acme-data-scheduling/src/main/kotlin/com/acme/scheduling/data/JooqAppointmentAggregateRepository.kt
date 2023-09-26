@@ -26,7 +26,7 @@ class JooqAppointmentAggregateRepository(
       .where(APPOINTMENTS.ID.eq(id.value))
       .fetchOne {
         PersistedAggregate(
-          aggregate = Json.decodeFromString<Appointment>(it.aggregate!!.data()),
+          aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
             createdAt = it.createdAt!!,
             updatedAt = it.updatedAt!!,

@@ -24,7 +24,7 @@ class JooqPracticeAggregateRepository(
       .where(PRACTICES.ID.eq(id.value))
       .fetchOne {
         PersistedAggregate(
-          aggregate = Json.decodeFromString<Practice>(it.aggregate!!.data()),
+          aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
             createdAt = it.createdAt!!,
             updatedAt = it.updatedAt!!,
