@@ -1,4 +1,4 @@
-FROM liquibase/liquibase:4.19.0
+FROM liquibase/liquibase:4.23.2
 COPY src/main/resources/db /liquibase
 
 USER root
