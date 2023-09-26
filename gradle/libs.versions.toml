@@ -56,6 +56,7 @@ io-opentracing-opentracing-api = "io.opentracing:opentracing-api:0.33.0"
 jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:3.0.2"
 net-logstash-logback-logstash-logback-encoder = "net.logstash.logback:logstash-logback-encoder:7.2"
 net-sizovs-pipelinr = "net.sizovs:pipelinr:0.7"
+net-datafaker-datafaker = "net.datafaker:datafaker:2.0.1"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.17.1"
 org-glassfish-jakarta-el = "org.glassfish:jakarta.el:4.0.2"
 org-hibernate-validator-hibernate-validator = "org.hibernate.validator:hibernate-validator:8.0.0.Final"
@@ -74,14 +75,14 @@ org-jooq-jooq-kotlin = { module = "org.jooq:jooq-kotlin", version.ref = "org-joo
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.9.1"
-org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.17.2"
+org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.23.2"
 org-postgresql = "org.postgresql:postgresql:42.5.0"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
 org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.4"
-org-testcontainers-postgresql = "org.testcontainers:postgresql:1.17.6"
+org-testcontainers-postgresql = "org.testcontainers:postgresql:1.19.0"
 org-webjars-swagger-ui = "org.webjars:swagger-ui:4.15.5"
-org-yaml-snakeyaml = "org.yaml:snakeyaml:1.33"
+org-yaml-snakeyaml = "org.yaml:snakeyaml:2.2"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.44.0"

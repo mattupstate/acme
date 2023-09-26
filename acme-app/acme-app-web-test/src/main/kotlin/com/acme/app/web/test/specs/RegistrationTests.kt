@@ -1,6 +1,5 @@
 package com.acme.app.web.test.specs
 
-import com.acme.app.web.test.data.fixture
 import com.acme.app.web.test.email.kratos.KratosVerifyEmailContent
 import com.acme.app.web.test.email.mailhog.withMailhogApp
 import com.acme.app.web.test.kotest.WebDriverExtension
@@ -11,7 +10,10 @@ import com.acme.selenium.wait
 import com.acme.selenium.windowsAreVisible
 import io.kotest.core.extensions.install
 import io.kotest.core.spec.style.FeatureSpec
+import net.datafaker.Faker
 import kotlin.time.Duration.Companion.seconds
+
+val faker = Faker()
 
 class RegistrationTests : FeatureSpec({
 
@@ -19,7 +21,12 @@ class RegistrationTests : FeatureSpec({
 
   feature("Password method") {
     scenario("Happy path") {
-      val fixture = fixture<RegisterPage.RegistrationValues>()
+      val fixture = RegisterPage.RegistrationValues(
+        emailAddress = faker.internet().emailAddress(),
+        password = faker.internet().password(12, 24, true),
+        firstName = faker.name().firstName(),
+        lastName = faker.name().lastName(),
+      )
 
       withAcmeWebApp(driver) {
         goToRegisterPage {
@@ -30,7 +37,6 @@ class RegistrationTests : FeatureSpec({
       withMailhogApp(driver) {
         navigateToInbox {
           openEmail(fixture.emailAddress, KratosVerifyEmailContent.SUBJECT)
-
           withEmailMessageContent<KratosVerifyEmailContent> {
             clickVerificationLink()
           }

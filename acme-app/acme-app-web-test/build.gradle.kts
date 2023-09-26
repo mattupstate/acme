@@ -6,8 +6,8 @@ plugins {
 
 dependencies {
   implementation(project(":acme-lib:acme-lib-selenium"))
-  implementation(libs.com.appmattus.fixture)
-  implementation(libs.com.appmattus.fixture.fixture.javafaker)
+  implementation(kotlin("reflect"))
+  implementation(libs.net.datafaker.datafaker)
   implementation(libs.io.github.bonigarcia.selenium.jupiter)
   implementation(libs.io.github.microutils.kotlin.logging.jvm)
   implementation(libs.io.kotest.kotest.runner.junit5.jvm)
