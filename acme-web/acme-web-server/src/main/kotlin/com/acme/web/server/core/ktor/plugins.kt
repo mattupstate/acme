@@ -30,10 +30,10 @@ import io.ktor.server.request.httpMethod
 import io.ktor.server.request.path
 import io.ktor.server.routing.IgnoreTrailingSlash
 import kotlinx.serialization.json.Json
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.util.UUID
 
-private val appLogger = KotlinLogging.logger {}
+private val appLogger = LoggerFactory.getLogger("com.acme.web.server.core.ktor")
 
 fun Application.installCallLogging() {
   install(CallLogging) {

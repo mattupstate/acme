@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
   implementation(project(":acme-domain:acme-domain-core"))
-  implementation(libs.io.github.microutils.kotlin.logging.jvm)
+  implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.org.slf4j.slf4j.api)
   testImplementation(project(":acme-web:acme-web-server"))
   testImplementation(project(":acme-lib:acme-lib-liquibase"))

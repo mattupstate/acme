@@ -1,31 +1,31 @@
 [versions]
 com-appmattus-fixture = "1.2.0"
 io-jaegertracing = "1.8.1"
-io-kotest = "5.5.5"
-io-ktor = "2.3.3"
-io-opentelemetry = "1.23.0"
+io-kotest = "5.7.2"
+io-ktor = "2.3.4"
+io-opentelemetry = "1.30.1"
 kotlin = "1.9.10"
 org-jooq = "3.17.4"
-org-junit-jupiter = "5.9.1"
-org-seleniumhq-selenium = "4.6.0"
+org-junit-jupiter = "5.10.0"
+org-seleniumhq-selenium = "4.13.0"
 
 [libraries]
 am-ik-timeflake-timeflake4j = "am.ik.timeflake:timeflake4j:1.4.0"
-ch-qos-logback-logback-classic = "ch.qos.logback:logback-classic:1.4.5"
+ch-qos-logback-logback-classic = "ch.qos.logback:logback-classic:1.4.11"
 com-appmattus-fixture = { module = "com.appmattus.fixture:fixture", version.ref = "com-appmattus-fixture" }
 com-appmattus-fixture-fixture-javafaker = { module = "com.appmattus.fixture:fixture-javafaker", version.ref = "com-appmattus-fixture" }
 # @keep this version, it's used in buildSrc and the update plugin doens't recognize it
 com-diffplug-spotless-gradle-plugin = "com.diffplug.spotless:spotless-plugin-gradle:6.6.1"
 com-github-java-json-tools-json-schema-validator = "com.github.java-json-tools:json-schema-validator:2.2.14"
-com-googlecode-libphonenumber = "com.googlecode.libphonenumber:libphonenumber:8.13.0"
-com-mattbertolini-liquibase-slf4j = "com.mattbertolini:liquibase-slf4j:4.1.0"
+com-googlecode-libphonenumber = "com.googlecode.libphonenumber:libphonenumber:8.13.21"
+com-mattbertolini-liquibase-slf4j = "com.mattbertolini:liquibase-slf4j:5.0.0"
 com-michael-bull-kotlin-coroutines-jdbc = "com.michael-bull.kotlin-coroutines-jdbc:kotlin-coroutines-jdbc:1.0.2"
 com-zaxxer-HikariCP = "com.zaxxer:HikariCP:5.0.1"
-io-github-bonigarcia-selenium-jupiter = "io.github.bonigarcia:selenium-jupiter:4.3.2"
-io-github-microutils-kotlin-logging-jvm = "io.github.microutils:kotlin-logging-jvm:3.0.4"
+io-github-bonigarcia-selenium-jupiter = "io.github.bonigarcia:selenium-jupiter:4.3.7"
+io-github-oshai-kotlin-logging-jvm = "io.github.oshai:kotlin-logging-jvm:5.1.0"
 io-jaegertracing-jaeger-micrometer = { module = "io.jaegertracing:jaeger-micrometer", version.ref = "io-jaegertracing" }
 io-jaegertracing-jaeger-thrift = { module = "io.jaegertracing:jaeger-thrift", version.ref = "io-jaegertracing" }
-io-kotest-extensions-kotest-assertions-ktor = "io.kotest.extensions:kotest-assertions-ktor:1.0.3"
+io-kotest-extensions-kotest-assertions-ktor = "io.kotest.extensions:kotest-assertions-ktor:2.0.0"
 io-kotest-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "io-kotest" }
 io-kotest-kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "io-kotest" }
 io-kotest-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "io-kotest" }
@@ -47,26 +47,26 @@ io-ktor-ktor-server-locations = { module = "io.ktor:ktor-server-locations", vers
 io-ktor-ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "io-ktor" }
 io-ktor-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "io-ktor" }
 io-ktor-ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "io-ktor" }
-io-micrometer-micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.10.1"
-io-opentelemetry-javaagent-opentelemetry-javaagent = "io.opentelemetry.javaagent:opentelemetry-javaagent:1.20.1"
+io-micrometer-micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.11.4"
+io-opentelemetry-javaagent-opentelemetry-javaagent = "io.opentelemetry.javaagent:opentelemetry-javaagent:1.30.0"
 io-opentelemetry-opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "io-opentelemetry" }
 io-opentelemetry-opentelemetry-bom = { module = "io.opentelemetry:opentelemetry-bom", version.ref = "io-opentelemetry" }
 io-opentelemetry-opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk", version.ref = "io-opentelemetry" }
 io-opentracing-opentracing-api = "io.opentracing:opentracing-api:0.33.0"
 jakarta-validation-jakarta-validation-api = "jakarta.validation:jakarta.validation-api:3.0.2"
-net-logstash-logback-logstash-logback-encoder = "net.logstash.logback:logstash-logback-encoder:7.2"
-net-sizovs-pipelinr = "net.sizovs:pipelinr:0.7"
+net-logstash-logback-logstash-logback-encoder = "net.logstash.logback:logstash-logback-encoder:7.4"
+net-sizovs-pipelinr = "net.sizovs:pipelinr:0.8"
 net-datafaker-datafaker = "net.datafaker:datafaker:2.0.1"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.17.1"
-org-glassfish-jakarta-el = "org.glassfish:jakarta.el:4.0.2"
-org-hibernate-validator-hibernate-validator = "org.hibernate.validator:hibernate-validator:8.0.0.Final"
+org-glassfish-jakarta-el = "org.glassfish:jakarta.el:5.0.0-M1"
+org-hibernate-validator-hibernate-validator = "org.hibernate.validator:hibernate-validator:8.0.1.Final"
 org-jetbrains-annotations = "org.jetbrains:annotations:13.0"
 # @keep this version, it's used in buildSrc and the update plugin doesn't recognize it
 org-jetbrains-kotlin-jvm-gradle-plugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
 # @keep this version, it's used in buildSrc and the update plugin doens't recognize it
 org-jetbrains-kotlin-serialization-gradle-plugin = { module = "org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin", version.ref = "kotlin" }
-org-jetbrains-kotlinx-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-org-jetbrains-kotlinx-kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+org-jetbrains-kotlinx-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+org-jetbrains-kotlinx-kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
 # @keep this version, it's used in buildSrc and the update plugin doens't recognize it
 org-jlleitschuh-ktlint-gradle-plugin = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
 org-jooq = { module = "org.jooq:jooq", version.ref = "org-jooq" }
@@ -76,18 +76,18 @@ org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupite
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.9.1"
 org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.23.2"
-org-postgresql = "org.postgresql:postgresql:42.5.0"
+org-postgresql = "org.postgresql:postgresql:42.6.0"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
-org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.4"
+org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.9"
 org-testcontainers-postgresql = "org.testcontainers:postgresql:1.19.0"
-org-webjars-swagger-ui = "org.webjars:swagger-ui:4.15.5"
+org-webjars-swagger-ui = "org.webjars:swagger-ui:5.7.2"
 org-yaml-snakeyaml = "org.yaml:snakeyaml:2.2"
 
 [plugins]
-com-github-ben-manes-versions = "com.github.ben-manes.versions:0.44.0"
-com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.3.1"
-com-ryandens-javaagent-jib = "com.ryandens.javaagent-jib:0.4.0"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
-nu-studer-jooq = "nu.studer.jooq:8.0"
+com-github-ben-manes-versions = "com.github.ben-manes.versions:0.48.0"
+com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.4.0"
+com-ryandens-javaagent-jib = "com.ryandens.javaagent-jib:0.5.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
+nu-studer-jooq = "nu.studer.jooq:8.2.1"
 org-hidetake-swagger-generator = "org.hidetake.swagger.generator:2.19.2"

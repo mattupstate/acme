@@ -9,7 +9,7 @@ dependencies {
   implementation(kotlin("reflect"))
   implementation(libs.net.datafaker.datafaker)
   implementation(libs.io.github.bonigarcia.selenium.jupiter)
-  implementation(libs.io.github.microutils.kotlin.logging.jvm)
+  implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.io.kotest.kotest.runner.junit5.jvm)
   implementation(libs.io.ktor.ktor.client.apache)
   implementation(libs.io.ktor.ktor.client.auth)

@@ -3,11 +3,11 @@ package com.acme.web.server.scheduling
 import com.acme.web.server.core.toJsonPointer
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.Tag
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation
 import jakarta.validation.Validator
-import mu.KotlinLogging
 import org.jooq.Configuration
 import org.jooq.SQLDialect
 import org.jooq.exception.DataAccessException
@@ -50,7 +50,7 @@ fun testTransaction(block: (config: Configuration) -> Unit) {
       }
     }
   } catch (e: TestTransactionException) {
-    logger.debug(e.message)
+    logger.debug { e.message }
   }
 }
 

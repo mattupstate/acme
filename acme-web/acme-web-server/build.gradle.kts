@@ -27,7 +27,7 @@ dependencies {
   implementation(libs.ch.qos.logback.logback.classic)
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
   implementation(libs.com.zaxxer.hikariCP)
-  implementation(libs.io.github.microutils.kotlin.logging.jvm)
+  implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.io.ktor.ktor.client.content.negotiation)
   implementation(libs.io.ktor.ktor.client.java)
   implementation(libs.io.ktor.ktor.serialization.kotlinx.json)

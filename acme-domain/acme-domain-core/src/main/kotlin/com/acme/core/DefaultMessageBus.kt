@@ -1,6 +1,6 @@
 package com.acme.core
 
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KClass
 
 class DefaultMessageBus(
@@ -49,7 +49,7 @@ class DefaultMessageBus(
         it(event, unitOfWork)
         queue.addAll(unitOfWork.events)
       } catch (e: Exception) {
-        logger.error("Unable to handle event", e)
+        logger.error(e) {"Unable to handle event" }
         throw e
       }
     }

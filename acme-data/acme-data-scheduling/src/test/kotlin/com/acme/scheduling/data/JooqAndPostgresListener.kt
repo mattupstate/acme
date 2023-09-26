@@ -2,9 +2,9 @@ package com.acme.scheduling.data
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
-import mu.KotlinLogging
 import org.jooq.Configuration
 import org.jooq.SQLDialect
 import org.jooq.exception.DataAccessException
@@ -33,7 +33,7 @@ class JooqAndPostgresListener : TestListener {
         }
       }
     } catch (e: TestTransactionException) {
-      logger.debug(e.message)
+      logger.debug { e.message }
     }
   }
 

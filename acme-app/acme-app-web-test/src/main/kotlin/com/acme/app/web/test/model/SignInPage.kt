@@ -4,8 +4,8 @@ import com.acme.selenium.PageObject
 import com.acme.selenium.buttonText
 import com.acme.selenium.formControlByName
 import com.acme.selenium.wait
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.matchers.string.shouldContain
-import mu.KotlinLogging
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
