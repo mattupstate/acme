@@ -39,11 +39,11 @@ tasks {
     reports {
       xml.apply {
         required.set(true)
-        outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/xml/coverage.xml"))
+        outputLocation.set(file("${layout.buildDirectory.get()}/reports/jacoco/xml/coverage.xml"))
       }
       html.apply {
         required.set(true)
-        outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/html"))
+        outputLocation.set(file("${layout.buildDirectory.get()}/reports/jacoco/html"))
       }
     }
   }

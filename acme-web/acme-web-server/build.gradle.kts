@@ -61,7 +61,7 @@ dependencies {
 swaggerSources {
   register("acme") {
     setInputFile(file("spec.yaml"))
-    ui.outputDir = file("${layout.buildDirectory}/swagger-ui-acme/swagger-ui")
+    ui.outputDir = file("${layout.buildDirectory.get()}/swagger-ui-acme/swagger-ui")
   }
 }
 
