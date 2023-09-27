@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatLineModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,7 +14,6 @@ import { NotificationsComponent } from './notifications.component';
 @NgModule({
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatCardModule,
     MatToolbarModule,
     MatDividerModule,

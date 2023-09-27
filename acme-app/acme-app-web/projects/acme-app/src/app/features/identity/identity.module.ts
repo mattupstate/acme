@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -42,7 +41,6 @@ import { VerifyComponent } from './verify/verify.component';
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
