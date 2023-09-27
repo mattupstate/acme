@@ -4,7 +4,8 @@ COPY package* ./
 RUN npm install
 COPY .eslintrc.json angular.json tsconfig.json ./
 COPY projects ./projects
-CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
+COPY docker-entrypoint.sh ./
+ENTRYPOINT [ "/usr/src/docker-entrypoint.sh" ]
 
 FROM dev as build
 RUN npx ng build
