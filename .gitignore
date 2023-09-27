@@ -65,3 +65,4 @@ libs.versions.updates.toml
 .env
 .auto.tfvars
 .auto.tfvars.json
+.secrets
