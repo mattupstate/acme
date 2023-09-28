@@ -9,20 +9,8 @@ import {
 
 @Component({
   selector: 'app-recover-container',
-  template: `
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-recover
-        fxFlex.xs
-        fxFlex.gt-xs="400px"
-        [toggleView]="requested$ | async"
-        [errorCode]="errorCode$ | async"
-        [enabled]="(busy$ | async) === false"
-        (formSubmit)="dispatch($event)"
-        (recoverCodeSubmit)="dispatchCode($event)"
-      >
-      </app-recover>
-    </div>
-  `,
+  styleUrls: ['./recover-container.component.less'],
+  templateUrl: './recover-container.component.html',
 })
 export class RecoverContainerComponent {
   errorCode$ = this.store.select(selectRecoverError);

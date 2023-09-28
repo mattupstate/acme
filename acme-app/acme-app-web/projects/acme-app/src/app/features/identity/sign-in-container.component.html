@@ -1,0 +1,5 @@
+<div class="container">
+  <app-sign-in [errorCode]="errorCode$ | async" [postVerify]="postVerify" [enabled]="(busy$ | async) === false"
+    (formSubmit)="dispatch($event)" (openIdRequest)="onOpenIdRequest($event)">
+  </app-sign-in>
+</div>

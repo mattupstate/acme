@@ -2,26 +2,13 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { signIn, signInViaOpenId } from '../../app.actions';
 import { selectBusy, selectSignInError } from '../../app.selectors';
-import { SignInError } from '../../app.state';
 
 @Component({
   selector: 'app-sign-in-container',
-  template: `
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-sign-in
-        fxFlex.xs
-        fxFlex.gt-xs="400px"
-        [errorCode]="errorCode$ | async"
-        [postVerify]="postVerify"
-        [enabled]="(busy$ | async) === false"
-        (formSubmit)="dispatch($event)"
-        (openIdRequest)="onOpenIdRequest($event)">
-      </app-sign-in>
-    </div>
-  `,
+  styleUrls: ["./sign-in-container.component.less"],
+  templateUrl: "./sign-in-container.component.html",
 })
 export class SignInContainerComponent {
   errorCode$ = this.store.select(selectSignInError);

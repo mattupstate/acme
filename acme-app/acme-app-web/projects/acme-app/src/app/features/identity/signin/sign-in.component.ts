@@ -8,7 +8,7 @@ import { UntypedFormBuilder, Validators } from '@angular/forms';
 })
 export class SignInComponent {
   hidePassword = true;
-
+  
   signInForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],

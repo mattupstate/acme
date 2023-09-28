@@ -1,9 +1,20 @@
-mat-card-content {
-  margin-top: 2em;
+mat-card {
+  max-width: 400px;
 }
 
-.mat-form-field {
+mat-card-content {
+  margin-top: 1em;
+}
+
+mat-form-field {
   width: 100%;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .root-error {
@@ -13,7 +24,7 @@ mat-card-content {
   color: white;
 }
 
-.root-error > div {
+.root-error>div {
   margin-right: 1em;
 }
 
@@ -21,6 +32,7 @@ p.already {
   margin-top: 2em;
 }
 
-button {
-  margin-bottom: 1em;
+.form-btn {
+  margin-bottom: 0.5em;
+  width: 70%;
 }

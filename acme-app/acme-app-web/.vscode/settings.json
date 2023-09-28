@@ -1,4 +1,7 @@
 {
+  "files.exclude": {
+    "projects/**/build": true
+  },
   "editor.formatOnSave": true,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

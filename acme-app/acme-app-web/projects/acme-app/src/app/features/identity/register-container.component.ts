@@ -5,20 +5,8 @@ import { selectBusy, selectRegistrationError, selectRegistrationRequested } from
 
 @Component({
   selector: 'app-register-container',
-  template: `
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-register
-        fxFlex.xs
-        fxFlex.gt-xs="400px"
-        [toggleView]="(requested$ | async)"
-        [asyncErrors]="asyncErrors$ | async"
-        [enabled]="(busy$ | async) === false"
-        (formSubmit)="onFormSubmit($event)"
-        (openIdRequest)="onOpenIdRequest($event)"
-      >
-      </app-register>
-    </div>
-  `,
+  styleUrls: ["./register-container.component.less"],
+  templateUrl: './register-container.component.html',
 })
 export class RegisterContainerComponent {
   asyncErrors$ = this.store.select(selectRegistrationError)

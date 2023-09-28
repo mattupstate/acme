@@ -1,15 +1,17 @@
 <mat-card>
-  <mat-card-title i18n="Sign-In form card title@signInFormCardTitle">Sign In</mat-card-title>
+  <mat-card-header>
+    <mat-card-title i18n="Sign-In form card title@signInFormCardTitle">Sign In</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <form [formGroup]="signInForm" (ngSubmit)="onSubmit(signInForm.value)" novalidate>
-      <div fxLayout="row" fxLayoutAlign="space-between start" class="post-verify" *ngIf="postVerify">
+      <div class="post-verify" *ngIf="postVerify">
         <div>
           <mat-icon>verified</mat-icon>
         </div>
         <div class="content">Thanks for verifying your account. You may now sign-in using your email and password.</div>
       </div>
-      <div fxLayout="column">
-        <mat-form-field appearance="outline">
+      <div class="form-fields">
+        <mat-form-field>
           <mat-label i18n="Sign-In form email label@@signInFormEmailLabel">
             Email
           </mat-label>
@@ -23,13 +25,13 @@
             Invalid email address
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-label i18n="Sign-In form password label@@signInFormPasswordLabel">
             Password
           </mat-label>
           <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
-          <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
           <mat-error i18n="Sign-In form password required error@@signInFormPasswordRequiredError"
@@ -44,18 +46,19 @@
           </p>
           <p class="center" i18n="Sign-In form unverified email error@@signInFormIncorrectCredentialsError"
             *ngIf="errorCode === 2">
-            Your account is not yet verified.<br/>Please <a [routerLink]="verifyLink">verify your email address</a>.
+            Your account is not yet verified.<br />Please <a [routerLink]="verifyLink">verify your email address</a>.
           </p>
           <p class="center" i18n="Sign-In form unexpected error@@signInFormUnexpectedError" *ngIf="errorCode === 100">
             An unexpected problem occurred.<br />Please try again in a few minutes.
           </p>
         </div>
-        <button type="submit" color="primary" mat-raised-button
+        <button type="submit" mat-raised-button color="primary" class="form-btn"
           i18n="Sign-In form button label@@signInFormButtonLabel">Sign in
         </button>
         <p class="center">or</p>
-        <button type="button" mat-raised-button color="primary" class="btn-block oidc"
-          (click)="onOpenIdRequest('google')">Sign in with Google</button>
+        <button type="button" mat-raised-button color="primary" class="form-btn oidc"
+          (click)="onOpenIdRequest('google')">Sign in
+          with Google</button>
         <a class="forgot" mat-button color="accent" [routerLink]="recoverLink"
           i18n="Sign-In form forgot password button label@@signInFormForgotPasswordButtonLabel">
           Forgot your password?

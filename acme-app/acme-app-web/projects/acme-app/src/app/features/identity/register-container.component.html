@@ -1,0 +1,5 @@
+<div class="container">
+  <app-register [toggleView]="(requested$ | async)" [asyncErrors]="asyncErrors$ | async"
+    [enabled]="(busy$ | async) === false" (formSubmit)="onFormSubmit($event)" (openIdRequest)="onOpenIdRequest($event)">
+  </app-register>
+</div>

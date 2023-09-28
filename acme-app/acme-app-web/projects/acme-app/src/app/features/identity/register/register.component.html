@@ -1,15 +1,17 @@
 <mat-card>
-  <mat-card-title i18n="Register form card title@registerFormCardTitle">Register</mat-card-title>
+  <mat-card-header>
+    <mat-card-title i18n="Register form card title@registerFormCardTitle">Register</mat-card-title>
+  </mat-card-header>
   <mat-card-content *ngIf="!requested" name="form-card-content">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)">
-      <div fxLayout="row" fxLayoutAlign="space-between start" class="root-error" *ngIf="root.errors?.async">
+      <div class="root-error" *ngIf="root.errors?.async">
         <div>
           <mat-icon>error</mat-icon>
         </div>
         <div>{{ root.errors?.async }}</div>
       </div>
-      <div fxLayout="column">
-        <mat-form-field appearance="outline">
+      <div class="form-fields">
+        <mat-form-field>
           <mat-label i18n="Register form email label@registerFormEmailLabel">Email</mat-label>
           <input matInput formControlName="email">
           <mat-error *ngIf="hasError('email', 'required')">
@@ -18,8 +20,8 @@
             </span>
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label i18n="Register form password label@registerFormPasswordLabel">Enter a password</mat-label>
+        <mat-form-field>
+          <mat-label i18n="Register form password label@registerFormPasswordLabel">Password</mat-label>
           <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
           <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
@@ -32,7 +34,7 @@
           <mat-error *ngIf="hasError('password', 'async')">{{ displaySafeError('password', 'async') }} ... <a
               (click)="displayExtendedError('password', 'async')">more</a></mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-label i18n="Register form first name label@registerFormGivenNameLabel">First Name</mat-label>
           <input matInput formControlName="givenName">
           <mat-error *ngIf="hasError('givenName', 'required')">
@@ -40,7 +42,7 @@
               required</span>
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field>
           <mat-label i18n="Register form last name label@registerFormFamilyNameLabel">Last Name</mat-label>
           <input matInput formControlName="familyName">
           <mat-error *ngIf="hasError('familyName', 'required')">
@@ -48,10 +50,10 @@
               required</span>
           </mat-error>
         </mat-form-field>
-        <button type="submit" mat-raised-button color="primary" class="btn-block"
+        <button type="submit" mat-raised-button color="primary" class="form-btn"
           i18n="Register form submit button label@registerFormSubmitButtonLabel">Register</button>
         <p class="center">or</p>
-        <button type="button" mat-raised-button color="primary" class="btn-block oidc"
+        <button type="button" mat-raised-button color="primary" class="form-btn oidc"
           (click)="onOpenIdRequest('google')"
           i18n="Register form with Google button label@registerFormWithGoogleButtonLabel">
           Register with Google</button>
