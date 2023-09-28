@@ -12,7 +12,6 @@ import {
 } from '@ory/kratos-client';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { OryKratosHttpClient } from './identity.http';
 
 export interface RefreshResult {
   refreshed: boolean;
@@ -220,7 +219,7 @@ export class IdentityServiceUnexpectedError extends IdentityServiceError {
 
 export class KratosIdentityService implements IdentityService {
   constructor(
-    private http: OryKratosHttpClient,
+    private http: HttpClient,
     private baseUrl: string,
     private registrationReturnTo: string,
     private recoveryReturnTo: string

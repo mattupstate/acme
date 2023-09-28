@@ -29,7 +29,7 @@ export const ORY_KRATOS_HTTP_INTERCEPTORS = new InjectionToken<
 
 @Injectable()
 export class OryKratosHttpClient extends HttpClient {
-  constructor(backend: HttpBackend, private injector: Injector) {
+  constructor(backend: HttpBackend, injector: Injector) {
     super(
       new CustomHttpHandler(backend, injector, ORY_KRATOS_HTTP_INTERCEPTORS)
     );
