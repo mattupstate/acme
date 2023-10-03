@@ -66,3 +66,4 @@ libs.versions.updates.toml
 .auto.tfvars
 .auto.tfvars.json
 .secrets
+**/charts

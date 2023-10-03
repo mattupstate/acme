@@ -5,7 +5,7 @@
 # Specifies the name of the Vault role to assume
 vault:
   role: database-root-rotator
-  addr: http://vault.management.svc.cluster.local:8200
+  addr: http://vault.vault.svc.cluster.local:8200
   # Specifies the name of the Vault database connection to rotate
   database: ""
 
@@ -22,10 +22,10 @@ job:
   parallelism:  1
 
 image:
-  repository: vault
+  repository: hashicorp/vault
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "1.11.2"
 
 imagePullSecrets: []
 nameOverride: ""

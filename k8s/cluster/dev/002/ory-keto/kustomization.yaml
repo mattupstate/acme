@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: keto
+    repo: https://k8s.ory.sh/helm/charts
+    version: "0.36.0"
+    releaseName: keto
+    namespace: default
+    valuesFile: ./helm_release.keto.values.yaml
+    skipTests: true
+
+patches:
+  - target:
+      kind: Deployment
+      name: keto
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/containers/0/env
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --config=/vault/secrets/secrets.yaml
+  - target:
+      group: batch
+      version: v1
+      kind: Job
+      name: keto-automigrate
+      namespace: default
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/containers/0/env
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --config=/vault/secrets/secrets.yaml

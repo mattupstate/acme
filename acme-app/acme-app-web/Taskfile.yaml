@@ -1,6 +1,14 @@
 version: '3'
 
 tasks:
+  dev-server:
+    cmds:
+      - >-
+        npx ng serve --ssl \
+          --ssl-cert ../../k8s/cluster/dev/.certs/_wildcard.nip.io.pem \
+          --ssl-key ../../k8s/cluster/dev/.certs/_wildcard.nip.io-key.pem \
+          --disable-host-check
+
   install:
     cmds:
       - npm install --prune

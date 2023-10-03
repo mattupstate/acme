@@ -1,0 +1,72 @@
+keto:
+  config:
+    version: v0.11.0-alpha.0
+    tracing:
+      service_name: ory-keto
+      provider: jaeger
+      providers:
+        jaeger:
+          # sampling:
+          #   server_url: http://jaeger:5778
+          local_agent_address: opentelemetry-collector.ops.svc.cluster.local:6831
+    log:
+      level: info
+      format: json
+      leak_sensitive_values: true
+    namespaces:
+      - id: 0
+        name: scheduling
+    serve:
+      read:
+        host: 0.0.0.0
+        port: 4466
+      write:
+        host: 0.0.0.0
+        port: 4467
+      metrics:
+        host: 0.0.0.0
+        port: 4468
+    dsn: ""
+  automigration:
+    type: job
+    enabled: true
+
+secret:
+  enabled: false
+
+serviceAccount:
+  name: keto-app
+
+deployment:
+  podAnnotations:
+    vault.hashicorp.com/role: "keto-app"
+    vault.hashicorp.com/agent-limits-cpu: ""
+    vault.hashicorp.com/agent-limits-mem: ""
+    vault.hashicorp.com/agent-requests-cpu: ""
+    vault.hashicorp.com/agent-requests-mem: ""
+    vault.hashicorp.com/agent-pre-populate-only: "true"
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject-file-secrets.yaml: "secrets.yaml"
+    vault.hashicorp.com/agent-inject-secret-secrets.yaml: "database/roles/keto-app"
+    vault.hashicorp.com/agent-inject-template-secrets.yaml: |
+      {{- with secret "database/creds/keto-app" -}}
+      dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@keto-postgresql.default.svc.cluster.local:5432/keto?sslmode=disable
+      {{- end }}
+
+job:
+  serviceAccount:
+    name: keto-dba
+  annotations:
+    vault.hashicorp.com/role: "keto-dba"
+    vault.hashicorp.com/agent-limits-cpu: ""
+    vault.hashicorp.com/agent-limits-mem: ""
+    vault.hashicorp.com/agent-requests-cpu: ""
+    vault.hashicorp.com/agent-requests-mem: ""
+    vault.hashicorp.com/agent-pre-populate-only: "true"
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject-file-secrets.yaml: "secrets.yaml"
+    vault.hashicorp.com/agent-inject-secret-secrets.yaml: "database/roles/keto-dba"
+    vault.hashicorp.com/agent-inject-template-secrets.yaml: |
+      {{- with secret "database/creds/keto-dba" -}}
+      dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@keto-postgresql.default.svc.cluster.local:5432/keto?sslmode=disable
+      {{- end }}

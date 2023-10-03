@@ -1,0 +1,278 @@
+secret:
+  enabled: false
+kratos:
+  config:
+    version: v0.11.0
+    tracing:
+      service_name: ory-kratos
+      provider: jaeger
+      providers:
+        jaeger:
+          # sampling:
+          #   server_url: http://jaeger:5778
+          local_agent_address: opentelemetry-collector.ops.svc.cluster.local:6831
+    watch-courier: true
+    serve:
+      public:
+        base_url: https://kratos-127-0-0-1.nip.io
+      admin:
+        base_url: https://kratos-admin-127-0-0-1.nip.io
+        request_log:
+          disable_for_health: true
+    cookies:
+      same_site: None
+      domain: nip.io
+    session:
+      cookie:
+        domain: nip.io
+        same_site: None
+    selfservice:
+      default_browser_return_url: http://app-127-0-0-1.nip.io:4200
+      allowed_return_urls:
+        - https://app-127-0-0-1.nip.io:4200
+      methods:
+        password:
+          enabled: true
+        oidc:
+          enabled: true
+          config:
+            providers: [ ]
+        code:
+          enabled: true
+      flows:
+        error:
+          ui_url: https://app-127-0-0-1.nip.io:4200/error
+        settings:
+          ui_url: https://app-127-0-0-1.nip.io:4200/settings
+          privileged_session_max_age: 15m
+        recovery:
+          enabled: true
+          lifespan: 2h
+          use: code
+          ui_url: https://app-127-0-0-1.nip.io:4200/recover
+        verification:
+          enabled: true
+          ui_url: https://app-127-0-0-1.nip.io:4200/sign-in?verified=true
+          after:
+            default_browser_return_url: https://app-127-0-0-1.nip.io:4200/sign-in?verified=true
+        logout:
+          after:
+            default_browser_return_url: https://app-127-0-0-1.nip.io:4200/sign-in
+        login:
+          ui_url: https://app-127-0-0-1.nip.io:4200/sign-in
+          lifespan: 10m
+          after:
+            password:
+              hooks:
+                - hook: require_verified_address
+        registration:
+          lifespan: 1h
+          ui_url: https://app-127-0-0-1.nip.io:4200/registration
+          after:
+            oidc:
+              hooks:
+                - hook: session
+    #        password:
+    #          hooks:
+    #            - hook: session
+    log:
+      level: info
+      format: json
+      leak_sensitive_values: true
+    ciphers:
+      algorithm: xchacha20-poly1305
+    hashers:
+      algorithm: bcrypt
+      bcrypt:
+        cost: 8
+    identity:
+      default_schema_id: default
+      schemas:
+        - id: default
+          url: file:///etc/config/identity.default.schema.json
+    courier:
+      smtp:
+        from_address: support@app-127-0-0-1.nip.io
+        from_name: Support
+
+  identitySchemas:
+    "oidc.google.jsonnet": |
+      local claims = {
+        email_verified: true
+      } + std.extVar('claims');
+
+      {
+        identity: {
+          traits: {
+            [if "email" in claims && claims.email_verified then "email" else null]: claims.email,
+            name: {
+              given: claims.given_name,
+              family: claims.family_name,
+              preferred: claims.given_name
+            }
+          },
+        },
+      }
+    "identity.default.schema.json": |
+      {
+        "$id": "https://schemas.ory.sh/presets/kratos/quickstart/email-password/identity.schema.json",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Person",
+        "type": "object",
+        "properties": {
+          "traits": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "title": "E-Mail",
+                "minLength": 3,
+                "ory.sh/kratos": {
+                  "credentials": {
+                    "password": {
+                      "identifier": true
+                    }
+                  },
+                  "verification": {
+                    "via": "email"
+                  },
+                  "recovery": {
+                    "via": "email"
+                  }
+                }
+              },
+              "name": {
+                "type": "object",
+                "properties": {
+                  "given": {
+                    "title": "First Name",
+                    "type": "string"
+                  },
+                  "family": {
+                    "title": "Last Name",
+                    "type": "string"
+                  },
+                  "preferred": {
+                    "title": "Preferred Name",
+                    "type": "string"
+                  },
+                  "prefix": {
+                    "title": "Prefix",
+                    "type": "string"
+                  },
+                  "suffix": {
+                    "title": "Suffix",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "given",
+                  "family",
+                  "preferred"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "email",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+
+  automigration:
+    enabled: true
+    type: job
+
+secret:
+  enabled: false
+
+deployment:
+  serviceAccount:
+    name: kratos-app
+  annotations:
+    vault.hashicorp.com/role: "kratos-app"
+    vault.hashicorp.com/agent-limits-cpu: ""
+    vault.hashicorp.com/agent-limits-mem: ""
+    vault.hashicorp.com/agent-requests-cpu: ""
+    vault.hashicorp.com/agent-requests-mem: ""
+    vault.hashicorp.com/agent-pre-populate-only: "true"
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject-file-secrets.yaml: "secrets.yaml"
+    vault.hashicorp.com/agent-inject-secret-secrets.yaml: "database/roles/kratos-app"
+    vault.hashicorp.com/agent-inject-template-secrets.yaml: |
+      {{- with secret "database/creds/kratos-app" -}}
+        dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@kratos-postgresql.default.svc.cluster.local:5432/kratos?sslmode=disable
+      {{- end }}
+      {{- with secret "service/kratos/config" }}
+      courier:
+        smtp:
+            connection_uri: "{{ .Data.data.courier.connection_uri }}"
+      secrets:
+      {{ .Data.data.secrets | toYAML | indent 2 }}
+      selfservice:
+        methods:
+          oidc:
+            config:
+              providers:
+                - id: google
+                  provider: google
+                  client_id: {{ .Data.data.oidc.google.client_id }}
+                  client_secret: {{ .Data.data.oidc.google.client_secret }}
+                  mapper_url: file:///etc/config/oidc.google.jsonnet
+                  scope:
+                    - email
+                    - profile
+                  requested_claims:
+                    id_token:
+                      email:
+                        essential: true
+                      email_verified:
+                        essential: true
+                      given_0.name:
+                        essential: true
+                      family_name: null
+      {{ end }}
+
+job:
+  serviceAccount:
+    name: kratos-dba
+  annotations:
+    vault.hashicorp.com/role: "kratos-dba"
+    vault.hashicorp.com/agent-limits-cpu: ""
+    vault.hashicorp.com/agent-limits-mem: ""
+    vault.hashicorp.com/agent-requests-cpu: ""
+    vault.hashicorp.com/agent-requests-mem: ""
+    vault.hashicorp.com/agent-pre-populate-only: "true"
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject-file-secrets.yaml: "secrets.yaml"
+    vault.hashicorp.com/agent-inject-secret-secrets.yaml: "database/roles/kratos-dba"
+    vault.hashicorp.com/agent-inject-command-secrets.yaml: "cat /vault/secrets/secrets.yaml"
+    vault.hashicorp.com/agent-inject-template-secrets.yaml: |
+      {{- with secret "database/creds/kratos-dba" -}}
+      dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@kratos-postgresql.default.svc.cluster.local:5432/kratos?sslmode=disable
+      {{- end }}
+
+ingress:
+  public:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/cors-allow-origin: https://app-127-0-0-1.nip.io:4200
+      nginx.ingress.kubernetes.io/cors-allow-methods: OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE
+      nginx.ingress.kubernetes.io/cors-allow-headers: Authorization,Cookie,Content-Type
+      nginx.ingress.kubernetes.io/cors-expose-headers: Content-Type,Set-Cookie
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    tls:
+      - hosts:
+          - kratos-127-0-0-1.nip.io
+        secretName: tls-io-nip-wildcard
+    hosts:
+      - host: kratos-127-0-0-1.nip.io
+        paths:
+          - path: "/"
+            pathType: Prefix
