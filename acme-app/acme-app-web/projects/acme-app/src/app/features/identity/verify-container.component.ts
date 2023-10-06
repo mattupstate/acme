@@ -7,19 +7,8 @@ import { IdentityServiceVerifyError } from './identity.service';
 
 @Component({
   selector: 'app-verify-container',
-  template: `
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-verify
-        fxFlex.xs
-        fxFlex.gt-xs="400px"
-        [toggleView]="(requested$ | async)"
-        [errorCode]="errorCode$ | async"
-        [enabled]="(busy$ | async) === false"
-        (formSubmit)="dispatch($event)"
-      >
-      </app-verify>
-    </div>
-  `,
+  styleUrls: ['./verify-container.component.less'],
+  templateUrl: './verify-container.component.html',
 })
 export class VerifyContainerComponent {
   errorCode$ = this.store.select(selectVerifyError);

@@ -220,13 +220,13 @@ export class IdentityServiceUnexpectedError extends IdentityServiceError {
 export class KratosIdentityService implements IdentityService {
   constructor(
     private http: HttpClient,
-    private baseUrl: string,
-    private registrationReturnTo: string,
-    private recoveryReturnTo: string
+    private kratosUrl: string,
+    private afterVerifyReturnTo: string,
+    private afterRecoveryReturnTo: string
   ) {}
 
   whoAmI(): Observable<Identity> {
-    return this.http.get<Session>(`${this.baseUrl}/sessions/whoami`).pipe(
+    return this.http.get<Session>(`${this.kratosUrl}/sessions/whoami`).pipe(
       map((res: Session) => mapKratosIdentityToIdentity(res.identity)),
       catchError((res: HttpErrorResponse) => {
         if (res.status === 401) {
@@ -240,7 +240,7 @@ export class KratosIdentityService implements IdentityService {
 
   signIn(email: string, password: string): Observable<Identity> {
     return this.http
-      .get<SelfServiceLoginFlow>(`${this.baseUrl}/self-service/login/browser`)
+      .get<SelfServiceLoginFlow>(`${this.kratosUrl}/self-service/login/browser`)
       .pipe(
         mergeMap((res) =>
           this.http
@@ -273,7 +273,7 @@ export class KratosIdentityService implements IdentityService {
   signInViaOpenId(provider: string): Observable<string> {
     return this.http
       .get<SelfServiceRegistrationFlow>(
-        `${this.baseUrl}/self-service/login/browser`
+        `${this.kratosUrl}/self-service/login/browser`
       )
       .pipe(
         mergeMap((res) =>
@@ -321,7 +321,7 @@ export class KratosIdentityService implements IdentityService {
   registerViaOpenId(provider: string): Observable<string> {
     return this.http
       .get<SelfServiceRegistrationFlow>(
-        `${this.baseUrl}/self-service/registration/browser?return_to=${this.registrationReturnTo}`
+        `${this.kratosUrl}/self-service/registration/browser?return_to=${this.afterVerifyReturnTo}`
       )
       .pipe(
         mergeMap((res) =>
@@ -365,7 +365,7 @@ export class KratosIdentityService implements IdentityService {
   ): Observable<void> {
     return this.http
       .get<SelfServiceRegistrationFlow>(
-        `${this.baseUrl}/self-service/registration/browser?verified=true&after_verification_return_to=${this.registrationReturnTo}`
+        `${this.kratosUrl}/self-service/registration/browser?verified=true&after_verification_return_to=${this.afterVerifyReturnTo}`
       )
       .pipe(
         mergeMap((res) =>
@@ -408,7 +408,7 @@ export class KratosIdentityService implements IdentityService {
   verify(email: string): Observable<void> {
     return this.http
       .get<SelfServiceVerificationFlow>(
-        `${this.baseUrl}/self-service/verification/browser`
+        `${this.kratosUrl}/self-service/verification/browser`
       )
       .pipe(
         mergeMap((res) =>
@@ -440,7 +440,7 @@ export class KratosIdentityService implements IdentityService {
   requestRecoveryCode(email: string): Observable<RequestRecoveryCodeResult> {
     return this.http
       .get<SelfServiceRecoveryFlow>(
-        `${this.baseUrl}/self-service/recovery/browser?return_to=${this.recoveryReturnTo}`
+        `${this.kratosUrl}/self-service/recovery/browser?return_to=${this.afterRecoveryReturnTo}`
       )
       .pipe(
         mergeMap((res) =>
@@ -478,7 +478,7 @@ export class KratosIdentityService implements IdentityService {
 
   completeRecovery(email: string, code: string): Observable<void> {
     return this.http
-      .get<SelfServiceRecoveryFlow>(`${this.baseUrl}/self-service/recovery`)
+      .get<SelfServiceRecoveryFlow>(`${this.kratosUrl}/self-service/recovery`)
       .pipe(
         mergeMap((res) =>
           this.http
@@ -507,7 +507,7 @@ export class KratosIdentityService implements IdentityService {
 
   logout(): Observable<void> {
     return this.http
-      .get<SelfServiceLogoutUrl>(`${this.baseUrl}/self-service/logout/browser`)
+      .get<SelfServiceLogoutUrl>(`${this.kratosUrl}/self-service/logout/browser`)
       .pipe(
         mergeMap((res) => this.http.get(res.logout_url!).pipe(map(() => {})))
       );

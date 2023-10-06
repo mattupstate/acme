@@ -1,0 +1,5 @@
+<div class="container">
+    <app-verify [toggleView]="(requested$ | async)" [errorCode]="errorCode$ | async"
+        [enabled]="(busy$ | async) === false" (formSubmit)="dispatch($event)">
+    </app-verify>
+</div>

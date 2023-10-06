@@ -53,7 +53,7 @@ export const initializer = (store: Store) => () =>
       autoPause: true,
     }),
     NotificationsAlertModule,
-    IdentityModule.forRoot(environment.identity.kratosUrl),
+    IdentityModule.forRoot(),
     FeatureModule,
   ],
   providers: [

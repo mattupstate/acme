@@ -53,21 +53,22 @@ import { VerifyComponent } from './verify/verify.component';
   ]
 })
 export class IdentityModule {
-  static forRoot(baseUrl: string): ModuleWithProviders<IdentityModule> {
+  static forRoot(): ModuleWithProviders<IdentityModule> {
     return {
       ngModule: IdentityModule,
       providers: [
         {
           provide: IdentityService,
-          useFactory: (http: OryKratosHttpClient) => {
+          useFactory: (http: OryKratosHttpClient, window: Window) => {
+            const baseUrl = `${window.location.protocol}//${window.location.host}`
             return new KratosIdentityService(
               http,
-              baseUrl,
-              environment.identity.afterVerificationReturnTo,
-              environment.identity.afterVerificationReturnTo
+              environment.identity.kratosUrl,
+              `${baseUrl}${environment.identity.afterVerifyReturnTo}`,
+              `${baseUrl}${environment.identity.afterRecoveryReturnTo}`
             );
           },
-          deps: [OryKratosHttpClient],
+          deps: [OryKratosHttpClient, Window],
         },
         {
           provide: ORY_KRATOS_HTTP_INTERCEPTORS,
