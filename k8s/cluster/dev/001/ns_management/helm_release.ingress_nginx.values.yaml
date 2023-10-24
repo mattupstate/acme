@@ -1,9 +1,5 @@
 controller:
-  # service:
-  #   type: NodePort
-  #   nodePorts:
-  #     http: 8080
-  #     https: 4443
+  allowSnippetAnnotations: true
   metrics:
     enabled: true
   podAnnotations:
@@ -11,13 +7,12 @@ controller:
     prometheus.io/port: 10254
   config:
     data:
-      allow-snippet-annotations: "true"
-      enable-opentracing: "true"
-      opentracing-operation-name: "$request_method $host"
-      opentracing-location-operation-name: "$namespace $service_name"
-      jaeger-collector-host: opentelemetry-collector.ops.svc.cluster.local:6831
-      jaeger-collector-port: "6831"
-      jaeger-service-name: ingress-nginx
+      # enable-opentracing: "true"
+      # opentracing-operation-name: "$request_method $host"
+      # opentracing-location-operation-name: "$namespace $service_name"
+      # jaeger-collector-host: opentelemetry-collector.ops.svc.cluster.local:6831
+      # jaeger-collector-port: "6831"
+      # jaeger-service-name: ingress-nginx
       # jaeger-sampler-host: opentelemetry-collector.ops.svc.cluster.local:6831
       # jaeger-sampler-port: "5778"
       # jaeger-sampler-type: const

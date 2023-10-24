@@ -1,0 +1,9 @@
+containerArgs: 
+  - -Dio.ktor.development=true
+podEnv:
+  - name: JAVA_TOOL_OPTIONS
+    value: -Dio.ktor.development=true
+  - name: LOG_FORMAT
+    value: text
+  - name: OTEL_SDK_DISABLED
+    value: "true"

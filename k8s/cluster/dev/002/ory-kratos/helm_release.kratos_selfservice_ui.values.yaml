@@ -1,0 +1,4 @@
+projectName: Acme
+nameOverride: kratos-selfservice-ui
+fullnameOverride: kratos-selfservice-ui
+kratosBrowserUrl: https://kratos-127-0-0-1.nip.io

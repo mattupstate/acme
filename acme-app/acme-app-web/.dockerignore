@@ -1,7 +1,0 @@
-.cache
-.git
-.gitignore
-.editorconfig
-acme-angular.iml
-node_modules
-README.md

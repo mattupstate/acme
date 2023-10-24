@@ -19,7 +19,7 @@ content:
   sources:
     - url: https://github.com/mattupstate/acme.git
       branches: main
-      start_paths: acme-docs/root, acme-docs/handbook, acme-docs/decisions, acme-web/acme-web-server/docs
+      start_paths: acme-docs/root, acme-docs/handbook, acme-docs/decisions, acme-web/acme-web-api/docs
 ui:
   bundle:
     url: https://gitlab.com/mattupstate/acme-antora-ui/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable

@@ -1,5 +1,5 @@
 # Secrets
-path "service/data/acme-web-server/*" {
+path "service/data/acme-web-app/*" {
   capabilities = ["read"]
 }
 

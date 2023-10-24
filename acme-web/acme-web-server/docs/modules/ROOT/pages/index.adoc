@@ -1,3 +1,0 @@
-= Overview
-
-The `acme-web-server` module implements a REST API to afford web applications to execute Acme domain commands and query data materialized from domain event handlers.

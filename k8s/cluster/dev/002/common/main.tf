@@ -1,3 +1,7 @@
+variable "database_root_rotator_service_account_names" {
+  type = list(string)
+}
+
 # Authentication
 resource "vault_auth_backend" "kubernetes" {
   type        = "kubernetes"
@@ -40,24 +44,8 @@ resource "vault_kubernetes_auth_backend_role" "database_root_rotator" {
   role_name = "database-root-rotator"
 
   bound_service_account_namespaces = ["default"]
-  bound_service_account_names = [
-    "keto-database-root-rotator",
-    "kratos-database-root-rotator",
-    "acme-web-server-database-root-rotator"
-  ]
+  bound_service_account_names = var.database_root_rotator_service_account_names
   token_policies = [vault_policy.database_root_rotator.name]
-}
-
-output "vault_kubernetes_auth_backend_path" {
-  value = vault_auth_backend.kubernetes.path
-}
-
-output "vault_mount_database_path" { 
-  value = vault_mount.database.path
-}
-
-output "vault_mount_services_path" {
-  value = vault_mount.services.path
 }
 
 resource "helm_release" "mailhog" {
@@ -70,4 +58,16 @@ resource "helm_release" "mailhog" {
   values = [
     file("${path.module}/helm_release.mailhog.values.yaml")
   ]
+}
+
+output "vault_kubernetes_auth_backend_path" {
+  value = vault_auth_backend.kubernetes.path
+}
+
+output "vault_mount_database_path" { 
+  value = vault_mount.database.path
+}
+
+output "vault_mount_services_path" {
+  value = vault_mount.services.path
 }

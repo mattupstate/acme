@@ -16,7 +16,7 @@ For example:
 
 [source,shell script]
 ----
-$ ./gradlew acme-web:acme-web-server:test
+$ ./gradlew acme-web:acme-web-api:test
 ----
 
 Run a subset of a module's tests by specifying a package or class name.
@@ -27,20 +27,6 @@ For example:
 $ ./gradlew acme-web:acme-web-test:test --tests 'com.acme.web.test.*'
 $ ./gradlew acme-web:acme-web-test:test --tests com.acme.web.test.scheduling.api.SchedulingClientCollectionApiSpec
 ----
-
-== TypeScript Modules
-
-Typescript module's tests can be executed by running `task test` from within the module's directory.
-In most cases For example:
-
-[source,shellscript]
-----
-$ cd acme-app/acme-app-web
-$ task test
-----
-
-This will start a long-running process that re-runs tests when code is changed.
-Press `Ctrl+C` to terminate the process.
 
 == Run Locally
 

@@ -47,7 +47,7 @@ System_Boundary(c1, "Acme") {
     ContainerDb(business_database, "Business Database", "PostgreSQL", "Stores Acme business application data")
     Container(authn_proxy, "Identity Aware Proxy", "ORY Oathkeeper", "Validates end-user application sessions.")
     Container(identity_api, "Identity API", "ORY Kratos", "Authenticates and manages user information\nof the system via API")
-    Container(business_api, "Business API", "acme-web-server", "Provides Acme\n functionality via API")
+    Container(business_api, "Business API", "acme-web-api", "Provides Acme\n functionality via API")
 }
 
 System_Ext(email_system, "E-Mail System", "Third party email provider.")

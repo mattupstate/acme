@@ -43,10 +43,13 @@ io-ktor-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-conten
 io-ktor-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "io-ktor" }
 io-ktor-ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "io-ktor" }
 io-ktor-ktor-server-forwarded-header = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "io-ktor" }
+io-ktor-ktor-server-html-builder = { module = "io.ktor:ktor-server-html-builder", version.ref = "io-ktor" }
 io-ktor-ktor-server-locations = { module = "io.ktor:ktor-server-locations", version.ref = "io-ktor" }
 io-ktor-ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "io-ktor" }
 io-ktor-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "io-ktor" }
+io-ktor-ktor-server-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = "io-ktor" }
 io-ktor-ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "io-ktor" }
+io-ktor-ktor-server-thymeleaf = { module = "io.ktor:ktor-server-thymeleaf", version.ref = "io-ktor" }
 io-micrometer-micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.11.4"
 io-opentelemetry-javaagent-opentelemetry-javaagent = "io.opentelemetry.javaagent:opentelemetry-javaagent:1.30.0"
 io-opentelemetry-opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "io-opentelemetry" }
@@ -83,6 +86,7 @@ org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.9"
 org-testcontainers-postgresql = "org.testcontainers:postgresql:1.19.0"
 org-webjars-swagger-ui = "org.webjars:swagger-ui:5.7.2"
 org-yaml-snakeyaml = "org.yaml:snakeyaml:2.2"
+sh-ory-kratos = "sh.ory.kratos:kratos-client:1.0.0"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.48.0"

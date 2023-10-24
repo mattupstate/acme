@@ -1,9 +1,6 @@
 version: 3
 
 includes:
-  acme-app:acme-app-web: 
-    taskfile: ./acme-app/acme-app-web/Taskfile.yaml
-    dir: ./acme-app/acme-app-web/
   dev: 
     taskfile: ./k8s/cluster/dev/Taskfile.yaml
     dir: ./k8s/cluster/dev
@@ -27,6 +24,6 @@ tasks:
       - acme-docs/decisions/**/*
       - acme-docs/handbook/**/*
       - acme-docs/root/**/*
-      - acme-web/acme-web-server/docs/**/*
+      - acme-web/acme-web-api/docs/**/*
     generates:
       - acme-docs/build/**/*

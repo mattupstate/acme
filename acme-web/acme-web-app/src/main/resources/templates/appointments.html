@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <style>
+
+  </style>
+  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.9/index.global.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/web-component@6.1.9/index.global.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.9/index.global.min.js'></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <full-calendar shadow options='{
+        "headerToolbar": {
+          "left": "prev,next today",
+          "center": "title",
+          "right": "dayGridMonth,dayGridWeek,dayGridDay"
+        }
+      }' />
+</div>
+</body>
+</html>

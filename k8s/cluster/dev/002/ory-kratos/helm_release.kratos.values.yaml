@@ -27,9 +27,9 @@ kratos:
         domain: nip.io
         same_site: None
     selfservice:
-      default_browser_return_url: http://app-127-0-0-1.nip.io:4200
+      default_browser_return_url: http://app-127-0-0-1.nip.io
       allowed_return_urls:
-        - https://app-127-0-0-1.nip.io:4200
+        - https://app-127-0-0-1.nip.io
       methods:
         password:
           enabled: true
@@ -41,25 +41,25 @@ kratos:
           enabled: true
       flows:
         error:
-          ui_url: https://app-127-0-0-1.nip.io:4200/error
+          ui_url: https://id-127-0-0-1.nip.io/error
         settings:
-          ui_url: https://app-127-0-0-1.nip.io:4200/settings
+          ui_url: https://id-127-0-0-1.nip.io/settings
           privileged_session_max_age: 15m
         recovery:
           enabled: true
           lifespan: 2h
           use: code
-          ui_url: https://app-127-0-0-1.nip.io:4200/recover
+          ui_url: https://id-127-0-0-1.nip.io/recovery
         verification:
           enabled: true
-          ui_url: https://app-127-0-0-1.nip.io:4200/sign-in?verified=true
+          ui_url: https://id-127-0-0-1.nip.io/verification
           after:
-            default_browser_return_url: https://app-127-0-0-1.nip.io:4200/sign-in?verified=true
+            default_browser_return_url: https://app-127-0-0-1.nip.io
         logout:
           after:
-            default_browser_return_url: https://app-127-0-0-1.nip.io:4200/sign-in
+            default_browser_return_url: https://id-127-0-0-1.nip.io/login
         login:
-          ui_url: https://app-127-0-0-1.nip.io:4200/sign-in
+          ui_url: https://id-127-0-0-1.nip.io/login
           lifespan: 10m
           after:
             password:
@@ -67,17 +67,14 @@ kratos:
                 - hook: require_verified_address
         registration:
           lifespan: 1h
-          ui_url: https://app-127-0-0-1.nip.io:4200/registration
+          ui_url: https://id-127-0-0-1.nip.io/registration
           after:
             oidc:
               hooks:
                 - hook: session
-    #        password:
-    #          hooks:
-    #            - hook: session
     log:
       level: info
-      format: json
+      format: text
       leak_sensitive_values: true
     ciphers:
       algorithm: xchacha20-poly1305
@@ -152,24 +149,11 @@ kratos:
                   "family": {
                     "title": "Last Name",
                     "type": "string"
-                  },
-                  "preferred": {
-                    "title": "Preferred Name",
-                    "type": "string"
-                  },
-                  "prefix": {
-                    "title": "Prefix",
-                    "type": "string"
-                  },
-                  "suffix": {
-                    "title": "Suffix",
-                    "type": "string"
                   }
                 },
                 "required": [
                   "given",
-                  "family",
-                  "preferred"
+                  "family"
                 ],
                 "additionalProperties": false
               }
@@ -256,23 +240,23 @@ job:
       dsn: postgres://{{ .Data.username }}:{{ .Data.password }}@kratos-postgresql.default.svc.cluster.local:5432/kratos?sslmode=disable
       {{- end }}
 
-ingress:
-  public:
-    enabled: true
-    className: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      nginx.ingress.kubernetes.io/cors-allow-origin: https://app-127-0-0-1.nip.io:4200
-      nginx.ingress.kubernetes.io/cors-allow-methods: OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE
-      nginx.ingress.kubernetes.io/cors-allow-headers: Authorization,Cookie,Content-Type
-      nginx.ingress.kubernetes.io/cors-expose-headers: Content-Type,Set-Cookie
-      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    tls:
-      - hosts:
-          - kratos-127-0-0-1.nip.io
-        secretName: tls-io-nip-wildcard
-    hosts:
-      - host: kratos-127-0-0-1.nip.io
-        paths:
-          - path: "/"
-            pathType: Prefix
+# ingress:
+#   public:
+#     enabled: true
+#     className: nginx
+#     annotations:
+#       nginx.ingress.kubernetes.io/enable-cors: "true"
+#       nginx.ingress.kubernetes.io/cors-allow-origin: https://app-127-0-0-1.nip.io
+#       nginx.ingress.kubernetes.io/cors-allow-methods: OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE
+#       nginx.ingress.kubernetes.io/cors-allow-headers: Authorization,Cookie,Content-Type
+#       nginx.ingress.kubernetes.io/cors-expose-headers: Content-Type,Set-Cookie
+#       nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+#     tls:
+#       - hosts:
+#           - kratos-127-0-0-1.nip.io
+#         secretName: tls-io-nip-wildcard
+#     hosts:
+#       - host: kratos-127-0-0-1.nip.io
+#         paths:
+#           - path: "/"
+#             pathType: Prefix

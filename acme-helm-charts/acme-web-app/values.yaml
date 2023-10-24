@@ -1,0 +1,122 @@
+# Default values for acme-web-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: mattupstate/acme-web-app
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+initContainers:
+  schemaCheck:
+    image:
+      repository: mattupstate/acme-data-sql
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: "latest"
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: { }
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "acme-web-app"
+
+podAnnotations:
+  vault.hashicorp.com/role: "acme-data-sql-app"
+  vault.hashicorp.com/agent-limits-cpu: ""
+  vault.hashicorp.com/agent-limits-mem: ""
+  vault.hashicorp.com/agent-requests-cpu: ""
+  vault.hashicorp.com/agent-requests-mem: ""
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/agent-init-first: "true"
+  vault.hashicorp.com/agent-inject: "true"
+  # Init Container
+  vault.hashicorp.com/agent-inject-file-credentials: "credentials"
+  vault.hashicorp.com/agent-inject-secret-credentials: "database/roles/acme-data-sql-app"
+  vault.hashicorp.com/agent-inject-template-credentials: |
+    {{- with secret "database/creds/acme-data-sql-app" -}}
+    DB_USERNAME="{{ .Data.username }}"
+    DB_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+  # Application Container
+  vault.hashicorp.com/agent-inject-file-acme.conf: "acme.conf"
+  vault.hashicorp.com/agent-inject-secret-acme.conf: "database/roles/acme-data-sql-app"
+  vault.hashicorp.com/agent-inject-template-acme.conf: |
+    {{- with secret "database/creds/acme-data-sql-app" -}}
+    datasource {
+      username = "{{ .Data.username }}"
+      password = "{{ .Data.password }}"
+    }
+    {{- end }}
+    {{- with secret "service/acme-web-app/sessions"}}
+    sessions {
+      encryptionKey = "{{ .Data.data.encryptionKey }}"
+      signingKey = "{{ .Data.data.signingKey }}"
+    }
+    {{- end }}
+
+podSecurityContext: { }
+# fsGroup: 2000
+
+securityContext: { }
+  # capabilities:
+  #   drop:
+  #   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: { }
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  # hosts:
+  #   - host: api-127-0-0-1.nip.io
+  #     paths:
+  #       - path: /
+  #         pathType: ImplementationSpecific
+  # tls:
+  #   - secretName: tls-io-nip-wildcard
+  #     hosts:
+  #       - api-127-0-0-1.nip.io
+
+resources: { }
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

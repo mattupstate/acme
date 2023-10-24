@@ -1,6 +1,0 @@
-<div class="container">
-    <app-recover [toggleView]="requested$ | async" [errorCode]="errorCode$ | async"
-        [enabled]="(busy$ | async) === false" (formSubmit)="dispatch($event)"
-        (recoverCodeSubmit)="dispatchCode($event)">
-    </app-recover>
-</div>

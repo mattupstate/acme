@@ -48,14 +48,34 @@ resource "vault_kubernetes_auth_backend_role" "acme_data_sql_app" {
   role_name = "acme-data-sql-app"
 
   bound_service_account_namespaces = ["default"]
-  bound_service_account_names      = ["acme-web-server"]
+  bound_service_account_names      = ["acme-web-api", "acme-web-app"]
   token_policies                   = [vault_policy.acme_data_sql_app.name]
 }
 
 
 resource "vault_database_secret_backend_connection" "acme" {
   backend = var.vault_mount_database_path
-  name    = "acme-web-server"
+  name    = "acme-web-api"
+
+  allowed_roles = [
+    "acme-data-sql-dba",
+    "acme-data-sql-app",
+  ]
+
+  postgresql {
+    username       = "vault"
+    password       = "rotate-me-immediately"
+    connection_url = "postgresql://{{username}}:{{password}}@acme-postgresql.default.svc.cluster.local:5432/acme"
+  }
+
+  depends_on = [
+    helm_release.acme_postgresql
+  ]
+}
+
+resource "vault_database_secret_backend_connection" "acme_app_web_htmx" {
+  backend = var.vault_mount_database_path
+  name    = "acme-web-app"
 
   allowed_roles = [
     "acme-data-sql-dba",
@@ -99,6 +119,17 @@ resource "vault_database_secret_backend_role" "acme_data_sql_app" {
     "GRANT acme_data_sql_app TO \"{{name}}\"",
     "ALTER ROLE \"{{name}}\" SET ROLE acme_data_sql_app;"
   ]
+}
+
+resource "vault_kv_secret_v2" "session_keys" {
+  mount               = "service"
+  name                = "acme-web-app/sessions"
+  data_json = jsonencode(
+    {
+      encryptionKey = "cdcb243b65e5e6095922ca5eae329239",
+      signingKey = "3e3371b62c7a3da2f6ddb835e78bff4c"
+    }
+  )
 }
 
 

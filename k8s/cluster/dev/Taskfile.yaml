@@ -2,13 +2,13 @@ version: 3
 
 tasks:
   setup:1password-darwin:
-    platforms: [darwin]
+    platforms: [ darwin ]
     silent: true
     cmds:
       - brew install --cask 1password/tap/1password-cli
 
   setup:1password-linux:
-    platforms: [linux]
+    platforms: [ linux ]
     silent: true
     env:
       OP_DEB_URL: https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -34,10 +34,10 @@ tasks:
     env:
       NVM_VERSION:
         sh: |
-            git -c 'versionsort.suffix=-' \
-              ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/nvm-sh/nvm.git '*.*.*' \
-              | tail --lines=1 \
-              | cut --delimiter='/' --fields=3
+          git -c 'versionsort.suffix=-' \
+            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/nvm-sh/nvm.git '*.*.*' \
+            | tail --lines=1 \
+            | cut --delimiter='/' --fields=3
     cmds:
       - brew install unzip zip
       - task: setup:1password-linux
@@ -97,7 +97,7 @@ tasks:
             jq '{"vault_root_token": .root_token}' > .auto.tfvars.json
 
   enable-overlay-module:
-    platforms: [linux]
+    platforms: [ linux ]
     silent: true
     cmds:
       - modprobe overlay
@@ -139,24 +139,46 @@ tasks:
       - .terraform/**/*
 
   provision-002:
-    deps: [validate-kubectx, provision-002-init, fetch-secrets, fetch-vault-token]
+    deps: [ validate-kubectx, provision-002-init, fetch-secrets, fetch-vault-token ]
     dir: ./002
     env:
       KUBE_CTX:
         sh: kubectl config current-context
     cmds:
-        - terraform apply -auto-approve
-        - kubectl delete pod kratos-test-connection || true
+      - terraform apply -auto-approve
+      - kubectl delete pod kratos-test-connection || true
+
+  # Layer 003
+  provision-003-init:
+    dir: ./003
+    cmds:
+      - terraform init
+    sources:
+      - ./*.tf
+    generates:
+      - .terraform.lock.hcl
+      - .terraform/**/*
+
+  provision-003:
+    deps: [ validate-kubectx, provision-003-init, fetch-secrets, fetch-vault-token ]
+    dir: ./003
+    env:
+      KUBE_CTX:
+        sh: kubectl config current-context
+    cmds:
+      - terraform apply -auto-approve
+      - kubectl delete pod kratos-test-connection || true
 
   # All layers
   provision:
     cmds:
       - task: provision-001
       - task: provision-002
+      - task: provision-003
 
   # Minikube
   minikube:start:
-    deps: [enable-overlay-module]
+    deps: [ enable-overlay-module ]
     env:
       MINIKUBE_CPUS: "4"
       MINIKUBE_MEM: "4g"

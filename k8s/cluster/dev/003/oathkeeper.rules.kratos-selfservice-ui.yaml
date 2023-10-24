@@ -1,0 +1,22 @@
+apiVersion: oathkeeper.ory.sh/v1alpha1
+kind: Rule
+metadata:
+  name: kratos-selfservice-ui
+  namespace: default
+spec:
+  upstream:
+    url: http://kratos-selfservice-ui
+  match:
+    url: https://id-127-0-0-1.nip.io/<**>
+    methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop

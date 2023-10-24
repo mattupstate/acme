@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - acme-docs/**
-      - acme-web/acme-web-server/docs/**
+      - acme-web/acme-web-api/docs/**
 jobs:
   build:
     name: Test Antora build

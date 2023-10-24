@@ -57,7 +57,7 @@ resource "helm_release" "ingress_nginx" {
   chart      = "ingress-nginx"
   name       = "ingress-nginx"
   namespace  = kubernetes_namespace.management.metadata[0].name
-  version    = "4.8.0"
+  version    = "4.8.2"
   atomic     = true
 
   values = [

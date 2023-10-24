@@ -91,12 +91,12 @@ resource "vault_database_secret_backend_connection" "kratos" {
 }
 
 resource "vault_database_secret_backend_role" "kratos_dba" {
-  name    = "kratos-dba"
-  backend = var.vault_mount_database_path
-  db_name = vault_database_secret_backend_connection.kratos.name
+  name                = "kratos-dba"
+  backend             = var.vault_mount_database_path
+  db_name             = vault_database_secret_backend_connection.kratos.name
   # NOTE: dba credentials last for 1 hour
-  default_ttl = 60 * 60
-  max_ttl     = 60 * 60
+  default_ttl         = 60 * 60
+  max_ttl             = 60 * 60
   creation_statements = [
     "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' INHERIT VALID UNTIL '{{expiration}}';",
     "GRANT kratos_dba TO \"{{name}}\"",
@@ -105,12 +105,12 @@ resource "vault_database_secret_backend_role" "kratos_dba" {
 }
 
 resource "vault_database_secret_backend_role" "kratos_app" {
-  name    = "kratos-app"
-  backend = var.vault_mount_database_path
-  db_name = vault_database_secret_backend_connection.kratos.name
+  name                = "kratos-app"
+  backend             = var.vault_mount_database_path
+  db_name             = vault_database_secret_backend_connection.kratos.name
   # NOTE: app credentials last for 18 days
-  default_ttl = 60 * 60 * 24 * 18
-  max_ttl     = 60 * 60 * 24 * 18
+  default_ttl         = 60 * 60 * 24 * 18
+  max_ttl             = 60 * 60 * 24 * 18
   creation_statements = [
     "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' INHERIT VALID UNTIL '{{expiration}}';",
     "GRANT kratos_app TO \"{{name}}\"",
@@ -136,6 +136,7 @@ resource "helm_release" "kratos_database_root_rotator" {
   ]
 }
 
+# NOTE: Would prefer this but couldn't get it to work. Opted for "null_resource" approach below
 # resource "helm_release" "kratos" {
 #   repository = "https://k8s.ory.sh/helm/charts"
 #   chart      = "kratos"
@@ -159,14 +160,15 @@ resource "helm_release" "kratos_database_root_rotator" {
 #   ]
 # }
 
+# NOTE: Not ideal, but couldn't get "helm_release" above to work yet
 resource "null_resource" "kratos_kustomization" {
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
-  
+
   provisioner "local-exec" {
-   command = "kustomize build --enable-helm ${path.module} | kubectl apply -f -"
-   interpreter = [ "/bin/bash", "-c" ]
+    command     = "kustomize build --enable-helm ${path.module} | kubectl apply -f -"
+    interpreter = ["/bin/bash", "-c"]
   }
 
   depends_on = [
@@ -196,5 +198,18 @@ resource "helm_release" "kratos_rotator" {
 
   depends_on = [
     null_resource.kratos_kustomization
+  ]
+}
+
+resource "helm_release" "kratos_self_service_ui" {
+  chart      = "kratos-selfservice-ui-node"
+  repository = "https://k8s.ory.sh/helm/charts"
+  name       = "kratos-selfservice-ui"
+  namespace  = "default"
+  atomic     = true
+  timeout    = 30
+
+  values = [
+    file("${path.module}/helm_release.kratos_selfservice_ui.values.yaml")
   ]
 }

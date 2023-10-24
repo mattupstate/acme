@@ -1,0 +1,103 @@
+maester:
+  enabled: false
+oathkeeper:
+  managedAccessRules: false
+  config:
+    #    tracing:
+    #      service_name: ory-oathkeeper
+    #      provider: jaeger
+    #      providers:
+    #        jaeger:
+    #          sampling:
+    #            server_url: http://jaeger:5778
+    #            type: const
+    #            value: 1
+    #          local_agent_address: jaeger-agent:6831
+    log:
+      level: debug
+      format: text
+    serve:
+      proxy:
+        cors:
+          enabled: true
+          allowed_origins:
+            - "*.nip.io"
+          allowed_methods:
+            - POST
+            - GET
+            - PUT
+            - PATCH
+            - DELETE
+          allowed_headers:
+            - Authorization
+            - Content-Type
+          exposed_headers:
+            - Content-Type
+          allow_credentials: true
+          debug: true
+    errors:
+      fallback:
+        - redirect
+      handlers:
+        redirect:
+          enabled: true
+          config:
+            to: https://id-127-0-0-1.nip.io/login
+            return_to_query_param: return_to
+    access_rules:
+      matching_strategy: glob
+    authenticators:
+      noop:
+        enabled: true
+      anonymous:
+        enabled: true
+      cookie_session:
+        enabled: true
+        config:
+          check_session_url: http://kratos-public/sessions/whoami
+          preserve_path: true
+          extra_from: "@this"
+          subject_from: "identity.id"
+          only:
+            - ory_kratos_session
+    authorizers:
+      allow:
+        enabled: true
+    mutators:
+      noop:
+        enabled: true
+      header:
+        enabled: true
+        config:
+          headers:
+            X-Auth-Id: "{{ print .Subject }}"
+            X-Auth-Email: "{{ print .Extra.identity.traits.email }}"
+            X-Auth-Name-Given: "{{ print .Extra.identity.traits.name.given }}"
+            X-Auth-Name-Family: "{{ print .Extra.identity.traits.name.family }}"
+ingress:
+  proxy:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "X-Frame-Options: ALLOW-FROM https://*.nip.io";
+        more_set_headers "Content-Security-Policy: frame-ancestors 'self' *.nip.io";
+    tls:  
+      - hosts:
+          - app-127-0-0-1.nip.io
+          - id-127-0-0-1.nip.io
+          - kratos-127-0-0-1.nip.io
+        secretName: tls-io-nip-wildcard
+    hosts:
+      - host: app-127-0-0-1.nip.io
+        paths:
+          - path: "/"
+            pathType: Prefix
+      - host: id-127-0-0-1.nip.io
+        paths:
+          - path: "/"
+            pathType: Prefix
+      - host: kratos-127-0-0-1.nip.io
+        paths:
+          - path: "/"
+            pathType: Prefix

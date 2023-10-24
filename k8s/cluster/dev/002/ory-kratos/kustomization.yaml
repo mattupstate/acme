@@ -8,6 +8,7 @@ helmCharts:
     releaseName: kratos
     namespace: default
     valuesFile: ./helm_release.kratos.values.yaml
+    skipTests: true
 
 patches:
   - target:

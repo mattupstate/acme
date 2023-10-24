@@ -1,0 +1,25 @@
+<configuration>
+  <conversionRule conversionWord="ex" converterClass="com.acme.web.api.logback.ColoredExceptionConverter"/>
+
+  <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
+    <target>System.err</target>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <fieldNames class="net.logstash.logback.fieldnames.ShortenedFieldNames"/>
+    </encoder>
+  </appender>
+
+  <appender name="text" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%cyan(%d{HH:mm:ss.SSS}) %highlight(%-5level) %green(%logger{24}) {%mdc} %msg%n%ex</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="${LOG_FORMAT:-json}"/>
+  </root>
+
+  <logger name="org.eclipse.jetty" level="INFO"/>
+  <logger name="io.netty" level="INFO"/>
+  <logger name="com.acme.ktor.server.tracing" level="INFO"/>
+  <logger name="org.jooq.Constants" level="ERROR"/>
+</configuration>

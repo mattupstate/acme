@@ -1,0 +1,24 @@
+---
+apiVersion: oathkeeper.ory.sh/v1alpha1
+kind: Rule
+metadata:
+  name: acme-web-app
+spec:
+  upstream:
+    url: http://acme-web-app
+  match:
+    url: https://app-127-0-0-1.nip.io/<**>
+    methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+  authenticators:
+    - handler: cookie_session
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: header
+  errors:
+    - handler: redirect

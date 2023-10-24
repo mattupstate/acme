@@ -30,13 +30,14 @@ class RequestDecodingException(message: String, cause: Throwable) : RuntimeExcep
 
 suspend inline fun <reified T : Any> ApplicationCall.receiveAndValidate(): T =
   try {
-    (receive<T>())
+    receive<T>().also(::validate)
   } catch (exc: SerializationException) {
     throw RequestDecodingException("JSON processing error", exc)
-  }.also { obj ->
-    attributes[requestValidationKey].validate(obj).also {
-      if (it.isNotEmpty()) throw RequestBodyValidationException(it)
-    }
+  }
+
+fun ApplicationCall.validate(obj: Any): Set<ConstraintViolation<Any>> =
+  attributes[requestValidationKey].validate(obj).also {
+    if (it.isNotEmpty()) throw RequestBodyValidationException(it)
   }
 
 class RequestValidationConfiguration {
