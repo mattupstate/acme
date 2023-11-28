@@ -6,6 +6,7 @@ dependencies {
   implementation(project(":acme-data:acme-data-sql"))
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(project(":acme-domain:acme-domain-scheduling"))
+  implementation(project(":acme-lib:acme-lib-jooq"))
   implementation(project(":acme-lib:acme-lib-serialization"))
   implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)

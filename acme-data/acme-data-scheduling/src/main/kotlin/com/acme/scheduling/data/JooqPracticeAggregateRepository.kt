@@ -3,14 +3,13 @@ package com.acme.scheduling.data
 import com.acme.core.AggregateRepository
 import com.acme.core.PersistedAggregate
 import com.acme.core.PersistenceMetaData
+import com.acme.jooq.asExcluded
 import com.acme.scheduling.Practice
 import com.acme.sql.scheduling.tables.Practices.Companion.PRACTICES
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
 import org.jooq.JSONB
-import org.jooq.impl.asExcluded
 import java.time.Clock
 import java.time.LocalDateTime
 
