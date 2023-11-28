@@ -15,6 +15,7 @@ dependencies {
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  implementation(libs.org.jooq.jooq.kotlin.coroutines)
   api(libs.org.jooq)
   api(libs.org.jooq.jooq.kotlin)
 

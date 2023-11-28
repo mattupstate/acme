@@ -49,6 +49,7 @@ dependencies {
   implementation(libs.io.opentelemetry.opentelemetry.sdk)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
   implementation(libs.org.postgresql)
+  implementation(libs.org.postgresql.r2dbc)
   implementation(libs.org.slf4j.slf4j.api)
   implementation(libs.sh.ory.kratos)
   runtimeOnly(libs.org.glassfish.jakarta.el)

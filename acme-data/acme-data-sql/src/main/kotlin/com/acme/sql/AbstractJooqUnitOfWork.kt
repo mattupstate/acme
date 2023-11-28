@@ -1,16 +1,12 @@
 package com.acme.sql
 
 import com.acme.core.AbstractUnitOfWork
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jooq.Configuration
 import org.jooq.DSLContext
-import org.jooq.impl.transactionResult as suspendedTransactionalResult
+import org.jooq.kotlin.coroutines.transactionCoroutine
 
 abstract class AbstractJooqUnitOfWork(
-  private val config: Configuration,
-  private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+  private val config: Configuration
 ) : AbstractUnitOfWork() {
 
   private var _dsl: DSLContext? = null
@@ -18,12 +14,10 @@ abstract class AbstractJooqUnitOfWork(
   val dsl get() = _dsl ?: throw RuntimeException("Unit of work missing context")
 
   override suspend fun <R> transaction(block: suspend () -> R): R =
-    withContext(dispatcher) {
-      config.dsl().suspendedTransactionalResult { config ->
-        _dsl = config.dsl()
-        block().also {
-          _dsl = null
-        }
+    config.dsl().transactionCoroutine { config ->
+      _dsl = config.dsl()
+      block().also {
+        _dsl = null
       }
     }
 }

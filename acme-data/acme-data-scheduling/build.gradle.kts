@@ -9,6 +9,7 @@ dependencies {
   implementation(project(":acme-lib:acme-lib-serialization"))
   implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+  implementation(libs.org.jooq.jooq.kotlin.coroutines)
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation(libs.com.zaxxer.hikariCP)

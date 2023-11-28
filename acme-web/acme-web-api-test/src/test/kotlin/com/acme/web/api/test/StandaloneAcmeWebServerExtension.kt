@@ -89,9 +89,8 @@ class StandaloneAcmeWebServerExtension(
                 )
               ),
               keto = KetoConfiguration(
-                baseUrl = "http://127.0.0.1",
-                readPort = keto.getMappedPort(4466),
-                writePort = keto.getMappedPort(4467),
+                readUrl = "http://127.0.0.1:${keto.getMappedPort(4466)}",
+                writeUrl = "http://127.0.0.1:${keto.getMappedPort(4467)}",
               ),
             )
           )

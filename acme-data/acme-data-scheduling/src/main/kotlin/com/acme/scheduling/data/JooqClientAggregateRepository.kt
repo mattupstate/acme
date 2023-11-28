@@ -5,7 +5,6 @@ import com.acme.core.PersistedAggregate
 import com.acme.core.PersistenceMetaData
 import com.acme.scheduling.Client
 import com.acme.sql.scheduling.tables.references.CLIENTS
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext

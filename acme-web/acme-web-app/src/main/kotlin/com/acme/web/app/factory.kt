@@ -13,6 +13,7 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
+import io.r2dbc.spi.ConnectionFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.jooq.SQLDialect
@@ -34,6 +35,11 @@ fun dataSourceFactory(config: DataSourceConfiguration) = HikariDataSource(
     isAutoCommit = false
   }
 )
+
+fun jooqConfigFactory(connectionFactory: ConnectionFactory) = DefaultConfiguration().apply {
+  set(connectionFactory)
+  set(SQLDialect.POSTGRES)
+}
 
 fun jooqConfigFactory(dataSource: DataSource) = DefaultConfiguration().apply {
   set(dataSource)

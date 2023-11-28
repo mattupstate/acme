@@ -75,11 +75,13 @@ org-jlleitschuh-ktlint-gradle-plugin = "org.jlleitschuh.gradle:ktlint-gradle:10.
 org-jooq = { module = "org.jooq:jooq", version.ref = "org-jooq" }
 org-jooq-jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "org-jooq" }
 org-jooq-jooq-kotlin = { module = "org.jooq:jooq-kotlin", version.ref = "org-jooq" }
+org-jooq-jooq-kotlin-coroutines = { module = "org.jooq:jooq-kotlin-coroutines", version.ref = "org-jooq" }
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-junit-platform-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.9.1"
 org-liquibase-liquibase-core = "org.liquibase:liquibase-core:4.23.2"
 org-postgresql = "org.postgresql:postgresql:42.6.0"
+org-postgresql-r2dbc = "org.postgresql:r2dbc-postgresql:1.0.2.RELEASE"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
 org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.9"
