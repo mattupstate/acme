@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
 
-  val jooq = listener(JooqAndPostgresListener())
+  val jooq = listener(TestDatabaseListener())
   val now = LocalDateTime.now()
 
   val appointment = Appointment(

@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 
 class JooqSchedulingUnitOfWorkTest : ShouldSpec({
 
-  val jooq = listener(JooqAndPostgresListener())
+  val jooq = listener(TestDatabaseListener())
 
   should("commit work") {
     jooq.testTransaction {

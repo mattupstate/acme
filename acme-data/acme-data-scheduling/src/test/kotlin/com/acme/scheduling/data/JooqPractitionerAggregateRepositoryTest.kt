@@ -1,6 +1,5 @@
 package com.acme.scheduling.data
 
-import com.acme.liquibase.update
 import com.acme.scheduling.Gender
 import com.acme.scheduling.HumanName
 import com.acme.scheduling.Name
@@ -14,7 +13,7 @@ import io.kotest.matchers.shouldBe
 
 class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
 
-  val jooq = listener(JooqAndPostgresListener())
+  val jooq = listener(TestDatabaseListener())
 
   val practitioner = Practitioner(
     id = Practitioner.Id("Practitioner123"),

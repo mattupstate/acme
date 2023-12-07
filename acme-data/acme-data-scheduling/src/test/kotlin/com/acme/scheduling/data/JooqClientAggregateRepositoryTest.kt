@@ -12,7 +12,7 @@ import io.kotest.matchers.shouldBe
 
 class JooqClientAggregateRepositoryTest : ShouldSpec({
 
-  val jooq = listener(JooqAndPostgresListener())
+  val jooq = listener(TestDatabaseListener())
 
   val client = Client(
     id = Client.Id("Client123"),

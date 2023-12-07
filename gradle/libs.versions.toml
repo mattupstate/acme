@@ -1,17 +1,18 @@
 [versions]
 com-appmattus-fixture = "1.2.0"
 io-jaegertracing = "1.8.1"
-io-kotest = "5.7.2"
+io-kotest = "5.8.0"
 io-ktor = "2.3.4"
 io-opentelemetry = "1.30.1"
 kotlin = "1.9.10"
-org-jooq = "3.17.4"
+org-jooq = "3.18.7"
 org-junit-jupiter = "5.10.0"
 org-seleniumhq-selenium = "4.13.0"
+org-slf4j = "2.0.9"
 
 [libraries]
 am-ik-timeflake-timeflake4j = "am.ik.timeflake:timeflake4j:1.4.0"
-ch-qos-logback-logback-classic = "ch.qos.logback:logback-classic:1.4.11"
+ch-qos-logback-logback-classic = "ch.qos.logback:logback-classic:1.4.14"
 com-appmattus-fixture = { module = "com.appmattus.fixture:fixture", version.ref = "com-appmattus-fixture" }
 com-appmattus-fixture-fixture-javafaker = { module = "com.appmattus.fixture:fixture-javafaker", version.ref = "com-appmattus-fixture" }
 # @keep this version, it's used in buildSrc and the update plugin doens't recognize it
@@ -84,8 +85,10 @@ org-postgresql = "org.postgresql:postgresql:42.6.0"
 org-postgresql-r2dbc = "org.postgresql:r2dbc-postgresql:1.0.2.RELEASE"
 org-seleniumhq-selenium-selenium-chrome-driver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version.ref = "org-seleniumhq-selenium" }
 org-seleniumhq-selenium-selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "org-seleniumhq-selenium" }
-org-slf4j-slf4j-api = "org.slf4j:slf4j-api:2.0.9"
+org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org.slf4j" }
+org-slf4j-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "org.slf4j" }
 org-testcontainers-postgresql = "org.testcontainers:postgresql:1.19.0"
+org-testcontainers-r2dbc = "org.testcontainers:r2dbc:1.19.0"
 org-webjars-swagger-ui = "org.webjars:swagger-ui:5.7.2"
 org-yaml-snakeyaml = "org.yaml:snakeyaml:2.2"
 sh-ory-kratos = "sh.ory.kratos:kratos-client:1.0.0"

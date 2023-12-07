@@ -12,7 +12,7 @@ import org.jooq.impl.DataSourceConnectionProvider
 import org.jooq.impl.DefaultConfiguration
 import org.jooq.impl.DefaultTransactionProvider
 
-class JooqAndPostgresListener : TestListener {
+class TestDatabaseListener : TestListener {
 
   private val logger = KotlinLogging.logger {}
 
@@ -40,7 +40,8 @@ class JooqAndPostgresListener : TestListener {
   override suspend fun beforeSpec(spec: Spec) {
     ds = HikariDataSource(
       HikariConfig().apply {
-        jdbcUrl = "jdbc:tc:postgresql:11.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
+        jdbcUrl =
+          "jdbc:tc:postgresql:11.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
         username = "test"
         password = "test"
         isAutoCommit = false

@@ -15,14 +15,13 @@ dependencies {
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
-  implementation(libs.org.jooq.jooq.kotlin.coroutines)
-  api(libs.org.jooq)
-  api(libs.org.jooq.jooq.kotlin)
+  api(project(":acme-lib:acme-lib-jooq"))
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation(libs.io.kotest.kotest.runner.junit5)
-  testImplementation(libs.org.postgresql)
+  testImplementation(libs.org.slf4j.slf4j.simple)
   testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.testcontainers.r2dbc)
 }
 
 java {
