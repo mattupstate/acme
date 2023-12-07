@@ -80,10 +80,10 @@
       <a class="title" href="../acme-adr/index.html">Decision Records</a>
     </li>
     <li class="component">
-      <a class="title" href="../acme-web-server/0.1.0/index.html">acme-web-server</a>
+      <a class="title" href="../acme-web-api/0.1.0/index.html">acme-web-api</a>
       <ul class="versions">
         <li class="version is-latest">
-          <a href="../acme-web-server/0.1.0/index.html">0.1.0</a>
+          <a href="../acme-web-api/0.1.0/index.html">0.1.0</a>
         </li>
       </ul>
     </li>
@@ -143,7 +143,7 @@ For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">$ ./gradlew acme-web:acme-web-server:test</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">$ ./gradlew acme-web:acme-web-api:test</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -155,25 +155,6 @@ For example:</p>
 <pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">$ ./gradlew acme-web:acme-web-test:test --tests 'com.acme.web.test.*'
 $ ./gradlew acme-web:acme-web-test:test --tests com.acme.web.test.scheduling.api.SchedulingClientCollectionApiSpec</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_typescript_modules"><a class="anchor" href="#_typescript_modules"></a>TypeScript Modules</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Typescript module&#8217;s tests can be executed by running <code>task test</code> from within the module&#8217;s directory.
-In most cases For example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shellscript hljs" data-lang="shellscript">$ cd acme-app/acme-app-web
-$ task test</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This will start a long-running process that re-runs tests when code is changed.
-Press <code>Ctrl+C</code> to terminate the process.</p>
 </div>
 </div>
 </div>

@@ -7,7 +7,7 @@
 <loc>https://mattupstate.com/acme/sitemap-acme-handbook.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://mattupstate.com/acme/sitemap-acme-web-server.xml</loc>
+<loc>https://mattupstate.com/acme/sitemap-acme-web-api.xml</loc>
 </sitemap>
 <sitemap>
 <loc>https://mattupstate.com/acme/sitemap-ROOT.xml</loc>
