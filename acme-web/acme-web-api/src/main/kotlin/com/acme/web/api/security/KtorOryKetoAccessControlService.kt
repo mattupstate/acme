@@ -1,10 +1,9 @@
-package com.acme.web.api.security.ktor
+package com.acme.web.api.security
 
-import com.acme.web.api.security.OryKetoAccessControlService
+import com.acme.web.api.security.keto.KtorOryKetoClient
 import com.acme.web.api.security.keto.OryKetoClient
-import com.acme.web.api.security.keto.ktor.KtorOryKetoClient
-import com.acme.web.api.security.keto.ktor.defaultOryKetoReadClient
-import com.acme.web.api.security.keto.ktor.defaultOryKetoWriteClient
+import com.acme.web.api.security.keto.defaultOryKetoReadClient
+import com.acme.web.api.security.keto.defaultOryKetoWriteClient
 
 class KtorOryKetoAccessControlService(namespace: String, client: OryKetoClient) :
   OryKetoAccessControlService(namespace, client) {

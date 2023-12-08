@@ -1,4 +1,4 @@
-package com.acme.web.api.security.ktor
+package com.acme.web.api.security
 
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.AuthenticationContext

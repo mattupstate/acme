@@ -1,14 +1,14 @@
 package com.acme.web.api.scheduling.data
 
-import com.acme.sql.web_server.tables.references.APPOINTMENTS
-import com.acme.sql.web_server.tables.references.CLIENTS
-import com.acme.sql.web_server.tables.references.CLIENT_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.CLIENT_NAMES
-import com.acme.sql.web_server.tables.references.PRACTICES
-import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.PRACTITIONERS
-import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
+import com.acme.sql.web.tables.references.APPOINTMENTS
+import com.acme.sql.web.tables.references.CLIENTS
+import com.acme.sql.web.tables.references.CLIENT_CONTACT_POINTS
+import com.acme.sql.web.tables.references.CLIENT_NAMES
+import com.acme.sql.web.tables.references.PRACTICES
+import com.acme.sql.web.tables.references.PRACTICE_CONTACT_POINTS
+import com.acme.sql.web.tables.references.PRACTITIONERS
+import com.acme.sql.web.tables.references.PRACTITIONER_CONTACT_POINTS
+import com.acme.sql.web.tables.references.PRACTITIONER_NAMES
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.jooq.Configuration
 import org.jooq.DSLContext
@@ -70,7 +70,7 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
         PracticeRecord(
           id = it[PRACTICES.ID]!!,
           name = it[PRACTICES.NAME]!!,
-          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+          contactPoints = it[it.field3()]
         )
       }
 
@@ -121,8 +121,8 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
         ClientRecord(
           id = it[CLIENTS.ID]!!,
           gender = it[CLIENTS.GENDER]!!,
-          names = (it["names"] as List<HumanNameRecord>),
-          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+          names = it[it.field3()],
+          contactPoints = it[it.field4()]
         )
       }
 
@@ -170,11 +170,12 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
       .from(PRACTITIONERS)
       .where(PRACTITIONERS.ID.eq(id))
       .awaitFirstOrNull()?.let {
+
         PractitionerRecord(
           id = it[PRACTITIONERS.ID]!!,
           gender = it[PRACTITIONERS.GENDER]!!,
-          names = it["names"] as List<HumanNameRecord>,
-          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+          contactPoints = it[it.field3()],
+          names = it[it.field4()],
         )
       }
 

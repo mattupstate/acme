@@ -1,4 +1,4 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import io.ktor.server.config.ApplicationConfig
 

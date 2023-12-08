@@ -7,8 +7,8 @@ import com.acme.scheduling.CancelAppointmentCommand
 import com.acme.scheduling.MarkAppointmentAttendedCommand
 import com.acme.scheduling.MarkAppointmentUnattendedCommand
 import com.acme.scheduling.SchedulingUnitOfWork
-import com.acme.web.api.core.defaultIdGenerator
-import com.acme.web.api.core.ktor.authenticatedUser
+import com.acme.web.api.authenticatedUser
+import com.acme.web.api.defaultIdGenerator
 import com.acme.web.api.scheduling.CreateAppointmentCommandRequest
 import com.acme.web.api.scheduling.CreateClientCommandRequest
 import com.acme.web.api.scheduling.CreatePracticeCommandRequest

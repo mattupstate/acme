@@ -1,5 +1,0 @@
-{
-  "yaml.schemas": {
-    "https://taskfile.dev/schema.json": "etc/tasks/*"
-  }
-}

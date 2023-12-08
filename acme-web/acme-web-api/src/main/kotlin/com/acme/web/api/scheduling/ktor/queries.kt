@@ -2,7 +2,7 @@
 
 package com.acme.web.api.scheduling.ktor
 
-import com.acme.web.api.core.ktor.authenticatedUser
+import com.acme.web.api.authenticatedUser
 import com.acme.web.api.json.hal.HalLink
 import com.acme.web.api.scheduling.data.SchedulingWebViews
 import com.acme.web.api.scheduling.json.AppointmentResource

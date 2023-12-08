@@ -1,7 +1,6 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import com.acme.ktor.server.validation.RequestBodyValidationException
-import com.acme.web.api.core.toJsonPointer
 import com.acme.web.api.json.hal.VndError
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode

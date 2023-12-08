@@ -1,4 +1,4 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import com.acme.core.CommandValidationException
 import com.acme.ktor.server.logging.logger

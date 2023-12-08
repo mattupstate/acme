@@ -3,13 +3,13 @@
 package com.acme.web.api.scheduling.ktor
 
 import com.acme.scheduling.data.SchedulingJooqUnitOfWork
-import com.acme.web.api.core.ktor.KetoConfiguration
+import com.acme.web.api.KetoConfiguration
 import com.acme.web.api.scheduling.data.JooqSchedulingWebViews
 import com.acme.web.api.scheduling.schedulingMessageBus
 import com.acme.web.api.security.AccessControlService
-import com.acme.web.api.security.keto.ktor.KtorOryKetoClient
-import com.acme.web.api.security.keto.ktor.defaultOryKetoClientConfiguration
-import com.acme.web.api.security.ktor.KtorOryKetoAccessControlService
+import com.acme.web.api.security.KtorOryKetoAccessControlService
+import com.acme.web.api.security.keto.KtorOryKetoClient
+import com.acme.web.api.security.keto.defaultOryKetoClientConfiguration
 import io.ktor.client.HttpClient
 import io.ktor.server.auth.authenticate
 import io.ktor.server.locations.KtorExperimentalLocationsAPI

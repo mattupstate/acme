@@ -27,11 +27,11 @@ class JooqAppointmentAggregateRepository(
       .where(APPOINTMENTS.ID.eq(id.value))
       .awaitFirstOrNull()?.let {
         PersistedAggregate(
-          aggregate = Json.decodeFromString(it.aggregate!!.data()),
+          aggregate = Json.decodeFromString(it.aggregate.data()),
           metaData = PersistenceMetaData(
-            createdAt = it.createdAt!!,
-            updatedAt = it.updatedAt!!,
-            revision = it.revision!!,
+            createdAt = it.createdAt,
+            updatedAt = it.updatedAt,
+            revision = it.revision,
           )
         )
       }

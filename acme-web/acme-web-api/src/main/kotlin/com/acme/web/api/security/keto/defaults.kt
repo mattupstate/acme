@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package com.acme.web.api.security.keto.ktor
+package com.acme.web.api.security.keto
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig

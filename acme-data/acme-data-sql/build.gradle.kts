@@ -38,7 +38,7 @@ java {
 }
 
 jooq {
-  version.set("3.17.4")
+  version.set("3.18.4")
   edition.set(JooqEdition.OSS)
   configurations {
     create("main") {
@@ -47,7 +47,7 @@ jooq {
         jdbc.apply {
           driver = "org.testcontainers.jdbc.ContainerDatabaseDriver"
           url =
-            "jdbc:tc:postgresql:11.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
+            "jdbc:tc:postgresql:15.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
         }
         generator.apply {
           name = "org.jooq.codegen.KotlinGenerator"
@@ -58,6 +58,11 @@ jooq {
           }
           target.apply {
             packageName = "com.acme.sql"
+          }
+          generate.apply {
+            isKotlinNotNullPojoAttributes = true
+            isKotlinNotNullRecordAttributes = true
+            isKotlinNotNullInterfaceAttributes = true
           }
           strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
         }

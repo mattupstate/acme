@@ -1,4 +1,4 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import io.ktor.server.http.content.defaultResource
 import io.ktor.server.http.content.resources

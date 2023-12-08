@@ -1,6 +1,5 @@
-package com.acme.web.api.security.ktor
+package com.acme.web.api.security
 
-import com.acme.web.api.security.AcmeWebUserPrincipal
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.Principal
 import io.ktor.server.config.ApplicationConfig

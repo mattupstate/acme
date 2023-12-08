@@ -1,6 +1,6 @@
 @file:OptIn(KtorExperimentalLocationsAPI::class)
 
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import com.acme.core.CommandValidationException
 import com.acme.ktor.server.i18n.I18N

@@ -1,12 +1,12 @@
 package com.acme.web.api.test
 
 import com.acme.liquibase.update
-import com.acme.web.api.core.ktor.AuthenticationConfiguration
-import com.acme.web.api.core.ktor.DataSourceConfiguration
-import com.acme.web.api.core.ktor.KetoConfiguration
-import com.acme.web.api.core.ktor.MainConfiguration
-import com.acme.web.api.core.ktor.main
-import com.acme.web.api.security.ktor.HeaderAuthConfiguration
+import com.acme.web.api.AuthenticationConfiguration
+import com.acme.web.api.DataSourceConfiguration
+import com.acme.web.api.KetoConfiguration
+import com.acme.web.api.MainConfiguration
+import com.acme.web.api.main
+import com.acme.web.api.security.HeaderAuthConfiguration
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.kotest.core.listeners.ProjectListener

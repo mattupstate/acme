@@ -12,15 +12,15 @@ import com.acme.scheduling.Period
 import com.acme.scheduling.PracticeCreatedEvent
 import com.acme.scheduling.PractitionerCreatedEvent
 import com.acme.scheduling.data.SchedulingJooqUnitOfWork
-import com.acme.sql.web_server.tables.references.APPOINTMENTS
-import com.acme.sql.web_server.tables.references.CLIENTS
-import com.acme.sql.web_server.tables.references.CLIENT_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.CLIENT_NAMES
-import com.acme.sql.web_server.tables.references.PRACTICES
-import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.PRACTITIONERS
-import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
-import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
+import com.acme.sql.web.tables.references.APPOINTMENTS
+import com.acme.sql.web.tables.references.CLIENTS
+import com.acme.sql.web.tables.references.CLIENT_CONTACT_POINTS
+import com.acme.sql.web.tables.references.CLIENT_NAMES
+import com.acme.sql.web.tables.references.PRACTICES
+import com.acme.sql.web.tables.references.PRACTICE_CONTACT_POINTS
+import com.acme.sql.web.tables.references.PRACTITIONERS
+import com.acme.sql.web.tables.references.PRACTITIONER_CONTACT_POINTS
+import com.acme.sql.web.tables.references.PRACTITIONER_NAMES
 import kotlinx.coroutines.reactive.awaitFirst
 import java.time.LocalDateTime
 

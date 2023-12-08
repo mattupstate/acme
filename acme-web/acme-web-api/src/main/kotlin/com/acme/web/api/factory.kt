@@ -1,7 +1,6 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
 import com.acme.ktor.server.logging.logger
-import com.acme.web.api.core.defaultJson
 import com.acme.web.api.scheduling.ktor.scheduling
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application

@@ -1,6 +1,6 @@
 package com.acme.web.api.scheduling
 
-import com.acme.web.api.core.toJsonPointer
+import com.acme.web.api.toJsonPointer
 import io.kotest.core.Tag
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation

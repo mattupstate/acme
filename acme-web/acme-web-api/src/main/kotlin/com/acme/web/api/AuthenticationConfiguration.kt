@@ -1,6 +1,6 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api
 
-import com.acme.web.api.security.ktor.HeaderAuthConfiguration
+import com.acme.web.api.security.HeaderAuthConfiguration
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.config.ApplicationConfig
 
