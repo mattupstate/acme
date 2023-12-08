@@ -11,6 +11,7 @@ dependencies {
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation(project(":acme-lib:acme-lib-serialization"))
   testImplementation(libs.com.github.java.json.tools.json.schema.validator)
+  testImplementation(libs.com.zaxxer.hikariCP)
   testImplementation(libs.io.kotest.extensions.kotest.assertions.ktor)
   testImplementation(libs.io.kotest.kotest.assertions.json)
   testImplementation(libs.io.kotest.kotest.runner.junit5)
@@ -19,4 +20,5 @@ dependencies {
   testImplementation(libs.io.ktor.ktor.client.logging)
   testImplementation(libs.io.ktor.ktor.server.netty)
   testImplementation(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.testcontainers.r2dbc)
 }

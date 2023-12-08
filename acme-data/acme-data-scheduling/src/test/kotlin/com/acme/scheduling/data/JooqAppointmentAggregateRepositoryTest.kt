@@ -14,7 +14,6 @@ import java.time.LocalDateTime
 
 class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
 
-  val jooq = listener(TestDatabaseListener())
   val now = LocalDateTime.now()
 
   val appointment = Appointment(
@@ -30,7 +29,7 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
   )
 
   should("save new aggregate") {
-    jooq.testTransaction {
+    testTransaction {
       val time = timeFixtureFactory()
       val repo = JooqAppointmentAggregateRepository(it.dsl(), time.clock)
       repo.save(appointment)
@@ -45,7 +44,7 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
   }
 
   should("update existing aggregate and increment revision") {
-    jooq.testTransaction {
+    testTransaction {
       val createTime = timeFixtureFactory()
       val createRepo = JooqAppointmentAggregateRepository(it.dsl(), createTime.clock)
       createRepo.save(appointment)
@@ -69,7 +68,7 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
   }
 
   should("throw NoSuchElementException") {
-    jooq.testTransaction {
+    testTransaction {
       val repo = JooqAppointmentAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
         repo.get(appointment.id)
@@ -78,7 +77,7 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
   }
 
   should("throw user supplied exception") {
-    jooq.testTransaction {
+    testTransaction {
       val repo = JooqAppointmentAggregateRepository(it.dsl())
       shouldThrow<FakeException> {
         repo.getOrThrow(appointment.id) {

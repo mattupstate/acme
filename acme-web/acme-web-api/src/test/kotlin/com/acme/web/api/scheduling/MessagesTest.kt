@@ -29,7 +29,6 @@ import com.acme.web.api.scheduling.data.PracticeRecord
 import com.acme.web.api.scheduling.data.PractitionerRecord
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.assertThrows
 import java.time.Instant
 import java.time.LocalDateTime
@@ -44,45 +43,43 @@ class MessagesTest : ShouldSpec({
   context("CreatePracticeCommand") {
     should("result in new PracticeEntity") {
       testTransaction {
-        val uow = SchedulingJooqUnitOfWork(it)
+        val uow = SchedulingJooqUnitOfWork(it.configuration())
 
-        runBlocking {
-          uow.transaction {
-            // When
-            schedulingMessageBus.handle(
-              CreatePracticeCommand(
-                id = Practice.Id("Practice123"),
-                name = Practice.Name("Hello & Associates"),
-                owner = Practitioner.Id("Practitioner123"),
-                contactPoints = setOf(
-                  ContactPoint.Phone.Unverified("917-555-5555"),
-                  ContactPoint.Email.Unverified("hello@associates.com")
-                )
-              ),
-              uow
-            )
+        uow.transaction {
+          // When
+          schedulingMessageBus.handle(
+            CreatePracticeCommand(
+              id = Practice.Id("Practice123"),
+              name = Practice.Name("Hello & Associates"),
+              owner = Practitioner.Id("Practitioner123"),
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555"),
+                ContactPoint.Email.Unverified("hello@associates.com")
+              )
+            ),
+            uow
+          )
 
-            // Then
-            with(JooqSchedulingWebViews(it.dsl())) {
-              findPracticeOrThrow("Practice123").shouldBe(
-                PracticeRecord(
-                  id = "Practice123",
-                  name = "Hello & Associates",
-                  contactPoints = listOf(
-                    ContactPointRecord(
-                      system = "Email",
-                      value = "hello@associates.com",
-                      verifiedAt = null
-                    ),
-                    ContactPointRecord(
-                      system = "Phone",
-                      value = "917-555-5555",
-                      verifiedAt = null
-                    )
+          // Then
+          with(JooqSchedulingWebViews(it.dsl())) {
+            findPracticeOrThrow("Practice123").shouldBe(
+              PracticeRecord(
+                id = "Practice123",
+                name = "Hello & Associates",
+                contactPoints = listOf(
+                  ContactPointRecord(
+                    system = "Email",
+                    value = "hello@associates.com",
+                    verifiedAt = null
+                  ),
+                  ContactPointRecord(
+                    system = "Phone",
+                    value = "917-555-5555",
+                    verifiedAt = null
                   )
                 )
               )
-            }
+            )
           }
         }
       }
@@ -92,47 +89,45 @@ class MessagesTest : ShouldSpec({
   context("CreatePractitionerCommand") {
     should("result in new PractitionerEntity") {
       testTransaction {
-        val uow = SchedulingJooqUnitOfWork(it)
-        runBlocking {
-          uow.transaction {
-            // When
-            schedulingMessageBus.handle(
-              CreatePractitionerCommand(
-                id = Practitioner.Id("Practitioner123"),
-                user = UserId("User123"),
-                name = HumanName(
-                  given = Name.Given("First"),
-                  family = Name.Family("Last"),
-                  suffix = Name.Suffix(""),
-                  prefix = Name.Prefix(""),
-                  period = Period.Unknown
-                ),
-                gender = Gender.UNKNOWN,
-                contactPoints = emptySet()
+        val uow = SchedulingJooqUnitOfWork(it.configuration())
+        uow.transaction {
+          // When
+          schedulingMessageBus.handle(
+            CreatePractitionerCommand(
+              id = Practitioner.Id("Practitioner123"),
+              user = UserId("User123"),
+              name = HumanName(
+                given = Name.Given("First"),
+                family = Name.Family("Last"),
+                suffix = Name.Suffix(""),
+                prefix = Name.Prefix(""),
+                period = Period.Unknown
               ),
-              uow
-            )
+              gender = Gender.UNKNOWN,
+              contactPoints = emptySet()
+            ),
+            uow
+          )
 
-            // Then
-            with(JooqSchedulingWebViews(it.dsl())) {
-              findPractitionerOrThrow("Practitioner123").shouldBe(
-                PractitionerRecord(
-                  id = "Practitioner123",
-                  names = listOf(
-                    HumanNameRecord(
-                      given = "First",
-                      family = "Last",
-                      suffix = "",
-                      prefix = "",
-                      periodStart = null,
-                      periodEnd = null
-                    )
-                  ),
-                  gender = "UNKNOWN",
-                  contactPoints = emptyList()
-                )
+          // Then
+          with(JooqSchedulingWebViews(it.dsl())) {
+            findPractitionerOrThrow("Practitioner123").shouldBe(
+              PractitionerRecord(
+                id = "Practitioner123",
+                names = listOf(
+                  HumanNameRecord(
+                    given = "First",
+                    family = "Last",
+                    suffix = "",
+                    prefix = "",
+                    periodStart = null,
+                    periodEnd = null
+                  )
+                ),
+                gender = "UNKNOWN",
+                contactPoints = emptyList()
               )
-            }
+            )
           }
         }
       }
@@ -142,60 +137,58 @@ class MessagesTest : ShouldSpec({
   context("CreateClientCommand") {
     should("result in new ClientEntity") {
       testTransaction {
-        val uow = SchedulingJooqUnitOfWork(it)
-        runBlocking {
-          uow.transaction {
-            // When
-            schedulingMessageBus.handle(
-              CreateClientCommand(
-                id = Client.Id("Client123"),
-                name = HumanName(
-                  family = Name.Family("Last"),
-                  given = Name.Given("First"),
-                  prefix = Name.Prefix(""),
-                  suffix = Name.Suffix(""),
-                  period = Period.Unknown
-                ),
-                gender = Gender.UNKNOWN,
-                contactPoints = setOf(
-                  ContactPoint.Phone.Unverified("917-555-5555"),
-                  ContactPoint.Email.Unverified("hello@world.com")
-                )
+        val uow = SchedulingJooqUnitOfWork(it.configuration())
+        uow.transaction {
+          // When
+          schedulingMessageBus.handle(
+            CreateClientCommand(
+              id = Client.Id("Client123"),
+              name = HumanName(
+                family = Name.Family("Last"),
+                given = Name.Given("First"),
+                prefix = Name.Prefix(""),
+                suffix = Name.Suffix(""),
+                period = Period.Unknown
               ),
-              uow
-            )
+              gender = Gender.UNKNOWN,
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555"),
+                ContactPoint.Email.Unverified("hello@world.com")
+              )
+            ),
+            uow
+          )
 
-            // Then
-            with(JooqSchedulingWebViews(it.dsl())) {
-              findClientOrThrow("Client123").shouldBe(
-                ClientRecord(
-                  id = "Client123",
-                  names = listOf(
-                    HumanNameRecord(
-                      family = "Last",
-                      given = "First",
-                      prefix = "",
-                      suffix = "",
-                      periodStart = null,
-                      periodEnd = null,
-                    )
+          // Then
+          with(JooqSchedulingWebViews(it.dsl())) {
+            findClientOrThrow("Client123").shouldBe(
+              ClientRecord(
+                id = "Client123",
+                names = listOf(
+                  HumanNameRecord(
+                    family = "Last",
+                    given = "First",
+                    prefix = "",
+                    suffix = "",
+                    periodStart = null,
+                    periodEnd = null,
+                  )
+                ),
+                gender = "UNKNOWN",
+                contactPoints = listOf(
+                  ContactPointRecord(
+                    system = "Email",
+                    value = "hello@world.com",
+                    verifiedAt = null
                   ),
-                  gender = "UNKNOWN",
-                  contactPoints = listOf(
-                    ContactPointRecord(
-                      system = "Email",
-                      value = "hello@world.com",
-                      verifiedAt = null
-                    ),
-                    ContactPointRecord(
-                      system = "Phone",
-                      value = "917-555-5555",
-                      verifiedAt = null
-                    )
+                  ContactPointRecord(
+                    system = "Phone",
+                    value = "917-555-5555",
+                    verifiedAt = null
                   )
                 )
               )
-            }
+            )
           }
         }
       }
@@ -205,15 +198,115 @@ class MessagesTest : ShouldSpec({
   context("CreateAppointmentCommand") {
     should("throw exception with invalid references") {
       testTransaction {
-        val uow = SchedulingJooqUnitOfWork(it)
+        val uow = SchedulingJooqUnitOfWork(it.configuration())
 
-        runBlocking {
-          uow.transaction {
-            // Given
-            val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
-            val end = start.plus(1, ChronoUnit.HOURS)
+        uow.transaction {
+          // Given
+          val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
+          val end = start.plus(1, ChronoUnit.HOURS)
 
-            val command = CreateAppointmentCommand(
+          val command = CreateAppointmentCommand(
+            id = Appointment.Id("Appointment123"),
+            client = Client.Id("Client123"),
+            practitioner = Practitioner.Id("Practitioner123"),
+            practice = Practice.Id("Practice123"),
+            state = AppointmentState.SCHEDULED,
+            period = Period.Bounded(
+              start.toLocalDateTimeUTC(),
+              end.toLocalDateTimeUTC()
+            )
+          )
+
+          // When
+          val exc = assertThrows<CommandValidationException> {
+            schedulingMessageBus.handle(command, uow)
+          }
+
+          // Then
+          exc.command.shouldBe(command)
+          exc.errors.shouldBe(
+            setOf(
+              CommandValidationException.InvalidAggregateReferenceError(
+                fieldName = "client",
+                value = "Client123",
+                message = "Invalid client"
+              ),
+              CommandValidationException.InvalidAggregateReferenceError(
+                fieldName = "practitioner",
+                value = "Practitioner123",
+                message = "Invalid practitioner"
+              ),
+              CommandValidationException.InvalidAggregateReferenceError(
+                fieldName = "practice",
+                value = "Practice123",
+                message = "Invalid practice"
+              )
+            )
+          )
+        }
+      }
+    }
+
+    should("result in new AppointmentEntity") {
+      testTransaction {
+        val uow = SchedulingJooqUnitOfWork(it.configuration())
+        uow.transaction {
+          // Given
+          schedulingMessageBus.handle(
+            CreatePracticeCommand(
+              id = Practice.Id("Practice123"),
+              name = Practice.Name("Hello & Associates"),
+              owner = Practitioner.Id("Practitioner123"),
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555"),
+                ContactPoint.Email.Unverified("hello@associates.com")
+              )
+            ),
+            uow
+          )
+
+          schedulingMessageBus.handle(
+            CreatePractitionerCommand(
+              id = Practitioner.Id("Practitioner123"),
+              user = UserId("User123"),
+              name = HumanName(
+                given = Name.Given("First"),
+                family = Name.Family("Last"),
+                suffix = Name.Suffix(""),
+                prefix = Name.Prefix(""),
+                period = Period.Unknown
+              ),
+              gender = Gender.UNKNOWN,
+              contactPoints = emptySet()
+            ),
+            uow
+          )
+
+          schedulingMessageBus.handle(
+            CreateClientCommand(
+              id = Client.Id("Client123"),
+              name = HumanName(
+                family = Name.Family("Last"),
+                given = Name.Given("First"),
+                prefix = Name.Prefix(""),
+                suffix = Name.Suffix(""),
+                period = Period.Unknown
+              ),
+              gender = Gender.UNKNOWN,
+              contactPoints = setOf(
+                ContactPoint.Phone.Unverified("917-555-5555"),
+                ContactPoint.Email.Unverified("hello@world.com")
+              )
+            ),
+            uow
+          )
+
+          val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
+          val end = start.plus(1, ChronoUnit.HOURS)
+
+          // When
+          schedulingMessageBus.handle(
+            CreateAppointmentCommand(
               id = Appointment.Id("Appointment123"),
               client = Client.Id("Client123"),
               practitioner = Practitioner.Id("Practitioner123"),
@@ -223,32 +316,21 @@ class MessagesTest : ShouldSpec({
                 start.toLocalDateTimeUTC(),
                 end.toLocalDateTimeUTC()
               )
-            )
+            ),
+            uow
+          )
 
-            // When
-            val exc = assertThrows<CommandValidationException> {
-              schedulingMessageBus.handle(command, uow)
-            }
-
-            // Then
-            exc.command.shouldBe(command)
-            exc.errors.shouldBe(
-              setOf(
-                CommandValidationException.InvalidAggregateReferenceError(
-                  fieldName = "client",
-                  value = "Client123",
-                  message = "Invalid client"
-                ),
-                CommandValidationException.InvalidAggregateReferenceError(
-                  fieldName = "practitioner",
-                  value = "Practitioner123",
-                  message = "Invalid practitioner"
-                ),
-                CommandValidationException.InvalidAggregateReferenceError(
-                  fieldName = "practice",
-                  value = "Practice123",
-                  message = "Invalid practice"
-                )
+          // Then
+          with(JooqSchedulingWebViews(it.dsl())) {
+            findAppointmentOrThrow("Appointment123").shouldBe(
+              AppointmentRecord(
+                id = "Appointment123",
+                clientId = "Client123",
+                practiceId = "Practice123",
+                practitionerId = "Practitioner123",
+                state = "SCHEDULED",
+                periodStart = start,
+                periodEnd = end,
               )
             )
           }
@@ -256,10 +338,11 @@ class MessagesTest : ShouldSpec({
       }
     }
 
-    should("result in new AppointmentEntity") {
-      testTransaction {
-        val uow = SchedulingJooqUnitOfWork(it)
-        runBlocking {
+    context("MarkAppointmentAttendedCommand") {
+      should("result in updated AppointmentEntity") {
+        testTransaction {
+          val uow = SchedulingJooqUnitOfWork(it.configuration())
+
           uow.transaction {
             // Given
             schedulingMessageBus.handle(
@@ -314,7 +397,6 @@ class MessagesTest : ShouldSpec({
             val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
-            // When
             schedulingMessageBus.handle(
               CreateAppointmentCommand(
                 id = Appointment.Id("Appointment123"),
@@ -330,6 +412,14 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
+            // When
+            schedulingMessageBus.handle(
+              MarkAppointmentAttendedCommand(
+                appointment = Appointment.Id("Appointment123")
+              ),
+              uow
+            )
+
             // Then
             with(JooqSchedulingWebViews(it.dsl())) {
               findAppointmentOrThrow("Appointment123").shouldBe(
@@ -338,7 +428,7 @@ class MessagesTest : ShouldSpec({
                   clientId = "Client123",
                   practiceId = "Practice123",
                   practitionerId = "Practitioner123",
-                  state = "SCHEDULED",
+                  state = "ATTENDED",
                   periodStart = start,
                   periodEnd = end,
                 )
@@ -349,206 +439,101 @@ class MessagesTest : ShouldSpec({
       }
     }
 
-    context("MarkAppointmentAttendedCommand") {
-      should("result in updated AppointmentEntity") {
-        testTransaction {
-          val uow = SchedulingJooqUnitOfWork(it)
-
-          runBlocking {
-            uow.transaction {
-              // Given
-              schedulingMessageBus.handle(
-                CreatePracticeCommand(
-                  id = Practice.Id("Practice123"),
-                  name = Practice.Name("Hello & Associates"),
-                  owner = Practitioner.Id("Practitioner123"),
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@associates.com")
-                  )
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreatePractitionerCommand(
-                  id = Practitioner.Id("Practitioner123"),
-                  user = UserId("User123"),
-                  name = HumanName(
-                    given = Name.Given("First"),
-                    family = Name.Family("Last"),
-                    suffix = Name.Suffix(""),
-                    prefix = Name.Prefix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = emptySet()
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreateClientCommand(
-                  id = Client.Id("Client123"),
-                  name = HumanName(
-                    family = Name.Family("Last"),
-                    given = Name.Given("First"),
-                    prefix = Name.Prefix(""),
-                    suffix = Name.Suffix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@world.com")
-                  )
-                ),
-                uow
-              )
-
-              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
-              val end = start.plus(1, ChronoUnit.HOURS)
-
-              schedulingMessageBus.handle(
-                CreateAppointmentCommand(
-                  id = Appointment.Id("Appointment123"),
-                  client = Client.Id("Client123"),
-                  practitioner = Practitioner.Id("Practitioner123"),
-                  practice = Practice.Id("Practice123"),
-                  state = AppointmentState.SCHEDULED,
-                  period = Period.Bounded(
-                    start.toLocalDateTimeUTC(),
-                    end.toLocalDateTimeUTC()
-                  )
-                ),
-                uow
-              )
-
-              // When
-              schedulingMessageBus.handle(
-                MarkAppointmentAttendedCommand(
-                  appointment = Appointment.Id("Appointment123")
-                ),
-                uow
-              )
-
-              // Then
-              with(JooqSchedulingWebViews(it.dsl())) {
-                findAppointmentOrThrow("Appointment123").shouldBe(
-                  AppointmentRecord(
-                    id = "Appointment123",
-                    clientId = "Client123",
-                    practiceId = "Practice123",
-                    practitionerId = "Practitioner123",
-                    state = "ATTENDED",
-                    periodStart = start,
-                    periodEnd = end,
-                  )
-                )
-              }
-            }
-          }
-        }
-      }
-    }
-
     context("MarkAppointmentUnattendedCommand") {
       should("result in updated AppointmentEntity") {
         testTransaction {
-          val uow = SchedulingJooqUnitOfWork(it)
+          val uow = SchedulingJooqUnitOfWork(it.configuration())
 
-          runBlocking {
-            uow.transaction {
-              // Given
-              schedulingMessageBus.handle(
-                CreatePracticeCommand(
-                  id = Practice.Id("Practice123"),
-                  name = Practice.Name("Hello & Associates"),
-                  owner = Practitioner.Id("Practitioner123"),
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@associates.com")
-                  )
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreatePractitionerCommand(
-                  id = Practitioner.Id("Practitioner123"),
-                  user = UserId("User123"),
-                  name = HumanName(
-                    given = Name.Given("First"),
-                    family = Name.Family("Last"),
-                    suffix = Name.Suffix(""),
-                    prefix = Name.Prefix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = emptySet()
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreateClientCommand(
-                  id = Client.Id("Client123"),
-                  name = HumanName(
-                    family = Name.Family("Last"),
-                    given = Name.Given("First"),
-                    prefix = Name.Prefix(""),
-                    suffix = Name.Suffix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@world.com")
-                  )
-                ),
-                uow
-              )
-
-              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
-              val end = start.plus(1, ChronoUnit.HOURS)
-
-              schedulingMessageBus.handle(
-                CreateAppointmentCommand(
-                  id = Appointment.Id("Appointment123"),
-                  client = Client.Id("Client123"),
-                  practitioner = Practitioner.Id("Practitioner123"),
-                  practice = Practice.Id("Practice123"),
-                  state = AppointmentState.SCHEDULED,
-                  period = Period.Bounded(
-                    start.toLocalDateTimeUTC(),
-                    end.toLocalDateTimeUTC()
-                  )
-                ),
-                uow
-              )
-
-              // When
-              schedulingMessageBus.handle(
-                MarkAppointmentUnattendedCommand(
-                  appointment = Appointment.Id("Appointment123")
-                ),
-                uow
-              )
-
-              // Then
-              with(JooqSchedulingWebViews(it.dsl())) {
-                findAppointmentOrThrow("Appointment123").shouldBe(
-                  AppointmentRecord(
-                    id = "Appointment123",
-                    clientId = "Client123",
-                    practiceId = "Practice123",
-                    practitionerId = "Practitioner123",
-                    state = "UNATTENDED",
-                    periodStart = start,
-                    periodEnd = end,
-                  )
+          uow.transaction {
+            // Given
+            schedulingMessageBus.handle(
+              CreatePracticeCommand(
+                id = Practice.Id("Practice123"),
+                name = Practice.Name("Hello & Associates"),
+                owner = Practitioner.Id("Practitioner123"),
+                contactPoints = setOf(
+                  ContactPoint.Phone.Unverified("917-555-5555"),
+                  ContactPoint.Email.Unverified("hello@associates.com")
                 )
-              }
+              ),
+              uow
+            )
+
+            schedulingMessageBus.handle(
+              CreatePractitionerCommand(
+                id = Practitioner.Id("Practitioner123"),
+                user = UserId("User123"),
+                name = HumanName(
+                  given = Name.Given("First"),
+                  family = Name.Family("Last"),
+                  suffix = Name.Suffix(""),
+                  prefix = Name.Prefix(""),
+                  period = Period.Unknown
+                ),
+                gender = Gender.UNKNOWN,
+                contactPoints = emptySet()
+              ),
+              uow
+            )
+
+            schedulingMessageBus.handle(
+              CreateClientCommand(
+                id = Client.Id("Client123"),
+                name = HumanName(
+                  family = Name.Family("Last"),
+                  given = Name.Given("First"),
+                  prefix = Name.Prefix(""),
+                  suffix = Name.Suffix(""),
+                  period = Period.Unknown
+                ),
+                gender = Gender.UNKNOWN,
+                contactPoints = setOf(
+                  ContactPoint.Phone.Unverified("917-555-5555"),
+                  ContactPoint.Email.Unverified("hello@world.com")
+                )
+              ),
+              uow
+            )
+
+            val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
+            val end = start.plus(1, ChronoUnit.HOURS)
+
+            schedulingMessageBus.handle(
+              CreateAppointmentCommand(
+                id = Appointment.Id("Appointment123"),
+                client = Client.Id("Client123"),
+                practitioner = Practitioner.Id("Practitioner123"),
+                practice = Practice.Id("Practice123"),
+                state = AppointmentState.SCHEDULED,
+                period = Period.Bounded(
+                  start.toLocalDateTimeUTC(),
+                  end.toLocalDateTimeUTC()
+                )
+              ),
+              uow
+            )
+
+            // When
+            schedulingMessageBus.handle(
+              MarkAppointmentUnattendedCommand(
+                appointment = Appointment.Id("Appointment123")
+              ),
+              uow
+            )
+
+            // Then
+            with(JooqSchedulingWebViews(it.dsl())) {
+              findAppointmentOrThrow("Appointment123").shouldBe(
+                AppointmentRecord(
+                  id = "Appointment123",
+                  clientId = "Client123",
+                  practiceId = "Practice123",
+                  practitionerId = "Practitioner123",
+                  state = "UNATTENDED",
+                  periodStart = start,
+                  periodEnd = end,
+                )
+              )
             }
           }
         }
@@ -558,100 +543,98 @@ class MessagesTest : ShouldSpec({
     context("CancelAppointmentCommand") {
       should(" result in updated AppointmentEntity") {
         testTransaction {
-          val uow = SchedulingJooqUnitOfWork(it)
+          val uow = SchedulingJooqUnitOfWork(it.configuration())
 
-          runBlocking {
-            uow.transaction {
-              // Given
-              schedulingMessageBus.handle(
-                CreatePracticeCommand(
-                  id = Practice.Id("Practice123"),
-                  name = Practice.Name("Hello & Associates"),
-                  owner = Practitioner.Id("Practitioner123"),
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@associates.com")
-                  )
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreatePractitionerCommand(
-                  id = Practitioner.Id("Practitioner123"),
-                  user = UserId("User123"),
-                  name = HumanName(
-                    given = Name.Given("First"),
-                    family = Name.Family("Last"),
-                    suffix = Name.Suffix(""),
-                    prefix = Name.Prefix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = emptySet()
-                ),
-                uow
-              )
-
-              schedulingMessageBus.handle(
-                CreateClientCommand(
-                  id = Client.Id("Client123"),
-                  name = HumanName(
-                    family = Name.Family("Last"),
-                    given = Name.Given("First"),
-                    prefix = Name.Prefix(""),
-                    suffix = Name.Suffix(""),
-                    period = Period.Unknown
-                  ),
-                  gender = Gender.UNKNOWN,
-                  contactPoints = setOf(
-                    ContactPoint.Phone.Unverified("917-555-5555"),
-                    ContactPoint.Email.Unverified("hello@world.com")
-                  )
-                ),
-                uow
-              )
-
-              val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
-              val end = start.plus(1, ChronoUnit.HOURS)
-
-              schedulingMessageBus.handle(
-                CreateAppointmentCommand(
-                  id = Appointment.Id("Appointment123"),
-                  client = Client.Id("Client123"),
-                  practitioner = Practitioner.Id("Practitioner123"),
-                  practice = Practice.Id("Practice123"),
-                  state = AppointmentState.SCHEDULED,
-                  period = Period.Bounded(
-                    start.toLocalDateTimeUTC(),
-                    end.toLocalDateTimeUTC()
-                  )
-                ),
-                uow
-              )
-
-              // When
-              schedulingMessageBus.handle(
-                CancelAppointmentCommand(
-                  appointment = Appointment.Id("Appointment123")
-                ),
-                uow
-              )
-
-              // Then
-              with(JooqSchedulingWebViews(it.dsl())) {
-                findAppointmentOrThrow("Appointment123").shouldBe(
-                  AppointmentRecord(
-                    id = "Appointment123",
-                    clientId = "Client123",
-                    practiceId = "Practice123",
-                    practitionerId = "Practitioner123",
-                    state = "CANCELED",
-                    periodStart = start,
-                    periodEnd = end,
-                  )
+          uow.transaction {
+            // Given
+            schedulingMessageBus.handle(
+              CreatePracticeCommand(
+                id = Practice.Id("Practice123"),
+                name = Practice.Name("Hello & Associates"),
+                owner = Practitioner.Id("Practitioner123"),
+                contactPoints = setOf(
+                  ContactPoint.Phone.Unverified("917-555-5555"),
+                  ContactPoint.Email.Unverified("hello@associates.com")
                 )
-              }
+              ),
+              uow
+            )
+
+            schedulingMessageBus.handle(
+              CreatePractitionerCommand(
+                id = Practitioner.Id("Practitioner123"),
+                user = UserId("User123"),
+                name = HumanName(
+                  given = Name.Given("First"),
+                  family = Name.Family("Last"),
+                  suffix = Name.Suffix(""),
+                  prefix = Name.Prefix(""),
+                  period = Period.Unknown
+                ),
+                gender = Gender.UNKNOWN,
+                contactPoints = emptySet()
+              ),
+              uow
+            )
+
+            schedulingMessageBus.handle(
+              CreateClientCommand(
+                id = Client.Id("Client123"),
+                name = HumanName(
+                  family = Name.Family("Last"),
+                  given = Name.Given("First"),
+                  prefix = Name.Prefix(""),
+                  suffix = Name.Suffix(""),
+                  period = Period.Unknown
+                ),
+                gender = Gender.UNKNOWN,
+                contactPoints = setOf(
+                  ContactPoint.Phone.Unverified("917-555-5555"),
+                  ContactPoint.Email.Unverified("hello@world.com")
+                )
+              ),
+              uow
+            )
+
+            val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
+            val end = start.plus(1, ChronoUnit.HOURS)
+
+            schedulingMessageBus.handle(
+              CreateAppointmentCommand(
+                id = Appointment.Id("Appointment123"),
+                client = Client.Id("Client123"),
+                practitioner = Practitioner.Id("Practitioner123"),
+                practice = Practice.Id("Practice123"),
+                state = AppointmentState.SCHEDULED,
+                period = Period.Bounded(
+                  start.toLocalDateTimeUTC(),
+                  end.toLocalDateTimeUTC()
+                )
+              ),
+              uow
+            )
+
+            // When
+            schedulingMessageBus.handle(
+              CancelAppointmentCommand(
+                appointment = Appointment.Id("Appointment123")
+              ),
+              uow
+            )
+
+            // Then
+            with(JooqSchedulingWebViews(it.dsl())) {
+              findAppointmentOrThrow("Appointment123").shouldBe(
+                AppointmentRecord(
+                  id = "Appointment123",
+                  clientId = "Client123",
+                  practiceId = "Practice123",
+                  practitionerId = "Practitioner123",
+                  state = "CANCELED",
+                  periodStart = start,
+                  periodEnd = end,
+                )
+              )
             }
           }
         }

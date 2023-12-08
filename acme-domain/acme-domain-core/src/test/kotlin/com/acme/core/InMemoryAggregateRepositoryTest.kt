@@ -15,7 +15,7 @@ class InMemoryAggregateRepositoryTest : ShouldSpec({
 
   should("contain aggregates provided through constructor") {
     val aggregate = FakeAggregate("id123")
-    val repo = InMemoryAggregateRepository(setOf(aggregate))
+    val repo = InMemoryAggregateRepository<FakeAggregate, String>().apply { save(aggregate) }
     repo.exists(aggregate.id).shouldBeTrue()
     val persistedAggregate = repo.get(aggregate.id)
     persistedAggregate.aggregate.shouldBe(aggregate)

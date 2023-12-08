@@ -24,7 +24,6 @@ dependencies {
   implementation(libs.am.ik.timeflake.timeflake4j)
   implementation(libs.ch.qos.logback.logback.classic)
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
-  implementation(libs.com.zaxxer.hikariCP)
   implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.io.ktor.ktor.client.content.negotiation)
   implementation(libs.io.ktor.ktor.client.java)

@@ -3,8 +3,6 @@ package com.acme.web.api.core.ktor
 import com.acme.ktor.server.logging.logger
 import com.acme.web.api.core.defaultJson
 import com.acme.web.api.scheduling.ktor.scheduling
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -13,29 +11,22 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import io.r2dbc.spi.ConnectionFactories
+import io.r2dbc.spi.ConnectionFactory
+import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.serialization.json.Json
-import org.jooq.SQLDialect
-import org.jooq.impl.DataSourceConnectionProvider
-import org.jooq.impl.DefaultConfiguration
-import org.jooq.impl.DefaultTransactionProvider
-import javax.sql.DataSource
+import org.jooq.impl.DSL
 
-fun dataSourceFactory(config: DataSourceConfiguration) = HikariDataSource(
-  HikariConfig().apply {
-    jdbcUrl = config.jdbcUrl
-    username = config.username
-    password = config.password
-    isAutoCommit = false
-  }
+fun connectionFactory(config: DataSourceConfiguration): ConnectionFactory = ConnectionFactories.get(
+  ConnectionFactoryOptions.parse(config.r2dbcUrl).mutate()
+    .option(ConnectionFactoryOptions.USER, config.username)
+    .option(ConnectionFactoryOptions.PASSWORD, config.password)
+    .build()
 )
 
-fun jooqConfigFactory(dataSource: DataSource) = DefaultConfiguration().apply {
-  set(dataSource)
-  set(DefaultTransactionProvider(DataSourceConnectionProvider(dataSource), true))
-  set(SQLDialect.POSTGRES)
-}
+fun jooqConfigFactory(connectionFactory: ConnectionFactory) = DSL.using(connectionFactory)
 
-fun dataConfigFactory(config: DataSourceConfiguration) = dataSourceFactory(config).let {
+fun dataConfigFactory(config: DataSourceConfiguration) = connectionFactory(config).let {
   it to jooqConfigFactory(it)
 }
 
@@ -46,11 +37,11 @@ fun Application.main(config: MainConfiguration, json: Json = defaultJson) {
     config.authentication.apply(this)
   }
 
-  val (_, jooqConfig) = dataConfigFactory(config.datasource)
+  val (_, jooq) = dataConfigFactory(config.datasource)
 
   routing {
     route("/scheduling") {
-      scheduling(jooqConfig, config.keto, "/scheduling")
+      scheduling(jooq.configuration(), config.keto, "/scheduling")
     }
     route("/health/check") {
       get {

@@ -185,11 +185,13 @@ class CommandHandlerTest : ShouldSpec({
         period = Period.Bounded(LocalDateTime.MIN, LocalDateTime.MAX),
       )
 
-      val uow = InMemorySchedulingUnitOfWork(
-        practices = setOf(practice),
-        practitioners = setOf(practitioner),
-        clients = setOf(client),
-      )
+      val uow = InMemorySchedulingUnitOfWork().apply {
+        with(repositories) {
+          practices.save(practice)
+          practitioners.save(practitioner)
+          clients.save(client)
+        }
+      }
 
       createAppointment(cmd, uow)
 
@@ -222,7 +224,8 @@ class CommandHandlerTest : ShouldSpec({
       )
 
       val cmd = MarkAppointmentAttendedCommand(Appointment.Id("Appointment123"))
-      val uow = InMemorySchedulingUnitOfWork(appointments = setOf(appointment))
+      val uow = InMemorySchedulingUnitOfWork()
+      uow.repositories.appointments.save(appointment)
 
       markAppointmentAttended(cmd, uow)
 
@@ -264,7 +267,8 @@ class CommandHandlerTest : ShouldSpec({
       )
 
       val cmd = MarkAppointmentUnattendedCommand(Appointment.Id("Appointment123"))
-      val uow = InMemorySchedulingUnitOfWork(appointments = setOf(appointment))
+      val uow = InMemorySchedulingUnitOfWork()
+      uow.repositories.appointments.save(appointment)
 
       markAppointmentUnattended(cmd, uow)
 
@@ -306,7 +310,8 @@ class CommandHandlerTest : ShouldSpec({
       )
 
       val cmd = CancelAppointmentCommand(Appointment.Id("Appointment123"))
-      val uow = InMemorySchedulingUnitOfWork(appointments = setOf(appointment))
+      val uow = InMemorySchedulingUnitOfWork()
+      uow.repositories.appointments.save(appointment)
 
       cancelAppointment(cmd, uow)
 

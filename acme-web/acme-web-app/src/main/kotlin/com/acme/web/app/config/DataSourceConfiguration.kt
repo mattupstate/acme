@@ -3,14 +3,14 @@ package com.acme.web.app.config
 import io.ktor.server.config.ApplicationConfig
 
 data class DataSourceConfiguration(
-  val jdbcUrl: String,
+  val r2dbcUrl: String,
   val username: String,
   val password: String
 ) {
   companion object {
     fun fromConfig(config: ApplicationConfig) =
       DataSourceConfiguration(
-        config.property("jdbcUrl").getString(),
+        config.property("r2dbcUrl").getString(),
         config.property("username").getString(),
         config.property("password").getString()
       )

@@ -9,6 +9,7 @@ import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
 import com.acme.sql.web_server.tables.references.PRACTITIONERS
 import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
 import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.Records.mapping
@@ -41,7 +42,7 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
 
   constructor(configuration: Configuration) : this(configuration.dsl())
 
-  override fun findPractice(id: String): PracticeRecord? =
+  override suspend fun findPractice(id: String): PracticeRecord? =
     dsl.select(
       PRACTICES.ID, PRACTICES.NAME,
       multiset(
@@ -65,22 +66,15 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
     )
       .from(PRACTICES)
       .where(PRACTICES.ID.eq(id))
-      .fetch()
-      .let { result ->
-        if (result.isEmpty()) {
-          null
-        } else {
-          result.first().let {
-            PracticeRecord(
-              id = it[PRACTICES.ID]!!,
-              name = it[PRACTICES.NAME]!!,
-              contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
-            )
-          }
-        }
+      .awaitFirstOrNull()?.let {
+        PracticeRecord(
+          id = it[PRACTICES.ID]!!,
+          name = it[PRACTICES.NAME]!!,
+          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+        )
       }
 
-  override fun findClient(id: String): ClientRecord? =
+  override suspend fun findClient(id: String): ClientRecord? =
     dsl.select(
       CLIENTS.ID, CLIENTS.GENDER,
       multiset(
@@ -123,23 +117,16 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
     )
       .from(CLIENTS)
       .where(CLIENTS.ID.eq(id))
-      .fetch()
-      .let { result ->
-        if (result.isEmpty()) {
-          null
-        } else {
-          result.first().let {
-            ClientRecord(
-              id = it[CLIENTS.ID]!!,
-              gender = it[CLIENTS.GENDER]!!,
-              names = (it["names"] as List<HumanNameRecord>),
-              contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
-            )
-          }
-        }
+      .awaitFirstOrNull()?.let {
+        ClientRecord(
+          id = it[CLIENTS.ID]!!,
+          gender = it[CLIENTS.GENDER]!!,
+          names = (it["names"] as List<HumanNameRecord>),
+          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+        )
       }
 
-  override fun findPractitioner(id: String): PractitionerRecord? =
+  override suspend fun findPractitioner(id: String): PractitionerRecord? =
     dsl.select(
       PRACTITIONERS.ID, PRACTITIONERS.GENDER,
       multiset(
@@ -182,19 +169,16 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
     )
       .from(PRACTITIONERS)
       .where(PRACTITIONERS.ID.eq(id))
-      .fetch()
-      .let { result ->
-        result.first().let {
-          PractitionerRecord(
-            id = it[PRACTITIONERS.ID]!!,
-            gender = it[PRACTITIONERS.GENDER]!!,
-            names = it["names"] as List<HumanNameRecord>,
-            contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
-          )
-        }
+      .awaitFirstOrNull()?.let {
+        PractitionerRecord(
+          id = it[PRACTITIONERS.ID]!!,
+          gender = it[PRACTITIONERS.GENDER]!!,
+          names = it["names"] as List<HumanNameRecord>,
+          contactPoints = (it["contactPoints"] as List<ContactPointRecord>)
+        )
       }
 
-  override fun findAppointment(id: String): AppointmentRecord? =
+  override suspend fun findAppointment(id: String): AppointmentRecord? =
     dsl.selectFrom(
       APPOINTMENTS
         .leftJoin(PRACTITIONERS)
@@ -205,7 +189,7 @@ class JooqSchedulingWebViews(private val dsl: DSLContext) : SchedulingWebViews {
         .on(CLIENTS.ID.eq(APPOINTMENTS.CLIENT_ID))
     )
       .where(APPOINTMENTS.ID.eq(id))
-      .fetchOne()?.let {
+      .awaitFirstOrNull()?.let {
         AppointmentRecord(
           id = it[APPOINTMENTS.ID]!!,
           practiceId = it[PRACTICES.ID]!!,

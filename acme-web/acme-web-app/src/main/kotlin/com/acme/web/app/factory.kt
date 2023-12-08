@@ -8,52 +8,37 @@ import com.acme.web.app.views.appointments
 import com.acme.web.app.views.health
 import com.acme.web.app.views.root
 import com.acme.web.app.views.staticAssets
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
+import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
+import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import org.jooq.SQLDialect
-import org.jooq.impl.DataSourceConnectionProvider
-import org.jooq.impl.DefaultConfiguration
-import org.jooq.impl.DefaultTransactionProvider
-import javax.sql.DataSource
+import org.jooq.impl.DSL
 
 val defaultJson = Json {
   prettyPrint = true
   prettyPrintIndent = "  "
 }
 
-fun dataSourceFactory(config: DataSourceConfiguration) = HikariDataSource(
-  HikariConfig().apply {
-    jdbcUrl = config.jdbcUrl
-    username = config.username
-    password = config.password
-    isAutoCommit = false
-  }
+fun connectionFactory(config: DataSourceConfiguration): ConnectionFactory = ConnectionFactories.get(
+  ConnectionFactoryOptions.parse(config.r2dbcUrl).mutate()
+    .option(ConnectionFactoryOptions.USER, config.username)
+    .option(ConnectionFactoryOptions.PASSWORD, config.password)
+    .build()
 )
 
-fun jooqConfigFactory(connectionFactory: ConnectionFactory) = DefaultConfiguration().apply {
-  set(connectionFactory)
-  set(SQLDialect.POSTGRES)
-}
+fun jooqConfigFactory(connectionFactory: ConnectionFactory) = DSL.using(connectionFactory)
 
-fun jooqConfigFactory(dataSource: DataSource) = DefaultConfiguration().apply {
-  set(dataSource)
-  set(DefaultTransactionProvider(DataSourceConnectionProvider(dataSource), true))
-  set(SQLDialect.POSTGRES)
-}
-
-fun dataConfigFactory(config: DataSourceConfiguration) = dataSourceFactory(config).let {
+fun dataConfigFactory(config: DataSourceConfiguration) = connectionFactory(config).let {
   it to jooqConfigFactory(it)
 }
 
 fun Application.main(config: MainConfiguration, json: Json = defaultJson) {
   common(config, json)
-  // val (_, jooqConfig) = dataConfigFactory(config.datasource)
+  val (_, jooq) = dataConfigFactory(config.datasource)
 
   routing {
     authenticate {

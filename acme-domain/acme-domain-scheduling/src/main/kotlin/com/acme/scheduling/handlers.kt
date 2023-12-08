@@ -3,45 +3,47 @@ package com.acme.scheduling
 import com.acme.core.CommandValidationException
 import com.acme.core.DefaultMessageBus
 
-val createPractice = { command: CreatePracticeCommand, uow: SchedulingUnitOfWork ->
+suspend fun createPractice(command: CreatePracticeCommand, uow: SchedulingUnitOfWork) {
   Practice(
     id = command.id,
     owner = command.owner,
     name = command.name,
     contactPoints = command.contactPoints
   )
-    .also(uow.repositories.practices::save)
+    .also {
+      uow.repositories.practices.save(it)
+    }
     .also {
       uow.addEvent(PracticeCreatedEvent(it))
     }
 }
 
-val createClient = { command: CreateClientCommand, uow: SchedulingUnitOfWork ->
+suspend fun createClient(command: CreateClientCommand, uow: SchedulingUnitOfWork) {
   Client(
     id = command.id,
     names = setOf(command.name),
     gender = command.gender,
     contactPoints = command.contactPoints
-  ).also(uow.repositories.clients::save)
+  ).also { uow.repositories.clients.save(it) }
     .also {
       uow.addEvent(ClientCreatedEvent(it))
     }
 }
 
-val createPractitioner = { command: CreatePractitionerCommand, uow: SchedulingUnitOfWork ->
+suspend fun createPractitioner(command: CreatePractitionerCommand, uow: SchedulingUnitOfWork) {
   Practitioner(
     id = command.id,
     user = command.user,
     gender = command.gender,
     names = setOf(command.name),
     contactPoints = command.contactPoints
-  ).also(uow.repositories.practitioners::save)
+  ).also { uow.repositories.practitioners.save(it) }
     .also {
       uow.addEvent(PractitionerCreatedEvent(it))
     }
 }
 
-val createAppointment = { command: CreateAppointmentCommand, uow: SchedulingUnitOfWork ->
+suspend fun createAppointment(command: CreateAppointmentCommand, uow: SchedulingUnitOfWork) {
   val errors = mutableSetOf<CommandValidationException.CommandValidationError>()
   if (!uow.repositories.practices.exists(command.practice)) {
     errors.add(
@@ -85,7 +87,7 @@ val createAppointment = { command: CreateAppointmentCommand, uow: SchedulingUnit
     state = command.state,
     period = command.period,
   )
-    .also(uow.repositories.appointments::save)
+    .also { uow.repositories.appointments.save(it) }
     .also {
       uow.addEvent(
         AppointmentCreatedEvent(
@@ -100,7 +102,7 @@ val createAppointment = { command: CreateAppointmentCommand, uow: SchedulingUnit
     }
 }
 
-val markAppointmentAttended = { command: MarkAppointmentAttendedCommand, uow: SchedulingUnitOfWork ->
+suspend fun markAppointmentAttended(command: MarkAppointmentAttendedCommand, uow: SchedulingUnitOfWork) {
   uow.repositories.appointments.getOrThrow(command.appointment) {
     CommandValidationException(
       command,
@@ -110,16 +112,15 @@ val markAppointmentAttended = { command: MarkAppointmentAttendedCommand, uow: Sc
         "Invalid appointment"
       )
     )
-  }
-  .let { it.aggregate }
-  .markAttended()
-  .also(uow.repositories.appointments::save)
-  .also {
-    uow.addEvent(AppointmentAttendedEvent(it.id))
-  }
+  }.aggregate
+    .markAttended()
+    .also { uow.repositories.appointments.save(it) }
+    .also {
+      uow.addEvent(AppointmentAttendedEvent(it.id))
+    }
 }
 
-val markAppointmentUnattended = { command: MarkAppointmentUnattendedCommand, uow: SchedulingUnitOfWork ->
+suspend fun markAppointmentUnattended(command: MarkAppointmentUnattendedCommand, uow: SchedulingUnitOfWork) {
   uow.repositories.appointments.getOrThrow(command.appointment) {
     CommandValidationException(
       command,
@@ -129,16 +130,14 @@ val markAppointmentUnattended = { command: MarkAppointmentUnattendedCommand, uow
         "Invalid appointment"
       )
     )
-  }.let {
-    it.aggregate
-  }.markUnattended()
-    .also(uow.repositories.appointments::save)
+  }.aggregate.markUnattended()
+    .also { uow.repositories.appointments.save(it) }
     .also {
       uow.addEvent(AppointmentUnattendedEvent(it.id))
     }
 }
 
-val cancelAppointment = { command: CancelAppointmentCommand, uow: SchedulingUnitOfWork ->
+suspend fun cancelAppointment(command: CancelAppointmentCommand, uow: SchedulingUnitOfWork) {
   uow.repositories.appointments.getOrThrow(command.appointment) {
     CommandValidationException(
       command,
@@ -148,8 +147,8 @@ val cancelAppointment = { command: CancelAppointmentCommand, uow: SchedulingUnit
         "Invalid appointment"
       )
     )
-  }.let { it.aggregate }.cancel()
-    .also(uow.repositories.appointments::save)
+  }.aggregate.cancel()
+    .also { uow.repositories.appointments.save(it) }
     .also {
       uow.addEvent(AppointmentCanceledEvent(it.id))
     }
@@ -157,11 +156,11 @@ val cancelAppointment = { command: CancelAppointmentCommand, uow: SchedulingUnit
 
 val schedulingMessageBus = DefaultMessageBus()
   .addCommandHandler(
-    CreatePracticeCommand::class to createPractice,
-    CreatePractitionerCommand::class to createPractitioner,
-    CreateClientCommand::class to createClient,
-    CreateAppointmentCommand::class to createAppointment,
-    MarkAppointmentAttendedCommand::class to markAppointmentAttended,
-    MarkAppointmentUnattendedCommand::class to markAppointmentUnattended,
-    CancelAppointmentCommand::class to cancelAppointment,
+    CreatePracticeCommand::class to ::createPractice,
+    CreatePractitionerCommand::class to ::createPractitioner,
+    CreateClientCommand::class to ::createClient,
+    CreateAppointmentCommand::class to ::createAppointment,
+    MarkAppointmentAttendedCommand::class to ::markAppointmentAttended,
+    MarkAppointmentUnattendedCommand::class to ::markAppointmentUnattended,
+    CancelAppointmentCommand::class to ::cancelAppointment,
   )

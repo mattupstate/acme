@@ -6,6 +6,8 @@ import com.acme.core.PersistenceMetaData
 import com.acme.jooq.asExcluded
 import com.acme.scheduling.Appointment
 import com.acme.sql.scheduling.tables.references.APPOINTMENTS
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
@@ -20,10 +22,10 @@ class JooqAppointmentAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Appointment, Appointment.Id> {
 
-  override fun find(id: Appointment.Id): PersistedAggregate<Appointment>? =
+  override suspend fun find(id: Appointment.Id): PersistedAggregate<Appointment>? =
     dsl.selectFrom(APPOINTMENTS)
       .where(APPOINTMENTS.ID.eq(id.value))
-      .fetchOne {
+      .awaitFirstOrNull()?.let {
         PersistedAggregate(
           aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
@@ -34,15 +36,16 @@ class JooqAppointmentAggregateRepository(
         )
       }
 
-  override fun get(id: Appointment.Id): PersistedAggregate<Appointment> = getOrThrow(id) { NoSuchElementException() }
+  override suspend fun get(id: Appointment.Id): PersistedAggregate<Appointment> =
+    getOrThrow(id) { NoSuchElementException() }
 
-  override fun getOrThrow(id: Appointment.Id, block: () -> Throwable): PersistedAggregate<Appointment> =
+  override suspend fun getOrThrow(id: Appointment.Id, block: () -> Throwable): PersistedAggregate<Appointment> =
     find(id) ?: throw block()
 
-  override fun exists(id: Appointment.Id): Boolean =
-    dsl.fetchExists(APPOINTMENTS, APPOINTMENTS.ID.eq(id.value))
+  override suspend fun exists(id: Appointment.Id): Boolean =
+    dsl.selectOne().from(APPOINTMENTS).where(APPOINTMENTS.ID.eq(id.value)).awaitFirstOrNull() != null
 
-  override fun save(aggregate: Appointment) {
+  override suspend fun save(aggregate: Appointment) {
     val now = LocalDateTime.ofInstant(Instant.now(clock), ZoneOffset.UTC)
     val json = JSONB.valueOf(Json.encodeToString(aggregate))
 
@@ -65,6 +68,7 @@ class JooqAppointmentAggregateRepository(
       .set(APPOINTMENTS.AGGREGATE, APPOINTMENTS.AGGREGATE.asExcluded())
       .set(APPOINTMENTS.REVISION, APPOINTMENTS.REVISION.add(1))
       .set(APPOINTMENTS.UPDATED_AT, now)
-      .execute()
+      .returning()
+      .awaitFirst()
   }
 }

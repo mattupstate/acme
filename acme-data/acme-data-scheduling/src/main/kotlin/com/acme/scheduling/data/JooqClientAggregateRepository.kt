@@ -6,6 +6,8 @@ import com.acme.core.PersistenceMetaData
 import com.acme.jooq.asExcluded
 import com.acme.scheduling.Client
 import com.acme.sql.scheduling.tables.references.CLIENTS
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
@@ -18,10 +20,10 @@ class JooqClientAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Client, Client.Id> {
 
-  override fun find(id: Client.Id): PersistedAggregate<Client>? =
+  override suspend fun find(id: Client.Id): PersistedAggregate<Client>? =
     dsl.selectFrom(CLIENTS)
       .where(CLIENTS.ID.eq(id.value))
-      .fetchOne {
+      .awaitFirstOrNull()?.let {
         PersistedAggregate(
           aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
@@ -32,15 +34,15 @@ class JooqClientAggregateRepository(
         )
       }
 
-  override fun get(id: Client.Id): PersistedAggregate<Client> = getOrThrow(id) { NoSuchElementException() }
+  override suspend fun get(id: Client.Id): PersistedAggregate<Client> = getOrThrow(id) { NoSuchElementException() }
 
-  override fun getOrThrow(id: Client.Id, block: () -> Throwable): PersistedAggregate<Client> =
+  override suspend fun getOrThrow(id: Client.Id, block: () -> Throwable): PersistedAggregate<Client> =
     find(id) ?: throw block()
 
-  override fun exists(id: Client.Id): Boolean =
-    dsl.fetchExists(CLIENTS, CLIENTS.ID.eq(id.value))
+  override suspend fun exists(id: Client.Id): Boolean =
+    dsl.selectOne().from(CLIENTS).where(CLIENTS.ID.eq(id.value)).awaitFirstOrNull() != null
 
-  override fun save(aggregate: Client) {
+  override suspend fun save(aggregate: Client) {
     val now = LocalDateTime.now(clock)
     val json = JSONB.valueOf(Json.encodeToString(aggregate))
 
@@ -63,6 +65,7 @@ class JooqClientAggregateRepository(
       .set(CLIENTS.AGGREGATE, CLIENTS.AGGREGATE.asExcluded())
       .set(CLIENTS.REVISION, CLIENTS.REVISION.add(1))
       .set(CLIENTS.UPDATED_AT, now)
-      .execute()
+      .returning()
+      .awaitFirst()
   }
 }

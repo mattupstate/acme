@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+  implementation(kotlin("reflect"))
   implementation(project(":acme-lib:acme-lib-serialization"))
   implementation(libs.net.sizovs.pipelinr)
   api(project(":acme-domain:acme-domain-core"))

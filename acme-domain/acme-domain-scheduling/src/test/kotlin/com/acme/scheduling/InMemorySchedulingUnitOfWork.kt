@@ -4,18 +4,13 @@ import com.acme.core.AbstractUnitOfWork
 import com.acme.core.Event
 import com.acme.core.InMemoryAggregateRepository
 
-class InMemorySchedulingUnitOfWork(
-  appointments: Set<Appointment> = emptySet(),
-  clients: Set<Client> = emptySet(),
-  practitioners: Set<Practitioner> = emptySet(),
-  practices: Set<Practice> = emptySet(),
-) : AbstractUnitOfWork(), SchedulingUnitOfWork {
+class InMemorySchedulingUnitOfWork : AbstractUnitOfWork(), SchedulingUnitOfWork {
 
   override val repositories = object : SchedulingPersistenceModule {
-    override val appointments = InMemoryAggregateRepository(appointments)
-    override val clients = InMemoryAggregateRepository(clients)
-    override val practitioners = InMemoryAggregateRepository(practitioners)
-    override val practices = InMemoryAggregateRepository(practices)
+    override val appointments = InMemoryAggregateRepository<Appointment, Appointment.Id>()
+    override val clients = InMemoryAggregateRepository<Client, Client.Id>()
+    override val practitioners = InMemoryAggregateRepository<Practitioner, Practitioner.Id>()
+    override val practices = InMemoryAggregateRepository<Practice, Practice.Id>()
   }
 
   private var _events: MutableList<Event> = mutableListOf()

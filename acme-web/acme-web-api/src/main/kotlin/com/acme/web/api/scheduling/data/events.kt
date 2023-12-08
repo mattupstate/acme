@@ -21,9 +21,10 @@ import com.acme.sql.web_server.tables.references.PRACTICE_CONTACT_POINTS
 import com.acme.sql.web_server.tables.references.PRACTITIONERS
 import com.acme.sql.web_server.tables.references.PRACTITIONER_CONTACT_POINTS
 import com.acme.sql.web_server.tables.references.PRACTITIONER_NAMES
+import kotlinx.coroutines.reactive.awaitFirst
 import java.time.LocalDateTime
 
-val onPractitionerCreated: (PractitionerCreatedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onPractitionerCreated(event: PractitionerCreatedEvent, uow: SchedulingJooqUnitOfWork) {
   with(uow.dsl) {
     val practitioner = event.practitioner
 
@@ -34,7 +35,7 @@ val onPractitionerCreated: (PractitionerCreatedEvent, SchedulingJooqUnitOfWork) 
     ).values(
       practitioner.id.value,
       practitioner.gender.toString()
-    ).execute()
+    ).returningResult(PRACTITIONERS.ID).awaitFirst()
 
     practitioner.names.map {
       val (start, end) = it.period.getTimeValues()
@@ -57,7 +58,9 @@ val onPractitionerCreated: (PractitionerCreatedEvent, SchedulingJooqUnitOfWork) 
         start,
         end,
       )
-    }.forEach(::execute)
+    }.forEach {
+      it.returning().awaitFirst()
+    }
 
     practitioner.contactPoints.map {
       insertInto(
@@ -72,11 +75,13 @@ val onPractitionerCreated: (PractitionerCreatedEvent, SchedulingJooqUnitOfWork) 
         it.toSystemString(),
         it.getVerifiedAtValue()
       )
-    }.forEach(::execute)
+    }.forEach {
+      it.returning().awaitFirst()
+    }
   }
 }
 
-val onPracticeCreated: (PracticeCreatedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onPracticeCreated(event: PracticeCreatedEvent, uow: SchedulingJooqUnitOfWork) {
   with(uow.dsl) {
     val practice = event.practice
 
@@ -87,7 +92,7 @@ val onPracticeCreated: (PracticeCreatedEvent, SchedulingJooqUnitOfWork) -> Unit 
     ).values(
       practice.id.value,
       practice.name.value
-    ).execute()
+    ).returning().awaitFirst()
 
     practice.contactPoints.map {
       insertInto(
@@ -102,11 +107,13 @@ val onPracticeCreated: (PracticeCreatedEvent, SchedulingJooqUnitOfWork) -> Unit 
         it.toSystemString(),
         it.getVerifiedAtValue(),
       )
-    }.forEach(::execute)
+    }.forEach {
+      it.returning().awaitFirst()
+    }
   }
 }
 
-val onClientCreated: (ClientCreatedEvent, uow: SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onClientCreated(event: ClientCreatedEvent, uow: SchedulingJooqUnitOfWork) {
   with(uow.dsl) {
     val client = event.client
 
@@ -117,7 +124,7 @@ val onClientCreated: (ClientCreatedEvent, uow: SchedulingJooqUnitOfWork) -> Unit
     ).values(
       client.id.value,
       client.gender.toString()
-    ).execute()
+    ).returning().awaitFirst()
 
     client.names.map {
       val (start, end) = it.period.getTimeValues()
@@ -140,7 +147,9 @@ val onClientCreated: (ClientCreatedEvent, uow: SchedulingJooqUnitOfWork) -> Unit
         start,
         end,
       )
-    }.forEach(::execute)
+    }.forEach {
+      it.returning().awaitFirst()
+    }
 
     client.contactPoints.map {
       insertInto(
@@ -155,11 +164,13 @@ val onClientCreated: (ClientCreatedEvent, uow: SchedulingJooqUnitOfWork) -> Unit
         it.toSystemString(),
         it.getVerifiedAtValue(),
       )
-    }.forEach(::execute)
+    }.forEach {
+      it.returning().awaitFirst()
+    }
   }
 }
 
-val onAppointmentCreated: (AppointmentCreatedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onAppointmentCreated(event: AppointmentCreatedEvent, uow: SchedulingJooqUnitOfWork) {
   val (start, end) = event.period.getTimeValues()
 
   uow.dsl.insertInto(
@@ -179,25 +190,29 @@ val onAppointmentCreated: (AppointmentCreatedEvent, SchedulingJooqUnitOfWork) ->
     event.state.toString(),
     start,
     end
-  ).execute()
+  ).returning().awaitFirst()
 }
 
-private fun updateAppointmentState(appointmentId: Appointment.Id, state: String, uow: SchedulingJooqUnitOfWork) {
+private suspend fun updateAppointmentState(
+  appointmentId: Appointment.Id,
+  state: String,
+  uow: SchedulingJooqUnitOfWork
+) {
   with(uow.dsl) {
     update(APPOINTMENTS).set(APPOINTMENTS.STATE, state)
-      .where(APPOINTMENTS.ID.eq(appointmentId.value)).execute()
+      .where(APPOINTMENTS.ID.eq(appointmentId.value)).returning().awaitFirst()
   }
 }
 
-val onAppointmentUnattended: (AppointmentUnattendedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onAppointmentUnattended(event: AppointmentUnattendedEvent, uow: SchedulingJooqUnitOfWork) {
   updateAppointmentState(event.appointmentId, AppointmentState.UNATTENDED.toString(), uow)
 }
 
-val onAppointmentAttended: (AppointmentAttendedEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onAppointmentAttended(event: AppointmentAttendedEvent, uow: SchedulingJooqUnitOfWork) {
   updateAppointmentState(event.appointmentId, AppointmentState.ATTENDED.toString(), uow)
 }
 
-val onAppointmentCanceled: (AppointmentCanceledEvent, SchedulingJooqUnitOfWork) -> Unit = { event, uow ->
+suspend fun onAppointmentCanceled(event: AppointmentCanceledEvent, uow: SchedulingJooqUnitOfWork) {
   updateAppointmentState(event.appointmentId, AppointmentState.CANCELED.toString(), uow)
 }
 

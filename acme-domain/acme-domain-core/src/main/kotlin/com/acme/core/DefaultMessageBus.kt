@@ -2,10 +2,11 @@ package com.acme.core
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KClass
+import kotlin.reflect.KSuspendFunction2
 
 class DefaultMessageBus(
-  private val commandHandlers: MutableMap<KClass<*>, (Command, UnitOfWork) -> Unit> = mutableMapOf(),
-  private val eventHandlers: MutableMap<KClass<*>, List<(Event, UnitOfWork) -> Unit>> = mutableMapOf()
+  private val commandHandlers: MutableMap<KClass<*>, KSuspendFunction2<Command, UnitOfWork, Unit>> = mutableMapOf(),
+  private val eventHandlers: MutableMap<KClass<*>, List<KSuspendFunction2<Event, UnitOfWork, Unit>>> = mutableMapOf()
 ) : MessageBus {
 
   private val logger = KotlinLogging.logger {}
@@ -13,26 +14,35 @@ class DefaultMessageBus(
   override fun copy() = DefaultMessageBus(commandHandlers, eventHandlers)
 
   @Suppress("UNCHECKED_CAST")
+  override fun addEventHandler(eventClass: KClass<*>, handler: Any): DefaultMessageBus {
+    val handlers = eventHandlers.getOrDefault(eventClass, emptyList())
+    if (handlers.contains(handler)) throw RuntimeException("Event handler has already been registered")
+    eventHandlers[eventClass] = handlers.plus(handler as KSuspendFunction2<Event, UnitOfWork, Unit>)
+    return this
+  }
+
   override fun addEventHandler(vararg pairs: Pair<KClass<*>, Any>): DefaultMessageBus {
     pairs.forEach {
-      val handler = it.second as (Event, UnitOfWork) -> Unit
-      val handlers = eventHandlers.getOrDefault(it.first, emptyList())
-      if (handlers.contains(it.second)) throw RuntimeException("${it.second} has already been registered")
-      eventHandlers[it.first] = handlers.plus(handler)
+      addEventHandler(it.first, it.second)
     }
     return this
   }
 
   @Suppress("UNCHECKED_CAST")
+  override fun addCommandHandler(commandClass: KClass<*>, handler: Any): DefaultMessageBus {
+    if (commandHandlers.containsKey(commandClass)) throw RuntimeException("Command handler already exists")
+    commandHandlers[commandClass] = handler as KSuspendFunction2<Command, UnitOfWork, Unit>
+    return this
+  }
+
   override fun addCommandHandler(vararg pairs: Pair<KClass<*>, Any>): DefaultMessageBus {
     pairs.forEach {
-      if (commandHandlers.containsKey(it.first)) throw RuntimeException("${it.first} handler already exists")
-      commandHandlers[it.first] = it.second as (Command, UnitOfWork) -> Unit
+      addCommandHandler(it.first, it.second)
     }
     return this
   }
 
-  override fun handle(message: Message, unitOfWork: UnitOfWork) {
+  override suspend fun handle(message: Message, unitOfWork: UnitOfWork) {
     val queue = mutableListOf(message)
     while (queue.size > 0) {
       when (val msg = queue.removeAt(0)) {
@@ -43,18 +53,18 @@ class DefaultMessageBus(
     }
   }
 
-  private fun handleEvent(event: Event, queue: MutableList<Message>, unitOfWork: UnitOfWork) =
+  private suspend fun handleEvent(event: Event, queue: MutableList<Message>, unitOfWork: UnitOfWork) =
     eventHandlers.getOrDefault(event::class, emptyList()).forEach {
       try {
         it(event, unitOfWork)
         queue.addAll(unitOfWork.events)
       } catch (e: Exception) {
-        logger.error(e) {"Unable to handle event" }
+        logger.error(e) { "Unable to handle event" }
         throw e
       }
     }
 
-  private fun handleCommand(command: Command, queue: MutableList<Message>, unitOfWork: UnitOfWork) =
+  private suspend fun handleCommand(command: Command, queue: MutableList<Message>, unitOfWork: UnitOfWork) =
     commandHandlers[command::class]?.also {
       it(command, unitOfWork)
       queue.addAll(unitOfWork.events)

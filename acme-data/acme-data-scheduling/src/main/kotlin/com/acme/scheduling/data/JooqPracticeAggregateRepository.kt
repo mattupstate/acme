@@ -6,6 +6,8 @@ import com.acme.core.PersistenceMetaData
 import com.acme.jooq.asExcluded
 import com.acme.scheduling.Practice
 import com.acme.sql.scheduling.tables.Practices.Companion.PRACTICES
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
@@ -18,10 +20,10 @@ class JooqPracticeAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Practice, Practice.Id> {
 
-  override fun find(id: Practice.Id): PersistedAggregate<Practice>? =
+  override suspend fun find(id: Practice.Id): PersistedAggregate<Practice>? =
     dsl.selectFrom(PRACTICES)
       .where(PRACTICES.ID.eq(id.value))
-      .fetchOne {
+      .awaitFirstOrNull()?.let {
         PersistedAggregate(
           aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
@@ -32,15 +34,15 @@ class JooqPracticeAggregateRepository(
         )
       }
 
-  override fun get(id: Practice.Id): PersistedAggregate<Practice> = getOrThrow(id) { NoSuchElementException() }
+  override suspend fun get(id: Practice.Id): PersistedAggregate<Practice> = getOrThrow(id) { NoSuchElementException() }
 
-  override fun getOrThrow(id: Practice.Id, block: () -> Throwable): PersistedAggregate<Practice> =
+  override suspend fun getOrThrow(id: Practice.Id, block: () -> Throwable): PersistedAggregate<Practice> =
     find(id) ?: throw block()
 
-  override fun exists(id: Practice.Id): Boolean =
-    dsl.fetchExists(PRACTICES, PRACTICES.ID.eq(id.value))
+  override suspend fun exists(id: Practice.Id): Boolean =
+    dsl.selectOne().from(PRACTICES).where(PRACTICES.ID.eq(id.value)).awaitFirstOrNull() != null
 
-  override fun save(aggregate: Practice) {
+  override suspend fun save(aggregate: Practice) {
     val now = LocalDateTime.now(clock)
     val json = JSONB.valueOf(Json.encodeToString(aggregate))
 
@@ -63,6 +65,7 @@ class JooqPracticeAggregateRepository(
       .set(PRACTICES.AGGREGATE, PRACTICES.AGGREGATE.asExcluded())
       .set(PRACTICES.REVISION, PRACTICES.REVISION.add(1))
       .set(PRACTICES.UPDATED_AT, now)
-      .execute()
+      .returning()
+      .awaitFirst()
   }
 }

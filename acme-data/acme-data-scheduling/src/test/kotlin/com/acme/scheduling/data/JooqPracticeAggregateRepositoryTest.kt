@@ -10,8 +10,6 @@ import io.kotest.matchers.shouldBe
 
 class JooqPracticeAggregateRepositoryTest : ShouldSpec({
 
-  val jooq = listener(TestDatabaseListener())
-
   val practice = Practice(
     id = Practice.Id("PracticeID"),
     name = Practice.Name("Practice & Associates"),
@@ -28,7 +26,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
   )
 
   should("save new aggregate") {
-    jooq.testTransaction {
+    testTransaction {
       val time: TimeFixture = timeFixtureFactory()
       val repo = JooqPracticeAggregateRepository(it.dsl(), time.clock)
       repo.save(practice)
@@ -43,7 +41,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
   }
 
   should("update an existing aggregate and increment revision") {
-    jooq.testTransaction {
+    testTransaction {
       val createTime = timeFixtureFactory()
       val createRepo = JooqPracticeAggregateRepository(it.dsl(), createTime.clock)
       createRepo.save(practice)
@@ -64,7 +62,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
   }
 
   should("throw NoSuchElementException") {
-    jooq.testTransaction {
+    testTransaction {
       val repo = JooqPracticeAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
         repo.get(practice.id)
@@ -73,7 +71,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
   }
 
   should("throw user supplied exception") {
-    jooq.testTransaction {
+    testTransaction {
       val repo = JooqPracticeAggregateRepository(it.dsl())
       shouldThrow<FakeException> {
         repo.getOrThrow(practice.id) {

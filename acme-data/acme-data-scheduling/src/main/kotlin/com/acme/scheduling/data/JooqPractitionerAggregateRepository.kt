@@ -6,6 +6,8 @@ import com.acme.core.PersistenceMetaData
 import com.acme.jooq.asExcluded
 import com.acme.scheduling.Practitioner
 import com.acme.sql.scheduling.tables.Practitioners.Companion.PRACTITIONERS
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jooq.DSLContext
@@ -18,10 +20,10 @@ class JooqPractitionerAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Practitioner, Practitioner.Id> {
 
-  override fun find(id: Practitioner.Id): PersistedAggregate<Practitioner>? =
+  override suspend fun find(id: Practitioner.Id): PersistedAggregate<Practitioner>? =
     dsl.selectFrom(PRACTITIONERS)
       .where(PRACTITIONERS.ID.eq(id.value))
-      .fetchOne {
+      .awaitFirstOrNull()?.let {
         PersistedAggregate(
           aggregate = Json.decodeFromString(it.aggregate!!.data()),
           metaData = PersistenceMetaData(
@@ -32,15 +34,16 @@ class JooqPractitionerAggregateRepository(
         )
       }
 
-  override fun get(id: Practitioner.Id): PersistedAggregate<Practitioner> = getOrThrow(id) { NoSuchElementException() }
+  override suspend fun get(id: Practitioner.Id): PersistedAggregate<Practitioner> =
+    getOrThrow(id) { NoSuchElementException() }
 
-  override fun getOrThrow(id: Practitioner.Id, block: () -> Throwable): PersistedAggregate<Practitioner> =
+  override suspend fun getOrThrow(id: Practitioner.Id, block: () -> Throwable): PersistedAggregate<Practitioner> =
     find(id) ?: throw block()
 
-  override fun exists(id: Practitioner.Id): Boolean =
-    dsl.fetchExists(PRACTITIONERS, PRACTITIONERS.ID.eq(id.value))
+  override suspend fun exists(id: Practitioner.Id): Boolean =
+    dsl.selectOne().from(PRACTITIONERS).where(PRACTITIONERS.ID.eq(id.value)).awaitFirstOrNull() != null
 
-  override fun save(aggregate: Practitioner) {
+  override suspend fun save(aggregate: Practitioner) {
     val now = LocalDateTime.now(clock)
     val json = JSONB.valueOf(Json.encodeToString(aggregate))
 
@@ -63,6 +66,7 @@ class JooqPractitionerAggregateRepository(
       .set(PRACTITIONERS.AGGREGATE, PRACTITIONERS.AGGREGATE.asExcluded())
       .set(PRACTITIONERS.REVISION, PRACTITIONERS.REVISION.add(1))
       .set(PRACTITIONERS.UPDATED_AT, now)
-      .execute()
+      .returning()
+      .awaitFirst()
   }
 }

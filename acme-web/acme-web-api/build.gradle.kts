@@ -25,8 +25,6 @@ dependencies {
   implementation(project(":acme-lib:acme-lib-validation"))
   implementation(libs.am.ik.timeflake.timeflake4j)
   implementation(libs.ch.qos.logback.logback.classic)
-  implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
-  implementation(libs.com.zaxxer.hikariCP)
   implementation(libs.io.github.oshai.kotlin.logging.jvm)
   implementation(libs.io.ktor.ktor.client.content.negotiation)
   implementation(libs.io.ktor.ktor.client.java)
@@ -46,16 +44,17 @@ dependencies {
   implementation(libs.io.opentelemetry.opentelemetry.sdk)
   implementation(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
   implementation(libs.org.postgresql)
+  implementation(libs.org.postgresql.r2dbc)
   implementation(libs.org.slf4j.slf4j.api)
   runtimeOnly(libs.org.glassfish.jakarta.el)
 
   testImplementation(project(":acme-lib:acme-lib-liquibase"))
   testImplementation(libs.com.mattbertolini.liquibase.slf4j)
+  testImplementation(libs.com.zaxxer.hikariCP)
   testImplementation(libs.io.kotest.kotest.runner.junit5)
+  testImplementation(libs.org.slf4j.slf4j.simple)
   testImplementation(libs.org.testcontainers.postgresql)
-
-  localRuntimeOnly(project(":acme-lib:acme-lib-liquibase"))
-  localRuntimeOnly(libs.org.testcontainers.postgresql)
+  testImplementation(libs.org.testcontainers.r2dbc)
 }
 
 swaggerSources {
@@ -87,11 +86,6 @@ jib {
 }
 
 tasks {
-  getByName<JavaExec>("run") {
-    classpath += localRuntimeOnly
-    systemProperty("logback.configurationFile", projectDir.resolve("logback-dev.xml"))
-  }
-
   getByName("processResources") {
     dependsOn(generateSwaggerUI)
   }

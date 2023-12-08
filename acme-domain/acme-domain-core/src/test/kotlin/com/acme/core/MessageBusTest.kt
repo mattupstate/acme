@@ -36,17 +36,19 @@ class MessageBusTest : ShouldSpec({
     var commandCalls = 0
     var eventCalls = 0
 
-    val onCommand = { _: FakeCommand, uow: FakeUnitOfWork ->
+    suspend fun onCommand(cmd: FakeCommand, uow: FakeUnitOfWork) {
       commandCalls++
       uow.addEvent(FakeEvent("World"))
     }
 
-    val onEvent = { _: FakeEvent, _: FakeUnitOfWork ->
+    suspend fun onEvent(event: FakeEvent, uow: FakeUnitOfWork) {
       eventCalls++
     }
 
-    mb.addCommandHandler(FakeCommand::class to onCommand)
-    mb.addEventHandler(FakeEvent::class to onEvent)
+    val e = ::onEvent
+
+    mb.addCommandHandler(FakeCommand::class to ::onCommand)
+    mb.addEventHandler(FakeEvent::class, ::onEvent)
 
     mb.handle(FakeCommand("Hello"), FakeUnitOfWork())
 
@@ -65,11 +67,11 @@ class MessageBusTest : ShouldSpec({
   should("not swallow command handler exceptions") {
     val mb = DefaultMessageBus()
 
-    val onCommand = { _: FakeCommand, _: FakeUnitOfWork ->
+    suspend fun onCommand(command: FakeCommand, uow: FakeUnitOfWork) {
       throw FakeException("command")
     }
 
-    mb.addCommandHandler(FakeCommand::class to onCommand)
+    mb.addCommandHandler(FakeCommand::class to ::onCommand)
 
     val exc = shouldThrow<FakeException> {
       mb.handle(FakeCommand("Hello"), FakeUnitOfWork())
@@ -81,16 +83,16 @@ class MessageBusTest : ShouldSpec({
   should("not swallow event handler exceptions") {
     val mb = DefaultMessageBus()
 
-    val onCommand = { _: FakeCommand, uow: FakeUnitOfWork ->
+    suspend fun onCommand(command: FakeCommand, uow: FakeUnitOfWork) {
       uow.addEvent(FakeEvent("World"))
     }
 
-    val onEvent = { _: FakeEvent, _: FakeUnitOfWork ->
+    suspend fun onEvent(event: FakeEvent, uow: FakeUnitOfWork) {
       throw FakeException("event")
     }
 
-    mb.addCommandHandler(FakeCommand::class to onCommand)
-    mb.addEventHandler(FakeEvent::class to onEvent)
+    mb.addCommandHandler(FakeCommand::class to ::onCommand)
+    mb.addEventHandler(FakeEvent::class to ::onEvent)
 
     val exc = shouldThrow<FakeException> {
       mb.handle(FakeCommand("Hello"), FakeUnitOfWork())
@@ -102,25 +104,22 @@ class MessageBusTest : ShouldSpec({
   should("throw exception when repeated handlers are added") {
     val mb = DefaultMessageBus()
 
-    val onCommand = { _: FakeCommand, uow: FakeUnitOfWork ->
+    suspend fun onCommand(command: FakeCommand, uow: FakeUnitOfWork) {
       uow.addEvent(FakeEvent("World"))
     }
 
-    val onEvent = { _: FakeEvent, _: FakeUnitOfWork ->
+    suspend fun onEvent(event: FakeEvent, uow: FakeUnitOfWork) {
       throw FakeException("event")
     }
 
-    mb.addCommandHandler(FakeCommand::class to onCommand)
-    mb.addEventHandler(FakeEvent::class to onEvent)
-
     val exc = shouldThrow<RuntimeException> {
-      mb.addCommandHandler(FakeCommand::class to onCommand)
+      mb.addCommandHandler(FakeCommand::class to ::onCommand, FakeCommand::class to ::onCommand)
     }
-    exc.message.shouldBe("${FakeCommand::class} handler already exists")
+    exc.message.shouldBe("Command handler already exists")
 
     val exc2 = shouldThrow<RuntimeException> {
-      mb.addEventHandler(FakeEvent::class to onEvent)
+      mb.addEventHandler(FakeEvent::class to ::onEvent, FakeEvent::class to ::onEvent)
     }
-    exc2.message.shouldBe("$onEvent has already been registered")
+    exc2.message.shouldBe("Event handler has already been registered")
   }
 })

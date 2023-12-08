@@ -18,12 +18,12 @@ import com.acme.scheduling.schedulingMessageBus as baseSchedulingMessageBus
 
 val schedulingMessageBus = baseSchedulingMessageBus.copy().apply {
   addEventHandler(
-    PracticeCreatedEvent::class to onPracticeCreated,
-    PractitionerCreatedEvent::class to onPractitionerCreated,
-    ClientCreatedEvent::class to onClientCreated,
-    AppointmentCreatedEvent::class to onAppointmentCreated,
-    AppointmentAttendedEvent::class to onAppointmentAttended,
-    AppointmentUnattendedEvent::class to onAppointmentUnattended,
-    AppointmentCanceledEvent::class to onAppointmentCanceled,
+    PracticeCreatedEvent::class to ::onPracticeCreated,
+    PractitionerCreatedEvent::class to ::onPractitionerCreated,
+    ClientCreatedEvent::class to ::onClientCreated,
+    AppointmentCreatedEvent::class to ::onAppointmentCreated,
+    AppointmentAttendedEvent::class to ::onAppointmentAttended,
+    AppointmentUnattendedEvent::class to ::onAppointmentUnattended,
+    AppointmentCanceledEvent::class to ::onAppointmentCanceled,
   )
 }
