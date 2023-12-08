@@ -28,18 +28,18 @@ suspend fun onPractitionerCreated(event: PractitionerCreatedEvent, uow: Scheduli
   with(uow.dsl) {
     val practitioner = event.practitioner
 
-    insertInto(
+    val insertResult = insertInto(
       PRACTITIONERS,
       PRACTITIONERS.ID,
       PRACTITIONERS.GENDER
     ).values(
       practitioner.id.value,
       practitioner.gender.toString()
-    ).returningResult(PRACTITIONERS.ID).awaitFirst()
+    ).returningResult(PRACTITIONERS.ID)
+      .awaitFirst()
 
-    practitioner.names.map {
+    val batchQueries = practitioner.names.map {
       val (start, end) = it.period.getTimeValues()
-
       insertInto(
         PRACTITIONER_NAMES,
         PRACTITIONER_NAMES.PRACTITIONER_ID,
@@ -50,7 +50,7 @@ suspend fun onPractitionerCreated(event: PractitionerCreatedEvent, uow: Scheduli
         PRACTITIONER_NAMES.PERIOD_START,
         PRACTITIONER_NAMES.PERIOD_END
       ).values(
-        practitioner.id.value,
+        insertResult[PRACTITIONERS.ID],
         it.given.value,
         it.family.value,
         it.suffix.value,
@@ -58,11 +58,7 @@ suspend fun onPractitionerCreated(event: PractitionerCreatedEvent, uow: Scheduli
         start,
         end,
       )
-    }.forEach {
-      it.returning().awaitFirst()
-    }
-
-    practitioner.contactPoints.map {
+    } + practitioner.contactPoints.map {
       insertInto(
         PRACTITIONER_CONTACT_POINTS,
         PRACTITIONER_CONTACT_POINTS.PRACTITIONER_ID,
@@ -70,14 +66,14 @@ suspend fun onPractitionerCreated(event: PractitionerCreatedEvent, uow: Scheduli
         PRACTITIONER_CONTACT_POINTS.SYSTEM,
         PRACTITIONER_CONTACT_POINTS.VERIFIED_AT,
       ).values(
-        practitioner.id.value,
+        insertResult[PRACTITIONERS.ID],
         it.value,
         it.toSystemString(),
         it.getVerifiedAtValue()
       )
-    }.forEach {
-      it.returning().awaitFirst()
     }
+
+    batch(batchQueries).awaitFirst()
   }
 }
 
@@ -85,16 +81,17 @@ suspend fun onPracticeCreated(event: PracticeCreatedEvent, uow: SchedulingJooqUn
   with(uow.dsl) {
     val practice = event.practice
 
-    insertInto(
+    val insertResult = insertInto(
       PRACTICES,
       PRACTICES.ID,
       PRACTICES.NAME
     ).values(
       practice.id.value,
       practice.name.value
-    ).returning().awaitFirst()
+    ).returning(PRACTICES.ID)
+      .awaitFirst()
 
-    practice.contactPoints.map {
+    val batchQueries = practice.contactPoints.map {
       insertInto(
         PRACTICE_CONTACT_POINTS,
         PRACTICE_CONTACT_POINTS.PRACTICE_ID,
@@ -102,14 +99,14 @@ suspend fun onPracticeCreated(event: PracticeCreatedEvent, uow: SchedulingJooqUn
         PRACTICE_CONTACT_POINTS.SYSTEM,
         PRACTICE_CONTACT_POINTS.VERIFIED_AT,
       ).values(
-        practice.id.value,
+        insertResult[PRACTICES.ID],
         it.value,
         it.toSystemString(),
         it.getVerifiedAtValue(),
       )
-    }.forEach {
-      it.returning().awaitFirst()
     }
+
+    batch(batchQueries).awaitFirst()
   }
 }
 
@@ -117,16 +114,16 @@ suspend fun onClientCreated(event: ClientCreatedEvent, uow: SchedulingJooqUnitOf
   with(uow.dsl) {
     val client = event.client
 
-    insertInto(
+    val insertResult = insertInto(
       CLIENTS,
       CLIENTS.ID,
       CLIENTS.GENDER
     ).values(
       client.id.value,
       client.gender.toString()
-    ).returning().awaitFirst()
+    ).returning(CLIENTS.ID).awaitFirst()
 
-    client.names.map {
+    val batchQueries = client.names.map {
       val (start, end) = it.period.getTimeValues()
 
       insertInto(
@@ -139,7 +136,7 @@ suspend fun onClientCreated(event: ClientCreatedEvent, uow: SchedulingJooqUnitOf
         CLIENT_NAMES.PERIOD_START,
         CLIENT_NAMES.PERIOD_END
       ).values(
-        client.id.value,
+        insertResult[CLIENTS.ID],
         it.given.value,
         it.family.value,
         it.suffix.value,
@@ -147,11 +144,7 @@ suspend fun onClientCreated(event: ClientCreatedEvent, uow: SchedulingJooqUnitOf
         start,
         end,
       )
-    }.forEach {
-      it.returning().awaitFirst()
-    }
-
-    client.contactPoints.map {
+    } + client.contactPoints.map {
       insertInto(
         CLIENT_CONTACT_POINTS,
         CLIENT_CONTACT_POINTS.CLIENT_ID,
@@ -164,9 +157,9 @@ suspend fun onClientCreated(event: ClientCreatedEvent, uow: SchedulingJooqUnitOf
         it.toSystemString(),
         it.getVerifiedAtValue(),
       )
-    }.forEach {
-      it.returning().awaitFirst()
     }
+
+    batch(batchQueries).awaitFirst()
   }
 }
 
