@@ -47,7 +47,7 @@ class MessagesTest : ShouldSpec({
 
         uow.transaction {
           // When
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreatePracticeCommand(
               id = Practice.Id("Practice123"),
               name = Practice.Name("Hello & Associates"),
@@ -92,7 +92,7 @@ class MessagesTest : ShouldSpec({
         val uow = SchedulingJooqUnitOfWork(it.configuration())
         uow.transaction {
           // When
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreatePractitionerCommand(
               id = Practitioner.Id("Practitioner123"),
               user = UserId("User123"),
@@ -140,7 +140,7 @@ class MessagesTest : ShouldSpec({
         val uow = SchedulingJooqUnitOfWork(it.configuration())
         uow.transaction {
           // When
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreateClientCommand(
               id = Client.Id("Client123"),
               name = HumanName(
@@ -219,7 +219,7 @@ class MessagesTest : ShouldSpec({
 
           // When
           val exc = assertThrows<CommandValidationException> {
-            schedulingMessageBus.handle(command, uow)
+            webApiSchedulingMessageBus.handle(command, uow)
           }
 
           // Then
@@ -252,7 +252,7 @@ class MessagesTest : ShouldSpec({
         val uow = SchedulingJooqUnitOfWork(it.configuration())
         uow.transaction {
           // Given
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreatePracticeCommand(
               id = Practice.Id("Practice123"),
               name = Practice.Name("Hello & Associates"),
@@ -265,7 +265,7 @@ class MessagesTest : ShouldSpec({
             uow
           )
 
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreatePractitionerCommand(
               id = Practitioner.Id("Practitioner123"),
               user = UserId("User123"),
@@ -282,7 +282,7 @@ class MessagesTest : ShouldSpec({
             uow
           )
 
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreateClientCommand(
               id = Client.Id("Client123"),
               name = HumanName(
@@ -305,7 +305,7 @@ class MessagesTest : ShouldSpec({
           val end = start.plus(1, ChronoUnit.HOURS)
 
           // When
-          schedulingMessageBus.handle(
+          webApiSchedulingMessageBus.handle(
             CreateAppointmentCommand(
               id = Appointment.Id("Appointment123"),
               client = Client.Id("Client123"),
@@ -345,7 +345,7 @@ class MessagesTest : ShouldSpec({
 
           uow.transaction {
             // Given
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePracticeCommand(
                 id = Practice.Id("Practice123"),
                 name = Practice.Name("Hello & Associates"),
@@ -358,7 +358,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePractitionerCommand(
                 id = Practitioner.Id("Practitioner123"),
                 user = UserId("User123"),
@@ -375,7 +375,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateClientCommand(
                 id = Client.Id("Client123"),
                 name = HumanName(
@@ -397,7 +397,7 @@ class MessagesTest : ShouldSpec({
             val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateAppointmentCommand(
                 id = Appointment.Id("Appointment123"),
                 client = Client.Id("Client123"),
@@ -413,7 +413,7 @@ class MessagesTest : ShouldSpec({
             )
 
             // When
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               MarkAppointmentAttendedCommand(
                 appointment = Appointment.Id("Appointment123")
               ),
@@ -446,7 +446,7 @@ class MessagesTest : ShouldSpec({
 
           uow.transaction {
             // Given
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePracticeCommand(
                 id = Practice.Id("Practice123"),
                 name = Practice.Name("Hello & Associates"),
@@ -459,7 +459,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePractitionerCommand(
                 id = Practitioner.Id("Practitioner123"),
                 user = UserId("User123"),
@@ -476,7 +476,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateClientCommand(
                 id = Client.Id("Client123"),
                 name = HumanName(
@@ -498,7 +498,7 @@ class MessagesTest : ShouldSpec({
             val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateAppointmentCommand(
                 id = Appointment.Id("Appointment123"),
                 client = Client.Id("Client123"),
@@ -514,7 +514,7 @@ class MessagesTest : ShouldSpec({
             )
 
             // When
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               MarkAppointmentUnattendedCommand(
                 appointment = Appointment.Id("Appointment123")
               ),
@@ -547,7 +547,7 @@ class MessagesTest : ShouldSpec({
 
           uow.transaction {
             // Given
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePracticeCommand(
                 id = Practice.Id("Practice123"),
                 name = Practice.Name("Hello & Associates"),
@@ -560,7 +560,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreatePractitionerCommand(
                 id = Practitioner.Id("Practitioner123"),
                 user = UserId("User123"),
@@ -577,7 +577,7 @@ class MessagesTest : ShouldSpec({
               uow
             )
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateClientCommand(
                 id = Client.Id("Client123"),
                 name = HumanName(
@@ -599,7 +599,7 @@ class MessagesTest : ShouldSpec({
             val start = Instant.now().truncatedTo(ChronoUnit.MICROS)
             val end = start.plus(1, ChronoUnit.HOURS)
 
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CreateAppointmentCommand(
                 id = Appointment.Id("Appointment123"),
                 client = Client.Id("Client123"),
@@ -615,7 +615,7 @@ class MessagesTest : ShouldSpec({
             )
 
             // When
-            schedulingMessageBus.handle(
+            webApiSchedulingMessageBus.handle(
               CancelAppointmentCommand(
                 appointment = Appointment.Id("Appointment123")
               ),

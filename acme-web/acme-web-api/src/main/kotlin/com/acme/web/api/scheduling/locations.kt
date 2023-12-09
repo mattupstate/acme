@@ -1,6 +1,6 @@
 @file:OptIn(KtorExperimentalLocationsAPI::class)
 
-package com.acme.web.api.scheduling.ktor
+package com.acme.web.api.scheduling
 
 import io.ktor.server.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.locations.Location

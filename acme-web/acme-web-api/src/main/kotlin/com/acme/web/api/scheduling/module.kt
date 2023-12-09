@@ -1,11 +1,10 @@
 @file:OptIn(KtorExperimentalLocationsAPI::class)
 
-package com.acme.web.api.scheduling.ktor
+package com.acme.web.api.scheduling
 
 import com.acme.scheduling.data.SchedulingJooqUnitOfWork
 import com.acme.web.api.KetoConfiguration
 import com.acme.web.api.scheduling.data.JooqSchedulingWebViews
-import com.acme.web.api.scheduling.schedulingMessageBus
 import com.acme.web.api.security.AccessControlService
 import com.acme.web.api.security.KtorOryKetoAccessControlService
 import com.acme.web.api.security.keto.KtorOryKetoClient
@@ -36,7 +35,7 @@ fun Route.scheduling(jooqConfig: Configuration, accessControl: AccessControlServ
   val schedulingWebViews = JooqSchedulingWebViews(jooqConfig)
 
   authenticate {
-    schedulingCommands(schedulingMessageBus, accessControl, schedulingUnitOfWork, basePath)
+    schedulingCommands(webApiSchedulingMessageBus, accessControl, schedulingUnitOfWork, basePath)
     schedulingQueries(schedulingWebViews, accessControl, basePath)
   }
 }

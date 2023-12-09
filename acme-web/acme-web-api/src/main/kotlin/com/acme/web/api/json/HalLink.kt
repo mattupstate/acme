@@ -1,4 +1,4 @@
-package com.acme.web.api.json.hal
+package com.acme.web.api.json
 
 import com.acme.serialization.URIAsStringSerializer
 import kotlinx.serialization.Serializable

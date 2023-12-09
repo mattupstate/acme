@@ -1,4 +1,4 @@
-package com.acme.web.api.scheduling.ktor
+package com.acme.web.api.scheduling
 
 import com.acme.core.MessageBus
 import com.acme.ktor.server.validation.receiveAndValidate
@@ -9,15 +9,10 @@ import com.acme.scheduling.MarkAppointmentUnattendedCommand
 import com.acme.scheduling.SchedulingUnitOfWork
 import com.acme.web.api.authenticatedUser
 import com.acme.web.api.defaultIdGenerator
-import com.acme.web.api.scheduling.CreateAppointmentCommandRequest
-import com.acme.web.api.scheduling.CreateClientCommandRequest
-import com.acme.web.api.scheduling.CreatePracticeCommandRequest
-import com.acme.web.api.scheduling.CreatePractitionerCommandRequest
 import com.acme.web.api.scheduling.json.AppointmentCollectionResource
 import com.acme.web.api.scheduling.json.ClientCollectionResource
 import com.acme.web.api.scheduling.json.PracticeCollectionResource
 import com.acme.web.api.scheduling.json.PractitionerCollectionResource
-import com.acme.web.api.scheduling.toCommand
 import com.acme.web.api.security.AccessControlService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall

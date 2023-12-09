@@ -1,7 +1,7 @@
 package com.acme.web.api
 
 import com.acme.ktor.server.logging.logger
-import com.acme.web.api.scheduling.ktor.scheduling
+import com.acme.web.api.scheduling.scheduling
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
 import io.ktor.server.application.call

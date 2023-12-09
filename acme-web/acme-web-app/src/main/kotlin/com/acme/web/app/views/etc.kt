@@ -9,20 +9,10 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.authentication
 import io.ktor.server.response.respond
 import io.ktor.server.thymeleaf.ThymeleafContent
-import jakarta.validation.ElementKind
-import jakarta.validation.Path
 import java.util.Locale
 
 fun ApplicationCall.authenticatedUser(): AcmeWebUserIdentity =
   authentication.principal() ?: throw PrincipalNotFoundException()
-
-fun Path.toJsonPointer(): String = "/" + map {
-  when (it.kind) {
-    ElementKind.PROPERTY -> it.name
-    ElementKind.CONTAINER_ELEMENT -> it.index
-    else -> throw RuntimeException("Unsupported ElementKind: ${it.kind}")
-  }
-}.joinToString("/")
 
 suspend fun ApplicationCall.respondTemplate(
   template: String,

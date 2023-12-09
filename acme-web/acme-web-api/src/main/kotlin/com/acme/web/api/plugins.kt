@@ -8,6 +8,7 @@ import com.acme.ktor.server.logging.StructuredLogging
 import com.acme.ktor.server.validation.RequestBodyValidationException
 import com.acme.ktor.server.validation.RequestDecodingException
 import com.acme.ktor.server.validation.RequestValidation
+import com.acme.web.api.json.respondVndError
 import com.acme.web.api.security.PrincipalNotFoundException
 import com.acme.web.api.security.UnauthorizedAccessException
 import io.ktor.http.ContentType

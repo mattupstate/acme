@@ -1,4 +1,4 @@
-package com.acme.web.api.scheduling.data
+package com.acme.web.api.scheduling
 
 import com.acme.scheduling.Appointment
 import com.acme.scheduling.AppointmentAttendedEvent

@@ -1,15 +1,14 @@
 @file:OptIn(KtorExperimentalLocationsAPI::class)
 
-package com.acme.web.api.scheduling.ktor
+package com.acme.web.api.scheduling
 
 import com.acme.web.api.authenticatedUser
-import com.acme.web.api.json.hal.HalLink
+import com.acme.web.api.json.HalLink
 import com.acme.web.api.scheduling.data.SchedulingWebViews
 import com.acme.web.api.scheduling.json.AppointmentResource
 import com.acme.web.api.scheduling.json.ClientResource
 import com.acme.web.api.scheduling.json.PracticeResource
 import com.acme.web.api.scheduling.json.PractitionerResource
-import com.acme.web.api.scheduling.toResource
 import com.acme.web.api.security.AccessControlService
 import com.acme.web.api.security.UnauthorizedAccessException
 import io.ktor.http.HttpStatusCode

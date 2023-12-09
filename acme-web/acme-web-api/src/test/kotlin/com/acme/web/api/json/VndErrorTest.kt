@@ -1,16 +1,14 @@
-package com.acme.web.api.core.ktor
+package com.acme.web.api.json
 
 import com.acme.ktor.server.validation.RequestBodyValidationException
-import com.acme.web.api.json.hal.VndError
 import com.acme.web.api.scheduling.constraintValidator
-import com.acme.web.api.toVndError
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
-class RequestBodyValidationExceptionExtensionTest : ShouldSpec({
+class VndErrorTest : ShouldSpec({
 
   data class FakeBean(
     @field:NotNull
@@ -42,8 +40,7 @@ class RequestBodyValidationExceptionExtensionTest : ShouldSpec({
               )
             )
           )
-        )
-        )
+        ))
     }
   }
 })
