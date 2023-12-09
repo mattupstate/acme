@@ -22,10 +22,6 @@ data class Appointment(
   fun cancel() =
     copy(state = AppointmentState.CANCELED)
 
-  override fun hashCode(): Int {
-    return id.hashCode()
-  }
-
   @JvmInline
   @Serializable
   value class Id(val value: String)

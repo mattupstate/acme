@@ -11,11 +11,7 @@ data class Practitioner(
   val gender: Gender,
   val contactPoints: Set<ContactPoint> = emptySet(),
 ) : Identifiable<Practitioner.Id> {
-
-  override fun hashCode(): Int {
-    return id.hashCode()
-  }
-
+  
   @JvmInline
   @Serializable
   value class Id(val value: String)

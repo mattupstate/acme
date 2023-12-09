@@ -10,11 +10,7 @@ data class Practice(
   val name: Name,
   val contactPoints: Set<ContactPoint>,
 ) : Identifiable<Practice.Id> {
-
-  override fun hashCode(): Int {
-    return id.hashCode()
-  }
-
+  
   @JvmInline
   @Serializable
   value class Id(val value: String)
