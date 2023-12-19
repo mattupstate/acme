@@ -1,16 +1,16 @@
-import org.jooq.codegen.gradle.CodegenTask
+import nu.studer.gradle.jooq.JooqEdition
+import nu.studer.gradle.jooq.JooqGenerate
 
 plugins {
   id("acme.kotlin-library-conventions")
-  alias(libs.plugins.org.jooq.codegen)
+  alias(libs.plugins.nu.studer.jooq)
 }
 
 dependencies {
-  jooqCodegen(files("src/main/resources"))
-  jooqCodegen(project(":acme-lib:acme-lib-liquibase"))
-  jooqCodegen(libs.org.testcontainers.postgresql)
-  jooqCodegen(libs.org.postgresql)
-  jooqCodegen(libs.ch.qos.logback.logback.classic)
+  jooqGenerator(project(":acme-lib:acme-lib-liquibase"))
+  jooqGenerator(libs.org.testcontainers.postgresql)
+  jooqGenerator(libs.org.postgresql)
+  jooqGenerator(libs.ch.qos.logback.logback.classic)
 
   implementation(project(":acme-domain:acme-domain-core"))
   implementation(libs.com.michael.bull.kotlin.coroutines.jdbc)
@@ -31,49 +31,56 @@ java {
   sourceSets {
     main {
       java {
-        srcDir(tasks.withType(CodegenTask::class))
+        srcDir(tasks.withType(JooqGenerate::class))
       }
     }
   }
 }
 
 jooq {
-  configuration {
-    logging = org.jooq.meta.jaxb.Logging.WARN
-    jdbc {
-      driver = "org.testcontainers.jdbc.ContainerDatabaseDriver"
-      url =
-        "jdbc:tc:postgresql:15.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
-      user = "test"
-      password = "test"
-    }
-    generator {
-      name = "org.jooq.codegen.KotlinGenerator"
-      database {
-        name = "org.jooq.meta.postgres.PostgresDatabase"
-        includes = ".*"
-        excludes = "databasechangelog.*|databasechangeloglock.*|pg_catalog.*|information_schema.*"
-      }
-      target {
-        packageName = "com.acme.sql"
-        directory = projectDir.resolve("build/generated-src/jooq/main").toString()
-      }
-      generate {
-        isKotlinNotNullPojoAttributes = true
-        isKotlinNotNullRecordAttributes = true
-        isKotlinNotNullInterfaceAttributes = true
-      }
-      strategy {
-        name = "org.jooq.codegen.DefaultGeneratorStrategy"
+  version.set("3.18.7")
+  edition.set(JooqEdition.OSS)
+  configurations {
+    create("main") {
+      jooqConfiguration.apply {
+        logging = org.jooq.meta.jaxb.Logging.WARN
+        jdbc.apply {
+          driver = "org.testcontainers.jdbc.ContainerDatabaseDriver"
+          url =
+            "jdbc:tc:postgresql:15.5:///test?TC_INITFUNCTION=com.acme.liquibase.LiquibaseTestContainerInitializerKt::update"
+        }
+        generator.apply {
+          name = "org.jooq.codegen.KotlinGenerator"
+          database.apply {
+            name = "org.jooq.meta.postgres.PostgresDatabase"
+            includes = ".*"
+            excludes = "databasechangelog.*|databasechangeloglock.*|pg_catalog.*|information_schema.*"
+          }
+          target.apply {
+            packageName = "com.acme.sql"
+          }
+          generate.apply {
+            isKotlinNotNullPojoAttributes = true
+            isKotlinNotNullRecordAttributes = true
+            isKotlinNotNullInterfaceAttributes = true
+          }
+          strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+        }
       }
     }
   }
 }
 
 tasks {
-  withType(CodegenTask::class) {
-    inputs.dir(projectDir.resolve("src/main/resources/db"))
-      .withPathSensitivity(PathSensitivity.RELATIVE)
+  val liquibaseChangelogFile = "src/main/resources/db/changelog.yaml"
+
+  withType(JooqGenerate::class) {
+    inputs.dir(file(liquibaseChangelogFile).parent).withPathSensitivity(PathSensitivity.RELATIVE)
+    allInputsDeclared.set(true)
     outputs.cacheIf { true }
+    javaExecSpec = Action {
+      systemProperty("liquibase.changelogFile", liquibaseChangelogFile)
+      systemProperty("logback.configurationFile", projectDir.resolve("logback-jooq.xml"))
+    }
   }
 }

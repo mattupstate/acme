@@ -5,7 +5,7 @@ io-kotest = "5.8.0"
 io-ktor = "2.3.4"
 io-opentelemetry = "1.30.1"
 kotlin = "1.9.21"
-org-jooq = "3.19.0"
+org-jooq = "3.18.7"
 org-junit-jupiter = "5.10.0"
 org-seleniumhq-selenium = "4.13.0"
 org-slf4j = "2.0.9"
@@ -74,6 +74,7 @@ org-jetbrains-kotlinx-kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlin
 # @keep this version, it's used in buildSrc and the update plugin doens't recognize it
 org-jlleitschuh-ktlint-gradle-plugin = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
 org-jooq = { module = "org.jooq:jooq", version.ref = "org-jooq" }
+org-jooq-jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "org-jooq" }
 org-jooq-jooq-kotlin = { module = "org.jooq:jooq-kotlin", version.ref = "org-jooq" }
 org-jooq-jooq-kotlin-coroutines = { module = "org.jooq:jooq-kotlin-coroutines", version.ref = "org-jooq" }
 org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
@@ -97,6 +98,5 @@ com-github-ben-manes-versions = "com.github.ben-manes.versions:0.50.0"
 com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.4.0"
 com-ryandens-javaagent-jib = "com.ryandens.javaagent-jib:0.5.1"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
-org-jooq-codegen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "org-jooq" }
-com-bmuschko-docker-remote-api = "com.bmuschko.docker-remote-api:9.4.0"
+nu-studer-jooq = "nu.studer.jooq:8.2.1"
 org-hidetake-swagger-generator = "org.hidetake.swagger.generator:2.19.2"
