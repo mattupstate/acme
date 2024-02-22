@@ -1,6 +1,9 @@
 version: 3
 
 includes:
+  env: 
+    taskfile: ./Taskfile.env.yaml
+    dir: .
   dev: 
     taskfile: ./k8s/cluster/dev/Taskfile.yaml
     dir: ./k8s/cluster/dev

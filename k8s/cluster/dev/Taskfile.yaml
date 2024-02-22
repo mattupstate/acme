@@ -1,59 +1,6 @@
 version: 3
 
 tasks:
-  setup:1password-darwin:
-    platforms: [ darwin ]
-    silent: true
-    cmds:
-      - brew install --cask 1password/tap/1password-cli
-
-  setup:1password-linux:
-    platforms: [ linux ]
-    silent: true
-    env:
-      OP_DEB_URL: https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-      OP_RPM_URL: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm
-      TEMPORARY_PACKAGE:
-        sh: mktemp
-    cmds:
-      - |
-        if command -v dpkg; then
-          wget -O "$TEMPORARY_PACKAGE" "$OP_DEB_URL"
-          sudo dpkg -i "$TEMPORARY_PACKAGE"
-        elif command -v rpm; then
-          wget -O "$TEMPORARY_PACKAGE" '$OP_RPM_URL'
-          sudo rpm -i "$TEMPORARY_PACKAGE"
-        else
-          echo "Could not find dpkg or rpm commands"
-          exit 1
-        fi
-      - defer: rm -f "$TEMPORARY_PACKAGE"
-
-  setup:
-    silent: true
-    env:
-      NVM_VERSION:
-        sh: |
-          git -c 'versionsort.suffix=-' \
-            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/nvm-sh/nvm.git '*.*.*' \
-            | tail --lines=1 \
-            | cut --delimiter='/' --fields=3
-    cmds:
-      - brew install unzip zip
-      - task: setup:1password-linux
-      - task: setup:1password-darwin
-      - curl -s "https://get.sdkman.io" | bash
-      - curl -s "https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh" | bash
-      - brew install mkcert helm terraform skaffold direnv jq
-      - bash -c "source $HOME/.sdkman/bin/sdkman-init.sh; sdk env install"
-      - bash -c "source $HOME/.nvm/nvm.sh; nvm install"
-      - echo
-      - echo -e "\033[32mAutomated setup was successful."
-      - echo -e "Be sure to hook the following tools into your shell before continuing:\033[0m"
-      - echo "sdkman > https://sdkman.io/install"
-      - echo "nvm    > https://github.com/nvm-sh/nvm#installing-and-updating"
-      - echo "direnv > https://direnv.net/docs/hook.html"
-
   validate-kubectx:
     internal: true
     silent: true
