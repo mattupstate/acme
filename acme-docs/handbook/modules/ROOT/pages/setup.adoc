@@ -18,7 +18,7 @@ They should also work for Windows under WSL but have not been verified.
 
 1. Install the rest of the development tools:
 
-  $ task dev:setup
+  $ task env:setup
 
 1. https://developer.1password.com/docs/cli/get-started#sign-in[Setup the 1Password CLI]
 
