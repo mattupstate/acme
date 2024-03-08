@@ -38,7 +38,7 @@ java {
 }
 
 jooq {
-  version.set("3.18.7")
+  version.set(libs.versions.org.jooq)
   edition.set(JooqEdition.OSS)
   configurations {
     create("main") {
