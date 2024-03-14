@@ -20,10 +20,10 @@ class JooqClientAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Client, Client.Id> {
 
-  override suspend fun find(id: Client.Id): PersistedAggregate<Client>? =
+  override suspend fun findById(id: Client.Id): Result<PersistedAggregate<Client>> = runCatching {
     dsl.selectFrom(CLIENTS)
       .where(CLIENTS.ID.eq(id.value))
-      .awaitFirstOrNull()?.let {
+      .awaitFirst().let {
         PersistedAggregate(
           aggregate = Json.decodeFromString(it.aggregate.data()),
           metaData = PersistenceMetaData(
@@ -33,11 +33,7 @@ class JooqClientAggregateRepository(
           )
         )
       }
-
-  override suspend fun get(id: Client.Id): PersistedAggregate<Client> = getOrThrow(id) { NoSuchElementException() }
-
-  override suspend fun getOrThrow(id: Client.Id, block: () -> Throwable): PersistedAggregate<Client> =
-    find(id) ?: throw block()
+  }
 
   override suspend fun exists(id: Client.Id): Boolean =
     dsl.selectOne().from(CLIENTS).where(CLIENTS.ID.eq(id.value)).awaitFirstOrNull() != null

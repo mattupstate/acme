@@ -8,16 +8,16 @@ class CommandValidationException(
 ) : IllegalArgumentException("Invalid command") {
 
   constructor(command: Any, error: CommandValidationError) : this(command, setOf(error))
+}
 
-  interface CommandValidationError {
-    val message: String
-  }
+interface CommandValidationError {
+  val message: String
+}
 
-  data class InvalidAggregateReferenceError(
-    val fieldName: String,
-    val value: String,
-    override val message: String,
-  ) : CommandValidationError {
-    constructor(property: KProperty<Any>, value: String, message: String) : this(property.name, value, message)
-  }
+data class InvalidAggregateReferenceError(
+  val fieldName: String,
+  val value: String,
+  override val message: String,
+) : CommandValidationError {
+  constructor(property: KProperty<Any>, value: String, message: String) : this(property.name, value, message)
 }

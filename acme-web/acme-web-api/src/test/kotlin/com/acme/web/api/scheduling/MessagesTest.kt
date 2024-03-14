@@ -1,6 +1,7 @@
 package com.acme.web.api.scheduling
 
 import com.acme.core.CommandValidationException
+import com.acme.core.InvalidAggregateReferenceError
 import com.acme.scheduling.Appointment
 import com.acme.scheduling.AppointmentState
 import com.acme.scheduling.CancelAppointmentCommand
@@ -226,17 +227,17 @@ class MessagesTest : ShouldSpec({
           exc.command.shouldBe(command)
           exc.errors.shouldBe(
             setOf(
-              CommandValidationException.InvalidAggregateReferenceError(
+              InvalidAggregateReferenceError(
                 fieldName = "client",
                 value = "Client123",
                 message = "Invalid client"
               ),
-              CommandValidationException.InvalidAggregateReferenceError(
+              InvalidAggregateReferenceError(
                 fieldName = "practitioner",
                 value = "Practitioner123",
                 message = "Invalid practitioner"
               ),
-              CommandValidationException.InvalidAggregateReferenceError(
+              InvalidAggregateReferenceError(
                 fieldName = "practice",
                 value = "Practice123",
                 message = "Invalid practice"

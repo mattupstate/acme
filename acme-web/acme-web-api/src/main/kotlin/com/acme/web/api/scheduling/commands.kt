@@ -37,7 +37,7 @@ fun Route.schedulingCommands(
   post<PracticeCollectionResourceLocation> {
     val principal = call.authenticatedUser()
     val command = call.receiveAndValidate<CreatePracticeCommandRequest>()
-      .toCommand(defaultIdGenerator(), principal)
+      .toCommand(defaultIdGenerator(), WebContext(principal))
     val resourceHref = href(PracticeResourceLocation(command.id.value))
 
     unitOfWork.transaction {
@@ -56,7 +56,7 @@ fun Route.schedulingCommands(
   post<ClientCollectionResourceLocation> {
     val principal = call.authenticatedUser()
     val command = call.receiveAndValidate<CreateClientCommandRequest>()
-      .toCommand(defaultIdGenerator(), principal)
+      .toCommand(defaultIdGenerator(), WebContext(principal))
     val resourceHref = href(ClientResourceLocation(command.id.value))
 
     unitOfWork.transaction {
@@ -75,7 +75,7 @@ fun Route.schedulingCommands(
   post<PractitionerCollectionResourceLocation> {
     val principal = call.authenticatedUser()
     val command = call.receiveAndValidate<CreatePractitionerCommandRequest>()
-      .toCommand(defaultIdGenerator(), principal)
+      .toCommand(defaultIdGenerator(), WebContext(principal))
     val resourceHref = href(PractitionerResourceLocation(command.id.value))
 
     unitOfWork.transaction {
@@ -94,7 +94,7 @@ fun Route.schedulingCommands(
   post<AppointmentCollectionResourceLocation> {
     val principal = call.authenticatedUser()
     val command = call.receiveAndValidate<CreateAppointmentCommandRequest>()
-      .toCommand(defaultIdGenerator(), principal)
+      .toCommand(defaultIdGenerator(), WebContext(principal))
     val resourceHref = href(AppointmentResourceLocation(command.id.value))
 
     unitOfWork.transaction {

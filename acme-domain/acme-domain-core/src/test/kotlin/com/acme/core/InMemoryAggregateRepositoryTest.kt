@@ -17,8 +17,7 @@ class InMemoryAggregateRepositoryTest : ShouldSpec({
     val aggregate = FakeAggregate("id123")
     val repo = InMemoryAggregateRepository<FakeAggregate, String>().apply { save(aggregate) }
     repo.exists(aggregate.id).shouldBeTrue()
-    val persistedAggregate = repo.get(aggregate.id)
-    persistedAggregate.aggregate.shouldBe(aggregate)
+    repo.findById(aggregate.id).getOrThrow().aggregate.shouldBe(aggregate)
   }
 
   should("should save new aggregate") {
@@ -26,14 +25,13 @@ class InMemoryAggregateRepositoryTest : ShouldSpec({
     val aggregate = FakeAggregate("id123")
     repo.save(aggregate)
     repo.exists(aggregate.id).shouldBeTrue()
-    val persistedAggregate = repo.get(aggregate.id)
-    persistedAggregate.aggregate.shouldBe(aggregate)
+    repo.findById(aggregate.id).getOrThrow().aggregate.shouldBe(aggregate)
   }
 
-  should("throw user supplied exception") {
+  should("result in NoSuchElementException") {
     val repo = InMemoryAggregateRepository<FakeAggregate, String>()
-    shouldThrow<FakeException> {
-      repo.getOrThrow("id123") { FakeException() }
+    shouldThrow<NoSuchElementException> {
+      repo.findById("id123").getOrThrow()
     }
   }
 })

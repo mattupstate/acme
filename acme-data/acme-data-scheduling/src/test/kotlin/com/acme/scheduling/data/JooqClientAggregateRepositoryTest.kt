@@ -33,11 +33,13 @@ class JooqClientAggregateRepositoryTest : ShouldSpec({
       repo.save(client)
       repo.exists(client.id).shouldBeTrue()
 
-      val persistedClient = repo.get(client.id)
+      val persistedClient = repo.findById(client.id).getOrThrow()
       persistedClient.aggregate.shouldBe(client)
-      persistedClient.metaData.revision.shouldBe(1)
-      persistedClient.metaData.createdAt.shouldBe(time.now)
-      persistedClient.metaData.updatedAt.shouldBe(time.now)
+      with(persistedClient.metaData) {
+        revision.shouldBe(1)
+        createdAt.shouldBe(time.now)
+        updatedAt.shouldBe(time.now)
+      }
     }
   }
 
@@ -52,11 +54,13 @@ class JooqClientAggregateRepositoryTest : ShouldSpec({
       val expectedClient = client.copy(gender = Gender.FEMALE)
       updateRepo.save(expectedClient)
 
-      val persistedClient = updateRepo.get(client.id)
+      val persistedClient = updateRepo.findById(client.id).getOrThrow()
       persistedClient.aggregate.shouldBe(expectedClient)
-      persistedClient.metaData.revision.shouldBe(2)
-      persistedClient.metaData.createdAt.shouldBe(createTime.now)
-      persistedClient.metaData.updatedAt.shouldBe(updateTime.now)
+      with(persistedClient.metaData) {
+        revision.shouldBe(2)
+        createdAt.shouldBe(createTime.now)
+        updatedAt.shouldBe(updateTime.now)
+      }
     }
   }
 
@@ -64,19 +68,9 @@ class JooqClientAggregateRepositoryTest : ShouldSpec({
     testTransaction {
       val repo = JooqClientAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
-        repo.get(client.id)
+        repo.findById(client.id).getOrThrow()
       }
     }
   }
 
-  should("should throw user supplied exception") {
-    testTransaction {
-      val repo = JooqClientAggregateRepository(it.dsl())
-      shouldThrow<FakeException> {
-        repo.getOrThrow(client.id) {
-          FakeException()
-        }
-      }
-    }
-  }
 })

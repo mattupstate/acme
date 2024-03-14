@@ -20,25 +20,21 @@ class JooqPractitionerAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Practitioner, Practitioner.Id> {
 
-  override suspend fun find(id: Practitioner.Id): PersistedAggregate<Practitioner>? =
-    dsl.selectFrom(PRACTITIONERS)
-      .where(PRACTITIONERS.ID.eq(id.value))
-      .awaitFirstOrNull()?.let {
-        PersistedAggregate(
-          aggregate = Json.decodeFromString(it.aggregate.data()),
-          metaData = PersistenceMetaData(
-            createdAt = it.createdAt,
-            updatedAt = it.updatedAt,
-            revision = it.revision,
+  override suspend fun findById(id: Practitioner.Id): Result<PersistedAggregate<Practitioner>> =
+    runCatching {
+      dsl.selectFrom(PRACTITIONERS)
+        .where(PRACTITIONERS.ID.eq(id.value))
+        .awaitFirst().let {
+          PersistedAggregate(
+            aggregate = Json.decodeFromString(it.aggregate.data()),
+            metaData = PersistenceMetaData(
+              createdAt = it.createdAt,
+              updatedAt = it.updatedAt,
+              revision = it.revision,
+            )
           )
-        )
-      }
-
-  override suspend fun get(id: Practitioner.Id): PersistedAggregate<Practitioner> =
-    getOrThrow(id) { NoSuchElementException() }
-
-  override suspend fun getOrThrow(id: Practitioner.Id, block: () -> Throwable): PersistedAggregate<Practitioner> =
-    find(id) ?: throw block()
+        }
+    }
 
   override suspend fun exists(id: Practitioner.Id): Boolean =
     dsl.selectOne().from(PRACTITIONERS).where(PRACTITIONERS.ID.eq(id.value)).awaitFirstOrNull() != null

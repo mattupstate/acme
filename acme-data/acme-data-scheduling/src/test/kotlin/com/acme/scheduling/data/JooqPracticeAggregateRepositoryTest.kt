@@ -32,7 +32,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
       repo.save(practice)
       repo.exists(practice.id).shouldBeTrue()
 
-      val persistedPractice = repo.get(practice.id)
+      val persistedPractice = repo.findById(practice.id).getOrThrow()
       persistedPractice.aggregate.shouldBe(practice)
       persistedPractice.metaData.revision.shouldBe(1)
       persistedPractice.metaData.createdAt.shouldBe(time.now)
@@ -43,8 +43,8 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
   should("update an existing aggregate and increment revision") {
     testTransaction {
       val createTime = timeFixtureFactory()
-      val createRepo = JooqPracticeAggregateRepository(it.dsl(), createTime.clock)
-      createRepo.save(practice)
+      val repo = JooqPracticeAggregateRepository(it.dsl(), createTime.clock)
+      repo.save(practice)
 
       val updateTime = timeFixtureFactory()
       val updateRepo = JooqPracticeAggregateRepository(it.dsl(), updateTime.clock)
@@ -53,11 +53,13 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
       )
       updateRepo.save(expectedPractice)
 
-      val persistedPractice = createRepo.get(practice.id)
+      val persistedPractice = repo.findById(practice.id).getOrThrow()
       persistedPractice.aggregate.shouldBe(expectedPractice)
-      persistedPractice.metaData.revision.shouldBe(2)
-      persistedPractice.metaData.createdAt.shouldBe(createTime.now)
-      persistedPractice.metaData.updatedAt.shouldBe(updateTime.now)
+      with(persistedPractice.metaData) {
+        revision.shouldBe(2)
+        createdAt.shouldBe(createTime.now)
+        updatedAt.shouldBe(updateTime.now)
+      }
     }
   }
 
@@ -65,18 +67,7 @@ class JooqPracticeAggregateRepositoryTest : ShouldSpec({
     testTransaction {
       val repo = JooqPracticeAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
-        repo.get(practice.id)
-      }
-    }
-  }
-
-  should("throw user supplied exception") {
-    testTransaction {
-      val repo = JooqPracticeAggregateRepository(it.dsl())
-      shouldThrow<FakeException> {
-        repo.getOrThrow(practice.id) {
-          FakeException()
-        }
+        repo.findById(practice.id).getOrThrow()
       }
     }
   }

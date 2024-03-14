@@ -35,11 +35,13 @@ class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
       repo.save(practitioner)
       repo.exists(practitioner.id).shouldBeTrue()
 
-      val persistedPractitioner = repo.get(practitioner.id)
+      val persistedPractitioner = repo.findById(practitioner.id).getOrThrow()
       persistedPractitioner.aggregate.shouldBe(practitioner)
-      persistedPractitioner.metaData.revision.shouldBe(1)
-      persistedPractitioner.metaData.createdAt.shouldBe(time.now)
-      persistedPractitioner.metaData.updatedAt.shouldBe(time.now)
+      with(persistedPractitioner.metaData) {
+        revision.shouldBe(1)
+        createdAt.shouldBe(time.now)
+        updatedAt.shouldBe(time.now)
+      }
     }
   }
 
@@ -54,11 +56,13 @@ class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
       val expectedPractitioner = practitioner.copy(gender = Gender.FEMALE)
       updateRepo.save(expectedPractitioner)
 
-      val persistedPractitioner = createRepo.get(practitioner.id)
+      val persistedPractitioner = createRepo.findById(practitioner.id).getOrThrow()
       persistedPractitioner.aggregate.shouldBe(expectedPractitioner)
-      persistedPractitioner.metaData.revision.shouldBe(2)
-      persistedPractitioner.metaData.createdAt.shouldBe(createTime.now)
-      persistedPractitioner.metaData.updatedAt.shouldBe(updateTime.now)
+      with(persistedPractitioner.metaData) {
+        revision.shouldBe(2)
+        createdAt.shouldBe(createTime.now)
+        updatedAt.shouldBe(updateTime.now)
+      }
     }
   }
 
@@ -66,18 +70,7 @@ class JooqPractitionerAggregateRepositoryTest : ShouldSpec({
     testTransaction {
       val repo = JooqPractitionerAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
-        repo.get(practitioner.id)
-      }
-    }
-  }
-
-  should("throw user supplied exception") {
-    testTransaction {
-      val repo = JooqPractitionerAggregateRepository(it.dsl())
-      shouldThrow<FakeException> {
-        repo.getOrThrow(practitioner.id) {
-          FakeException()
-        }
+        repo.findById(practitioner.id).getOrThrow()
       }
     }
   }

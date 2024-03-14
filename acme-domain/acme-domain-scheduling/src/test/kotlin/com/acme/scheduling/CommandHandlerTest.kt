@@ -1,6 +1,9 @@
 package com.acme.scheduling
 
 import com.acme.core.CommandValidationException
+import com.acme.core.InMemoryAggregateRepository
+import com.acme.core.InvalidAggregateReferenceError
+import com.acme.core.PersistedAggregate
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -213,7 +216,7 @@ class CommandHandlerTest : ShouldSpec({
   }
 
   context("markAppointmentAttended") {
-    should("should update aggregate and publish event") {
+    should("update aggregate and publish event") {
       val appointment = Appointment(
         id = Appointment.Id("Appointment123"),
         practice = Practice.Id("Practice123"),
@@ -234,7 +237,7 @@ class CommandHandlerTest : ShouldSpec({
       )
     }
 
-    should("markAppointmentAttended should throw exception when aggregate does not exist") {
+    should("throw CommandValidationException when aggregate does not exist") {
       val cmd = MarkAppointmentAttendedCommand(Appointment.Id("Appointment123"))
       val uow = InMemorySchedulingUnitOfWork()
 
@@ -245,13 +248,22 @@ class CommandHandlerTest : ShouldSpec({
       exc.command.shouldBe(cmd)
       exc.errors.shouldBe(
         setOf(
-          CommandValidationException.InvalidAggregateReferenceError(
+          InvalidAggregateReferenceError(
             MarkAppointmentAttendedCommand::appointment,
-            cmd.appointment.value,
+            "Appointment123",
             "Invalid appointment"
           )
         )
       )
+    }
+
+    should("throw unexpected exception") {
+      val cmd = MarkAppointmentAttendedCommand(Appointment.Id("Appointment123"))
+      val uow = InMemorySchedulingUnitOfWork(appointments = FakeAppointmentInMemoryAggregateRepository())
+
+      shouldThrow<NotImplementedError> {
+        markAppointmentAttended(cmd, uow)
+      }
     }
   }
 
@@ -277,7 +289,7 @@ class CommandHandlerTest : ShouldSpec({
       )
     }
 
-    should("throw exception when aggregate does not exist") {
+    should("throw CommandValidationException when aggregate does not exist") {
       val cmd = MarkAppointmentUnattendedCommand(Appointment.Id("Appointment123"))
       val uow = InMemorySchedulingUnitOfWork()
 
@@ -288,13 +300,22 @@ class CommandHandlerTest : ShouldSpec({
       exc.command.shouldBe(cmd)
       exc.errors.shouldBe(
         setOf(
-          CommandValidationException.InvalidAggregateReferenceError(
+          InvalidAggregateReferenceError(
             MarkAppointmentAttendedCommand::appointment,
-            cmd.appointment.value,
+            "Appointment123",
             "Invalid appointment"
           )
         )
       )
+    }
+
+    should("throw unexpected exception") {
+      val cmd = MarkAppointmentUnattendedCommand(Appointment.Id("Appointment123"))
+      val uow = InMemorySchedulingUnitOfWork(appointments = FakeAppointmentInMemoryAggregateRepository())
+
+      shouldThrow<NotImplementedError> {
+        markAppointmentUnattended(cmd, uow)
+      }
     }
   }
 
@@ -319,25 +340,40 @@ class CommandHandlerTest : ShouldSpec({
         listOf(AppointmentCanceledEvent(appointment.id))
       )
     }
-  }
 
-  should("throw exception when aggregate does not exist") {
-    val cmd = CancelAppointmentCommand(Appointment.Id("Appointment123"))
-    val uow = InMemorySchedulingUnitOfWork()
+    should("throw CommandValidationException when aggregate does not exist") {
+      val cmd = CancelAppointmentCommand(Appointment.Id("Appointment123"))
+      val uow = InMemorySchedulingUnitOfWork()
 
-    val exc = shouldThrow<CommandValidationException> {
-      cancelAppointment(cmd, uow)
-    }
+      val exc = shouldThrow<CommandValidationException> {
+        cancelAppointment(cmd, uow)
+      }
 
-    exc.command.shouldBe(cmd)
-    exc.errors.shouldBe(
-      setOf(
-        CommandValidationException.InvalidAggregateReferenceError(
-          MarkAppointmentAttendedCommand::appointment,
-          cmd.appointment.value,
-          "Invalid appointment"
+      exc.command.shouldBe(cmd)
+      exc.errors.shouldBe(
+        setOf(
+          InvalidAggregateReferenceError(
+            MarkAppointmentAttendedCommand::appointment,
+            "Appointment123",
+            "Invalid appointment"
+          )
         )
       )
-    )
+    }
+
+    should("throw unexpected exception") {
+      val cmd = CancelAppointmentCommand(Appointment.Id("Appointment123"))
+      val uow = InMemorySchedulingUnitOfWork(appointments = FakeAppointmentInMemoryAggregateRepository())
+
+      shouldThrow<NotImplementedError> {
+        cancelAppointment(cmd, uow)
+      }
+    }
   }
 })
+
+class FakeAppointmentInMemoryAggregateRepository : InMemoryAggregateRepository<Appointment, Appointment.Id>() {
+  override suspend fun findById(id: Appointment.Id): Result<PersistedAggregate<Appointment>> {
+    return Result.failure(NotImplementedError())
+  }
+}

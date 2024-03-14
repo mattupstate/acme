@@ -1,5 +1,6 @@
 package com.acme.web.api.scheduling
 
+import com.acme.core.Command
 import com.acme.scheduling.Appointment
 import com.acme.scheduling.AppointmentState
 import com.acme.scheduling.Client
@@ -34,7 +35,11 @@ fun Period.toValueObject() =
     com.acme.scheduling.Period.Unknown
   }
 
-fun CreateAppointmentCommandRequest.toCommand(id: String, authenticatedUser: AcmeWebUserPrincipal) =
+data class WebContext(
+  val authenticatedUser: AcmeWebUserPrincipal
+)
+
+fun CreateAppointmentCommandRequest.toCommand(id: String, ctx: WebContext) =
   CreateAppointmentCommand(
     id = Appointment.Id(id),
     practitioner = Practitioner.Id(practitionerId!!),
@@ -42,11 +47,9 @@ fun CreateAppointmentCommandRequest.toCommand(id: String, authenticatedUser: Acm
     practice = Practice.Id(practiceId!!),
     state = AppointmentState.valueOf(state!!),
     period = com.acme.scheduling.Period.Bounded(from!!, to!!),
-  ).apply {
-    metadata.set("principal" to authenticatedUser)
-  }
+  ).applyWebMetaData(ctx)
 
-fun CreateClientCommandRequest.toCommand(id: String, authenticatedUser: AcmeWebUserPrincipal) =
+fun CreateClientCommandRequest.toCommand(id: String, ctx: WebContext) =
   CreateClientCommand(
     id = Client.Id(id),
     name = name!!.toValueObject(),
@@ -58,14 +61,12 @@ fun CreateClientCommandRequest.toCommand(id: String, authenticatedUser: AcmeWebU
         ContactPoint.Email.Unverified(it)
       }
     ).toSet()
-  ).apply {
-    metadata.set("principal" to authenticatedUser)
-  }
+  ).applyWebMetaData(ctx)
 
-fun CreatePracticeCommandRequest.toCommand(id: String, authenticatedUser: AcmeWebUserPrincipal) =
+fun CreatePracticeCommandRequest.toCommand(id: String, ctx: WebContext) =
   CreatePracticeCommand(
     id = Practice.Id(id),
-    owner = Practitioner.Id(authenticatedUser.id),
+    owner = Practitioner.Id(ctx.authenticatedUser.id),
     name = Practice.Name(name!!),
     contactPoints = phoneNumbers!!.map {
       ContactPoint.Phone.Unverified(it)
@@ -74,14 +75,12 @@ fun CreatePracticeCommandRequest.toCommand(id: String, authenticatedUser: AcmeWe
         ContactPoint.Email.Unverified(it)
       }
     ).toSet()
-  ).apply {
-    metadata.set("principal" to authenticatedUser)
-  }
+  ).applyWebMetaData(ctx)
 
-fun CreatePractitionerCommandRequest.toCommand(id: String, authenticatedUser: AcmeWebUserPrincipal) =
+fun CreatePractitionerCommandRequest.toCommand(id: String, ctx: WebContext) =
   CreatePractitionerCommand(
     id = Practitioner.Id(id),
-    user = UserId(authenticatedUser.id),
+    user = UserId(ctx.authenticatedUser.id),
     name = name!!.toValueObject(),
     gender = Gender.valueOf(gender!!),
     contactPoints = phoneNumbers!!.map {
@@ -91,6 +90,9 @@ fun CreatePractitionerCommandRequest.toCommand(id: String, authenticatedUser: Ac
         ContactPoint.Email.Unverified(it)
       }
     ).toSet()
-  ).apply {
-    metadata.set("principal" to authenticatedUser)
-  }
+  ).applyWebMetaData(ctx)
+
+fun <C : Command> C.applyWebMetaData(ctx: WebContext): C {
+  metadata.set("principal" to ctx.authenticatedUser)
+  return this
+}

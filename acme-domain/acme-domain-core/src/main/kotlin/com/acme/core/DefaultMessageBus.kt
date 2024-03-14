@@ -5,8 +5,8 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KSuspendFunction2
 
 class DefaultMessageBus(
-  private val commandHandlers: MutableMap<KClass<*>, KSuspendFunction2<Command, UnitOfWork, Unit>> = mutableMapOf(),
-  private val eventHandlers: MutableMap<KClass<*>, List<KSuspendFunction2<Event, UnitOfWork, Unit>>> = mutableMapOf()
+  private val commandHandlers: MutableMap<KClass<out Command>, KSuspendFunction2<Command, UnitOfWork, Unit>> = mutableMapOf(),
+  private val eventHandlers: MutableMap<KClass<out Event>, List<KSuspendFunction2<Event, UnitOfWork, Unit>>> = mutableMapOf()
 ) : MessageBus {
 
   private val logger = KotlinLogging.logger {}
@@ -14,14 +14,14 @@ class DefaultMessageBus(
   override fun copy() = DefaultMessageBus(commandHandlers, eventHandlers)
 
   @Suppress("UNCHECKED_CAST")
-  override fun addEventHandler(eventClass: KClass<*>, handler: Any): DefaultMessageBus {
+  override fun addEventHandler(eventClass: KClass<out Event>, handler: Any): DefaultMessageBus {
     val handlers = eventHandlers.getOrDefault(eventClass, emptyList())
     if (handlers.contains(handler)) throw RuntimeException("Event handler has already been registered")
     eventHandlers[eventClass] = handlers.plus(handler as KSuspendFunction2<Event, UnitOfWork, Unit>)
     return this
   }
 
-  override fun addEventHandler(vararg pairs: Pair<KClass<*>, Any>): DefaultMessageBus {
+  override fun addEventHandler(vararg pairs: Pair<KClass<out Event>, Any>): DefaultMessageBus {
     pairs.forEach {
       addEventHandler(it.first, it.second)
     }
@@ -29,13 +29,13 @@ class DefaultMessageBus(
   }
 
   @Suppress("UNCHECKED_CAST")
-  override fun addCommandHandler(commandClass: KClass<*>, handler: Any): DefaultMessageBus {
+  override fun addCommandHandler(commandClass: KClass<out Command>, handler: Any): DefaultMessageBus {
     if (commandHandlers.containsKey(commandClass)) throw RuntimeException("Command handler already exists")
     commandHandlers[commandClass] = handler as KSuspendFunction2<Command, UnitOfWork, Unit>
     return this
   }
 
-  override fun addCommandHandler(vararg pairs: Pair<KClass<*>, Any>): DefaultMessageBus {
+  override fun addCommandHandler(vararg pairs: Pair<KClass<out Command>, Any>): DefaultMessageBus {
     pairs.forEach {
       addCommandHandler(it.first, it.second)
     }

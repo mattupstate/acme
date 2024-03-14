@@ -35,11 +35,13 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
       repo.save(appointment)
       repo.exists(appointment.id).shouldBeTrue()
 
-      val persistedAppointment = repo.get(appointment.id)
+      val persistedAppointment = repo.findById(appointment.id).getOrThrow()
       persistedAppointment.aggregate.shouldBe(appointment)
-      persistedAppointment.metaData.revision.shouldBe(1)
-      persistedAppointment.metaData.createdAt.shouldBe(time.now)
-      persistedAppointment.metaData.updatedAt.shouldBe(time.now)
+      with(persistedAppointment.metaData) {
+        revision.shouldBe(1)
+        createdAt.shouldBe(time.now)
+        updatedAt.shouldBe(time.now)
+      }
     }
   }
 
@@ -59,11 +61,13 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
       )
       updateRepo.save(expectedAppointment)
 
-      val persistedAppointment = updateRepo.get(appointment.id)
+      val persistedAppointment = updateRepo.findById(appointment.id).getOrThrow()
       persistedAppointment.aggregate.shouldBe(expectedAppointment)
-      persistedAppointment.metaData.revision.shouldBe(2)
-      persistedAppointment.metaData.createdAt.shouldBe(createTime.now)
-      persistedAppointment.metaData.updatedAt.shouldBe(updateTime.now)
+      with(persistedAppointment.metaData) {
+        revision.shouldBe(2)
+        createdAt.shouldBe(createTime.now)
+        updatedAt.shouldBe(updateTime.now)
+      }
     }
   }
 
@@ -71,18 +75,7 @@ class JooqAppointmentAggregateRepositoryTest : ShouldSpec({
     testTransaction {
       val repo = JooqAppointmentAggregateRepository(it.dsl())
       shouldThrow<NoSuchElementException> {
-        repo.get(appointment.id)
-      }
-    }
-  }
-
-  should("throw user supplied exception") {
-    testTransaction {
-      val repo = JooqAppointmentAggregateRepository(it.dsl())
-      shouldThrow<FakeException> {
-        repo.getOrThrow(appointment.id) {
-          FakeException()
-        }
+        repo.findById(appointment.id).getOrThrow()
       }
     }
   }

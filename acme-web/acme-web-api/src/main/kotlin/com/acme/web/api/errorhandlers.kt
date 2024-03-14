@@ -1,6 +1,7 @@
 package com.acme.web.api
 
 import com.acme.core.CommandValidationException
+import com.acme.core.InvalidAggregateReferenceError
 import com.acme.ktor.server.logging.logger
 import com.acme.ktor.server.validation.RequestBodyValidationException
 import com.acme.ktor.server.validation.RequestDecodingException
@@ -28,7 +29,7 @@ suspend fun ApplicationCall.onCommandValidationException(json: Json, exc: Comman
           VndError(
             message = it.message,
             path = when (it) {
-              is CommandValidationException.InvalidAggregateReferenceError -> "/${it.fieldName}"
+              is InvalidAggregateReferenceError -> "/${it.fieldName}"
               else -> null
             }
           )

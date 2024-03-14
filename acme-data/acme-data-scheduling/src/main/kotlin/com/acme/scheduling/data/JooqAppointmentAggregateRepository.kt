@@ -22,25 +22,21 @@ class JooqAppointmentAggregateRepository(
   private val clock: Clock = Clock.systemUTC()
 ) : AggregateRepository<Appointment, Appointment.Id> {
 
-  override suspend fun find(id: Appointment.Id): PersistedAggregate<Appointment>? =
-    dsl.selectFrom(APPOINTMENTS)
-      .where(APPOINTMENTS.ID.eq(id.value))
-      .awaitFirstOrNull()?.let {
-        PersistedAggregate(
-          aggregate = Json.decodeFromString(it.aggregate.data()),
-          metaData = PersistenceMetaData(
-            createdAt = it.createdAt,
-            updatedAt = it.updatedAt,
-            revision = it.revision,
+  override suspend fun findById(id: Appointment.Id): Result<PersistedAggregate<Appointment>> =
+    runCatching {
+      dsl.selectFrom(APPOINTMENTS)
+        .where(APPOINTMENTS.ID.eq(id.value))
+        .awaitFirst().let {
+          PersistedAggregate(
+            aggregate = Json.decodeFromString(it.aggregate.data()),
+            metaData = PersistenceMetaData(
+              createdAt = it.createdAt,
+              updatedAt = it.updatedAt,
+              revision = it.revision,
+            )
           )
-        )
-      }
-
-  override suspend fun get(id: Appointment.Id): PersistedAggregate<Appointment> =
-    getOrThrow(id) { NoSuchElementException() }
-
-  override suspend fun getOrThrow(id: Appointment.Id, block: () -> Throwable): PersistedAggregate<Appointment> =
-    find(id) ?: throw block()
+        }
+    }
 
   override suspend fun exists(id: Appointment.Id): Boolean =
     dsl.selectOne().from(APPOINTMENTS).where(APPOINTMENTS.ID.eq(id.value)).awaitFirstOrNull() != null

@@ -9,13 +9,9 @@ open class InMemoryAggregateRepository<T : Identifiable<I>, I>(
 
   private val objects: MutableMap<I, PersistedAggregate<T>> = mutableMapOf()
 
-  override suspend fun find(id: I): PersistedAggregate<T>? = objects[id]
-
-  override suspend fun get(id: I): PersistedAggregate<T> =
-    getOrThrow(id) { NoSuchElementException() }
-
-  override suspend fun getOrThrow(id: I, block: () -> Throwable): PersistedAggregate<T> =
-    find(id) ?: throw block()
+  override suspend fun findById(id: I): Result<PersistedAggregate<T>> = runCatching {
+    objects.get(id) ?: throw NoSuchElementException()
+  }
 
   override suspend fun exists(id: I): Boolean = objects.containsKey(id)
 
