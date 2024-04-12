@@ -9,7 +9,8 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Constraint(validatedBy = [OneOfStringsValidator::class])
 annotation class OneOfStrings(
-  val values: Array<String> = [],
+  val values: String = "",
+  val delimiter: String = ", ",
   val message: String = "{com.acme.validation.OneOfStrings.message}",
   val groups: Array<KClass<*>> = [],
   val payload: Array<KClass<out Payload>> = []

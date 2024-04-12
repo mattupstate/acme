@@ -36,7 +36,7 @@ class CreateClientCommandRequestTest : ShouldSpec({
           "/gender" to setOf(
             "" +
               "must not be null",
-            "must be one of [MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN]"
+            "must be one of MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN"
           ),
           "/phoneNumbers" to setOf("must not be null"),
           "/emailAddresses" to setOf("must not be null"),

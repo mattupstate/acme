@@ -58,7 +58,7 @@ data class CreateAppointmentCommandRequest(
   val practiceId: String? = null,
 
   @field:NotNull
-  @field:OneOfStrings(["SCHEDULED", "UNATTENDED", "ATTENDED", "CANCELED"])
+  @field:OneOfStrings(values = "SCHEDULED, UNATTENDED, ATTENDED, CANCELED")
   val state: String?,
 
   @field:NotNull
@@ -77,7 +77,7 @@ data class CreateClientCommandRequest(
   val name: HumanName? = null,
 
   @field:NotNull
-  @field:OneOfStrings(["MALE", "FEMALE", "TRANSGENDER", "NON_BINARY", "OTHER", "UNKNOWN"])
+  @field:OneOfStrings(values = "MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN")
   val gender: String? = null,
 
   @field:NotNull
@@ -111,7 +111,7 @@ data class CreatePractitionerCommandRequest(
   val name: HumanName? = null,
 
   @field:NotNull
-  @field:OneOfStrings(["MALE", "FEMALE", "TRANSGENDER", "NON_BINARY", "OTHER", "UNKNOWN"])
+  @field:OneOfStrings(values = "MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN")
   val gender: String? = null,
 
   @field:NotNull

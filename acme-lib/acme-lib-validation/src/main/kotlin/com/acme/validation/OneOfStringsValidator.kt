@@ -12,5 +12,5 @@ class OneOfStringsValidator : ConstraintValidator<OneOfStrings, String> {
   }
 
   override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean =
-    annotation!!.values.contains(value)
+    annotation!!.values.split(annotation!!.delimiter).contains(value)
 }

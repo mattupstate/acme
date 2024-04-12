@@ -275,7 +275,7 @@ class SchedulingClientCollectionApiSpec : ShouldSpec({
                   "path": "/emailAddresses"
                 },
                 {
-                  "message": "must be one of [MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN]",
+                  "message": "must be one of MALE, FEMALE, TRANSGENDER, NON_BINARY, OTHER, UNKNOWN",
                   "path": "/gender"
                 },
                 {
