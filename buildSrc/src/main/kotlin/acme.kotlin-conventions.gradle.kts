@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   kotlin("jvm")
   java
@@ -48,8 +50,8 @@ tasks {
   }
 
   withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_17.toString()
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_17
       freeCompilerArgs = listOf(
         "-Xemit-jvm-type-annotations",  // NOTE: necessary for validation annotations to work. Such as: `val things: List<@NotBlank String>`
         "-opt-in=kotlin.RequiresOptIn",
